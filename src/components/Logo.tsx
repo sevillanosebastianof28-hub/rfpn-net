@@ -28,7 +28,7 @@ export function Logo({ className, showText = true, size = 'md' }: LogoProps) {
       <img
         src={rfnbLogo}
         alt="RFNB Logo"
-        className={cn('w-auto object-contain', sizeClasses[size])}
+        className={cn('w-auto object-contain mix-blend-lighten', sizeClasses[size])}
       />
       
       {showText && (
