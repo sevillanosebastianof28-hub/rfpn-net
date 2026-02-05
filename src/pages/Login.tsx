@@ -34,43 +34,48 @@ export default function Login() {
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background">
-      {/* Background Effects */}
+      {/* Animated Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary/5 blur-3xl" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-primary/10 blur-3xl" />
-        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary/5 blur-3xl float" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-primary/10 blur-3xl float-delayed" />
+        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl animate-pulse-slow" />
+        
+        {/* Decorative circles */}
+        <div className="absolute top-20 right-20 h-32 w-32 rounded-full border border-primary/10 float" />
+        <div className="absolute bottom-32 left-20 h-24 w-24 rounded-full border border-primary/5 float-delayed" />
+        <div className="absolute top-1/3 left-1/4 h-16 w-16 rounded-full bg-primary/5 float" />
       </div>
 
       {/* Grid Pattern */}
       <div 
-        className="absolute inset-0 opacity-[0.02]"
+        className="absolute inset-0 opacity-[0.03]"
         style={{
           backgroundImage: `
-            linear-gradient(rgba(255,255,255,0.1) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(255,255,255,0.1) 1px, transparent 1px)
+            linear-gradient(hsl(288 45% 38% / 0.3) 1px, transparent 1px),
+            linear-gradient(90deg, hsl(288 45% 38% / 0.3) 1px, transparent 1px)
           `,
           backgroundSize: '64px 64px',
         }}
       />
 
       <div className="relative flex min-h-screen items-center justify-center p-4">
-        <div className="w-full max-w-md">
+        <div className="w-full max-w-md animate-fade-in">
           {/* Logo */}
-          <div className="mb-8 flex justify-center">
+          <div className="mb-8 flex justify-center animate-slide-up">
             <Logo size="lg" />
           </div>
 
           {/* Login Card */}
-          <div className="glass-card rounded-2xl border border-border/50 p-8">
+          <div className="glass-card hover-glow rounded-2xl border border-border/50 p-8 animate-slide-up stagger-1">
             <div className="mb-6 text-center">
-              <h1 className="text-2xl font-bold">Welcome back</h1>
+              <h1 className="text-2xl font-bold text-gradient">Welcome back</h1>
               <p className="mt-1 text-sm text-muted-foreground">
                 Sign in to access the admin dashboard
               </p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="space-y-2">
+              <div className="space-y-2 animate-slide-in-left stagger-2" style={{ opacity: 0 }}>
                 <Label htmlFor="email">Email address</Label>
                 <Input
                   id="email"
@@ -80,10 +85,11 @@ export default function Login() {
                   onChange={(e) => setEmail(e.target.value)}
                   required
                   autoComplete="email"
+                  className="input-glow"
                 />
               </div>
 
-              <div className="space-y-2">
+              <div className="space-y-2 animate-slide-in-left stagger-3" style={{ opacity: 0 }}>
                 <Label htmlFor="password">Password</Label>
                 <Input
                   id="password"
@@ -93,36 +99,39 @@ export default function Login() {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   autoComplete="current-password"
+                  className="input-glow"
                 />
               </div>
 
               {error && (
-                <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive">
+                <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive animate-fade-in">
                   <AlertCircle className="h-4 w-4 shrink-0" />
                   <p>{error}</p>
                 </div>
               )}
 
-              <Button
-                type="submit"
-                variant="gradient"
-                size="lg"
-                className="w-full"
-                disabled={isSubmitting}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Signing in...
-                  </>
-                ) : (
-                  'Sign in'
-                )}
-              </Button>
+              <div className="animate-slide-up stagger-4" style={{ opacity: 0 }}>
+                <Button
+                  type="submit"
+                  variant="gradient"
+                  size="lg"
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Signing in...
+                    </>
+                  ) : (
+                    'Sign in'
+                  )}
+                </Button>
+              </div>
             </form>
 
             {/* Demo Credentials */}
-            <div className="mt-6 rounded-lg bg-muted/50 p-4">
+            <div className="mt-6 rounded-lg bg-muted/50 p-4 card-shine animate-slide-up stagger-5" style={{ opacity: 0 }}>
               <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
                 <Shield className="h-3.5 w-3.5" />
                 Demo Credentials
@@ -135,7 +144,7 @@ export default function Login() {
           </div>
 
           {/* Footer */}
-          <p className="mt-6 text-center text-xs text-muted-foreground">
+          <p className="mt-6 text-center text-xs text-muted-foreground animate-fade-in stagger-5" style={{ opacity: 0 }}>
             Protected by enterprise-grade security
           </p>
         </div>
