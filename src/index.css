@@ -7,32 +7,32 @@
 
 @layer base {
   :root {
-    /* Dark mode - RFNB Crest Palette */
-    --background: 280 15% 4%;
-    --foreground: 0 0% 95%;
+    /* Light mode - RFNB Crest Palette */
+    --background: 0 0% 98%;
+    --foreground: 280 15% 10%;
 
-    --card: 280 12% 7%;
-    --card-foreground: 0 0% 95%;
+    --card: 0 0% 100%;
+    --card-foreground: 280 15% 10%;
 
-    --popover: 280 12% 7%;
-    --popover-foreground: 0 0% 95%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 280 15% 10%;
 
     /* Deep Royal Purple - from RFNB crest shield */
     --primary: 288 45% 38%;
     --primary-foreground: 0 0% 100%;
     --primary-glow: 288 50% 50%;
 
-    /* Black/Dark Secondary */
-    --secondary: 280 10% 12%;
-    --secondary-foreground: 0 0% 95%;
+    /* Light Secondary */
+    --secondary: 280 5% 94%;
+    --secondary-foreground: 280 15% 15%;
 
-    /* Muted - Charcoal */
-    --muted: 280 8% 16%;
-    --muted-foreground: 210 10% 60%;
+    /* Muted - Light Gray */
+    --muted: 280 5% 92%;
+    --muted-foreground: 280 8% 45%;
 
-    /* Accent - Silver (from crest flourishes) */
-    --accent: 210 8% 22%;
-    --accent-foreground: 210 10% 85%;
+    /* Accent - Light Silver */
+    --accent: 280 5% 94%;
+    --accent-foreground: 280 15% 15%;
     --silver: 210 10% 70%;
 
     --destructive: 0 72% 51%;
@@ -44,32 +44,32 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
 
-    --border: 280 8% 18%;
-    --input: 280 8% 18%;
+    --border: 280 5% 88%;
+    --input: 280 5% 88%;
     --ring: 288 45% 38%;
 
     --radius: 0.75rem;
 
-    /* Sidebar */
-    --sidebar-background: 280 15% 5%;
-    --sidebar-foreground: 210 10% 70%;
+    /* Sidebar - Light theme with purple accent */
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 280 15% 30%;
     --sidebar-primary: 288 45% 38%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 280 10% 12%;
-    --sidebar-accent-foreground: 0 0% 95%;
-    --sidebar-border: 280 8% 14%;
+    --sidebar-accent: 288 30% 96%;
+    --sidebar-accent-foreground: 288 45% 35%;
+    --sidebar-border: 280 5% 90%;
     --sidebar-ring: 288 45% 38%;
 
     /* Custom gradients - RFNB Purple */
     --gradient-primary: linear-gradient(135deg, hsl(288 45% 38%), hsl(288 50% 50%));
-    --gradient-dark: linear-gradient(180deg, hsl(280 12% 7%), hsl(280 15% 4%));
-    --gradient-card: linear-gradient(145deg, hsl(280 12% 9%), hsl(280 12% 6%));
+    --gradient-dark: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 99%));
     
     /* Shadows */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.4), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.5), 0 4px 6px -4px rgb(0 0 0 / 0.4);
-    --shadow-glow: 0 0 20px -5px hsl(288 45% 38% / 0.5);
+    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+    --shadow-glow: 0 0 20px -5px hsl(288 45% 38% / 0.3);
   }
 
   .dark {
