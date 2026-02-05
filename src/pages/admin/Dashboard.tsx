@@ -89,32 +89,40 @@ export default function Dashboard() {
 
       {/* Stats Grid */}
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Total Tenants"
-          value={mockDashboardStats.totalTenants}
-          subtitle={`${mockDashboardStats.activeTenants} active`}
-          icon={Building2}
-          trend={{ value: 12, isPositive: true }}
-        />
-        <StatCard
-          title="Total Users"
-          value={mockDashboardStats.totalUsers}
-          subtitle={`${mockDashboardStats.activeUsers} active`}
-          icon={Users}
-          trend={{ value: 8, isPositive: true }}
-        />
-        <StatCard
-          title="Pending Applications"
-          value={mockDashboardStats.pendingApplications}
-          subtitle="Awaiting review"
-          icon={FileText}
-        />
-        <StatCard
-          title="Activity (24h)"
-          value={mockDashboardStats.recentActivity}
-          subtitle="Actions logged"
-          icon={Activity}
-        />
+        <div className="animate-slide-up stagger-1" style={{ opacity: 0 }}>
+          <StatCard
+            title="Total Tenants"
+            value={mockDashboardStats.totalTenants}
+            subtitle={`${mockDashboardStats.activeTenants} active`}
+            icon={Building2}
+            trend={{ value: 12, isPositive: true }}
+          />
+        </div>
+        <div className="animate-slide-up stagger-2" style={{ opacity: 0 }}>
+          <StatCard
+            title="Total Users"
+            value={mockDashboardStats.totalUsers}
+            subtitle={`${mockDashboardStats.activeUsers} active`}
+            icon={Users}
+            trend={{ value: 8, isPositive: true }}
+          />
+        </div>
+        <div className="animate-slide-up stagger-3" style={{ opacity: 0 }}>
+          <StatCard
+            title="Pending Applications"
+            value={mockDashboardStats.pendingApplications}
+            subtitle="Awaiting review"
+            icon={FileText}
+          />
+        </div>
+        <div className="animate-slide-up stagger-4" style={{ opacity: 0 }}>
+          <StatCard
+            title="Activity (24h)"
+            value={mockDashboardStats.recentActivity}
+            subtitle="Actions logged"
+            icon={Activity}
+          />
+        </div>
       </div>
 
       {/* Two Column Layout */}
