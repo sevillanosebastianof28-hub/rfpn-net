@@ -217,19 +217,13 @@ export default function Landing() {
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 animate-slide-up stagger-2">
+            <div className="flex items-center justify-center mb-8 animate-slide-up stagger-2">
               <Link to="/login">
                 <Button variant="gradient" size="xl" className="btn-glow group text-base px-8 w-full sm:w-auto">
                   Get Started — It's Free
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <a href="#features">
-                <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
-                  <Play className="w-5 h-5 mr-1 group-hover:scale-110 transition-transform" />
-                  Watch Demo
-                </Button>
-              </a>
             </div>
 
             {/* Social Proof Mini */}
@@ -526,15 +520,6 @@ export default function Landing() {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <a href="mailto:sales@rfnb.com">
-                  <Button 
-                    variant="outline" 
-                    size="xl" 
-                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto text-base px-10 h-14"
-                  >
-                    Schedule a Demo
-                  </Button>
-                </a>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
