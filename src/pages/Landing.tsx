@@ -473,33 +473,56 @@ export default function Landing() {
       </section>
 
       {/* CTA Section */}
-      <section id="contact" className="py-20 sm:py-32">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative rounded-3xl overflow-hidden">
-            {/* Background */}
+      <section id="contact" className="py-20 sm:py-32 relative overflow-hidden">
+        {/* Background glow effects */}
+        <div className="absolute inset-0 pointer-events-none">
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-3xl" />
+        </div>
+
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="relative rounded-3xl overflow-hidden border border-border/50">
+            {/* Layered Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-primary via-primary to-primary-glow" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent" />
             <div 
-              className="absolute inset-0 opacity-10"
+              className="absolute inset-0 opacity-[0.07]"
               style={{
-                backgroundImage: 'radial-gradient(circle at 20% 50%, white 2px, transparent 2px)',
-                backgroundSize: '50px 50px'
+                backgroundImage: `
+                  radial-gradient(circle at 25% 25%, white 1px, transparent 1px),
+                  radial-gradient(circle at 75% 75%, white 1px, transparent 1px)
+                `,
+                backgroundSize: '40px 40px, 60px 60px'
               }}
             />
+            {/* Animated orbs */}
+            <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse-slow" />
+            <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-white/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
 
-            <div className="relative px-6 py-16 sm:px-12 sm:py-24 lg:px-20 lg:py-32 text-center">
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-white mb-4">
-                Ready to get started?
+            <div className="relative px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-36 text-center">
+              {/* Badge */}
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 mb-8">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                </span>
+                <span className="text-sm font-medium text-white/90">Limited time — 3 months free on annual plans</span>
+              </div>
+
+              <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
+                Start building the future<br className="hidden sm:block" />
+                <span className="text-white/80">of your enterprise today</span>
               </h2>
-              <p className="text-lg sm:text-xl text-white/80 max-w-2xl mx-auto mb-10">
-                Join thousands of teams already using RFNB to build better, faster.
+              <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
+                Join 10,000+ teams who trust RFNB to power their most critical operations. Setup takes less than 5 minutes.
               </p>
-              <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+
+              <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
                 <Link to="/login">
                   <Button 
                     size="xl" 
-                    className="bg-white text-primary hover:bg-white/90 shadow-xl group w-full sm:w-auto"
+                    className="bg-white text-primary hover:bg-white/90 shadow-2xl shadow-black/20 group w-full sm:w-auto text-base px-10 h-14"
                   >
-                    Start Free Trial
+                    Get Started Free
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
@@ -507,15 +530,27 @@ export default function Landing() {
                   <Button 
                     variant="outline" 
                     size="xl" 
-                    className="border-white/30 text-white hover:bg-white/10 w-full sm:w-auto"
+                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto text-base px-10 h-14"
                   >
-                    Talk to Sales
+                    Schedule a Demo
                   </Button>
                 </a>
               </div>
-              <p className="text-white/60 text-sm mt-6">
-                No credit card required • Free 14-day trial • Cancel anytime
-              </p>
+
+              <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  No credit card required
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  14-day free trial
+                </div>
+                <div className="flex items-center gap-2">
+                  <CheckCircle2 className="w-4 h-4" />
+                  Cancel anytime
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -573,12 +608,9 @@ export default function Landing() {
             </div>
           </div>
 
-          <div className="pt-8 border-t border-border/50 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="pt-8 border-t border-border/50 text-center">
             <p className="text-sm text-muted-foreground">
               © {new Date().getFullYear()} RFNB. All rights reserved.
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Made with 💜 for modern enterprises
             </p>
           </div>
         </div>
