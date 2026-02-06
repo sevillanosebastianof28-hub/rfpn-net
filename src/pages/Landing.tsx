@@ -224,10 +224,12 @@ export default function Landing() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
-                <Play className="w-5 h-5 mr-1 group-hover:scale-110 transition-transform" />
-                Watch Demo
-              </Button>
+              <a href="#features">
+                <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
+                  <Play className="w-5 h-5 mr-1 group-hover:scale-110 transition-transform" />
+                  Watch Demo
+                </Button>
+              </a>
             </div>
 
             {/* Social Proof Mini */}
@@ -501,13 +503,15 @@ export default function Landing() {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <Button 
-                  variant="outline" 
-                  size="xl" 
-                  className="border-white/30 text-white hover:bg-white/10 w-full sm:w-auto"
-                >
-                  Talk to Sales
-                </Button>
+                <a href="mailto:sales@rfnb.com">
+                  <Button 
+                    variant="outline" 
+                    size="xl" 
+                    className="border-white/30 text-white hover:bg-white/10 w-full sm:w-auto"
+                  >
+                    Talk to Sales
+                  </Button>
+                </a>
               </div>
               <p className="text-white/60 text-sm mt-6">
                 No credit card required • Free 14-day trial • Cancel anytime
