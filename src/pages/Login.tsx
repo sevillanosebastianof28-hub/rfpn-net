@@ -1,11 +1,11 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, AlertCircle, Shield } from 'lucide-react';
+import { Loader2, AlertCircle, Shield, ArrowLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 export default function Login() {
@@ -59,10 +59,20 @@ export default function Login() {
       />
 
       <div className="relative flex min-h-screen items-center justify-center p-4">
+        {/* Back to Landing */}
+        <Link to="/" className="absolute top-6 left-6 z-10 animate-fade-in">
+          <Button variant="ghost" size="sm" className="group gap-2 text-muted-foreground hover:text-foreground">
+            <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            Back to Home
+          </Button>
+        </Link>
+
         <div className="w-full max-w-md animate-fade-in">
           {/* Logo */}
           <div className="mb-8 flex justify-center animate-slide-up">
-            <Logo size="lg" />
+            <Link to="/">
+              <Logo size="lg" />
+            </Link>
           </div>
 
           {/* Login Card */}
