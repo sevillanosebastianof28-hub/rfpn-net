@@ -10,37 +10,18 @@ interface LogoProps {
 export function Logo({ className, showText = true, size = 'md' }: LogoProps) {
   const sizeClasses = {
     sm: 'h-10',
-    md: 'h-12',
-    lg: 'h-16',
-    xl: 'h-24',
-  };
-
-  const textSizeClasses = {
-    sm: 'text-lg',
-    md: 'text-xl',
-    lg: 'text-2xl',
-    xl: 'text-3xl',
+    md: 'h-14',
+    lg: 'h-20',
+    xl: 'h-28',
   };
 
   return (
-    <div className={cn('flex items-center gap-3', className)}>
-      {/* Logo Image */}
+    <div className={cn('flex items-center', className)}>
       <img
         src={rfnbLogo}
-        alt="RFNB Logo"
+        alt="Reley Fast Property Network Logo"
         className={cn('w-auto object-contain', sizeClasses[size])}
       />
-      
-      {showText && (
-        <div className="flex flex-col">
-          <span className={cn('font-bold tracking-tight text-foreground', textSizeClasses[size])}>
-            RFNB
-          </span>
-          <span className="text-[10px] uppercase tracking-widest text-muted-foreground -mt-0.5">
-            Fast Property Network
-          </span>
-        </div>
-      )}
     </div>
   );
 }
