@@ -172,7 +172,7 @@ export default function Landing() {
               </Link>
               <Link to="/login">
                 <Button variant="gradient" size="sm" className="group">
-                  Get Started Free
+                  Get Started
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
@@ -201,7 +201,7 @@ export default function Landing() {
                   <Button variant="outline" className="w-full">Sign In</Button>
                 </Link>
                 <Link to="/login" className="block">
-                  <Button variant="gradient" className="w-full">Get Started Free</Button>
+                  <Button variant="gradient" className="w-full">Get Started</Button>
                 </Link>
               </div>
             </div>
@@ -256,14 +256,14 @@ export default function Landing() {
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up stagger-2">
               <Link to="/login">
                 <Button variant="gradient" size="xl" className="btn-glow group text-base px-8 w-full sm:w-auto">
-                  Start Free — No Card Needed
+                  Get Started Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <a href="mailto:sales@rfnb.com">
+              <a href="mailto:hello@reley.io">
                 <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
                   <HeartHandshake className="w-5 h-5 mr-1" />
-                  Talk to Sales
+                  Contact Us
                 </Button>
               </a>
             </div>
@@ -536,7 +536,7 @@ export default function Landing() {
           <div className="text-center mt-16">
             <Link to="/login">
               <Button variant="gradient" size="lg" className="btn-glow group">
-                Start Your Free Trial
+                Get Started Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
@@ -632,7 +632,7 @@ export default function Landing() {
                   <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                   <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                 </span>
-                <span className="text-sm font-medium text-white/90">Limited time — 3 months free on annual plans</span>
+                <span className="text-sm font-medium text-white/90">Now onboarding new property networks</span>
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
@@ -649,17 +649,17 @@ export default function Landing() {
                     size="xl" 
                     className="bg-white text-primary hover:bg-white/90 shadow-2xl shadow-black/20 group w-full sm:w-auto text-base px-10 h-14"
                   >
-                    Get Started Free
+                    Get Started Now
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <a href="mailto:sales@rfnb.com">
+                <a href="mailto:hello@reley.io">
                   <Button 
                     variant="outline" 
                     size="xl" 
                     className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto text-base px-10 h-14"
                   >
-                    Talk to Our Team
+                    Contact Us
                   </Button>
                 </a>
               </div>
@@ -667,15 +667,15 @@ export default function Landing() {
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
-                  No credit card required
+                  Quick setup in minutes
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
-                  14-day free trial
+                  Dedicated support
                 </div>
                 <div className="flex items-center gap-2">
                   <CheckCircle2 className="w-4 h-4" />
-                  Cancel anytime
+                  Enterprise-grade security
                 </div>
               </div>
             </div>
