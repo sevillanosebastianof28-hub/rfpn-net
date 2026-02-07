@@ -8,11 +8,8 @@ import {
   Zap, 
   Users, 
   BarChart3, 
-  Lock, 
-  Globe,
   ArrowRight,
   CheckCircle2,
-  Play,
   Star,
   ChevronRight,
   Layers,
@@ -20,77 +17,119 @@ import {
   Bell,
   TrendingUp,
   Menu,
-  X
+  X,
+  Building2,
+  FileCheck,
+  Workflow,
+  Clock,
+  HeartHandshake,
+  Sparkles,
+  ArrowUpRight,
+  Quote
 } from 'lucide-react';
 
 const features = [
   {
-    icon: Layers,
-    title: 'Multi-Tenant Architecture',
-    description: 'Manage unlimited organizations with complete data isolation and custom configurations.',
+    icon: Building2,
+    title: 'Property Network Management',
+    description: 'Centralize all your property contacts, developers, and brokers in one intelligent platform.',
     color: 'from-violet-500 to-purple-600',
+    stat: '10x faster',
   },
   {
     icon: Shield,
-    title: 'Enterprise Security',
-    description: 'SOC 2 compliant with end-to-end encryption, SSO, and advanced threat protection.',
+    title: 'Bank-Grade Security',
+    description: 'SOC 2 compliant infrastructure with end-to-end encryption and role-based access control.',
     color: 'from-emerald-500 to-teal-600',
+    stat: '99.99% uptime',
   },
   {
     icon: Zap,
-    title: 'Real-Time Sync',
-    description: 'Instant updates across all users with WebSocket-powered live collaboration.',
+    title: 'Instant Collaboration',
+    description: 'Real-time updates across your entire network. No more chasing emails or spreadsheets.',
     color: 'from-amber-500 to-orange-600',
+    stat: 'Real-time sync',
   },
   {
     icon: BarChart3,
-    title: 'Advanced Analytics',
-    description: 'Custom dashboards with AI-powered insights and predictive analytics.',
+    title: 'Smart Analytics',
+    description: 'AI-powered insights into your pipeline. Know exactly where every deal stands at a glance.',
     color: 'from-blue-500 to-cyan-600',
+    stat: 'AI-powered',
   },
   {
     icon: Users,
     title: 'Role-Based Access',
-    description: 'Granular permissions with custom roles and hierarchical access control.',
+    description: 'Super Admins, Developers, Brokers — everyone gets exactly the access they need.',
     color: 'from-pink-500 to-rose-600',
+    stat: '4 role types',
   },
   {
-    icon: Globe,
-    title: 'Global CDN',
-    description: 'Lightning-fast delivery with edge locations worldwide for optimal performance.',
+    icon: FileCheck,
+    title: 'Application Tracking',
+    description: 'Monitor funding applications from submission to approval with full audit trails.',
     color: 'from-indigo-500 to-violet-600',
+    stat: 'End-to-end',
+  },
+];
+
+const steps = [
+  {
+    number: '01',
+    title: 'Connect Your Network',
+    description: 'Import contacts, set up organizations, and invite your team in minutes.',
+    icon: Workflow,
+  },
+  {
+    number: '02',
+    title: 'Configure & Customize',
+    description: 'Set roles, branding, and access levels. Each organization gets their own workspace.',
+    icon: Settings,
+  },
+  {
+    number: '03',
+    title: 'Scale With Confidence',
+    description: 'Process applications, track progress, and grow your property network seamlessly.',
+    icon: TrendingUp,
   },
 ];
 
 const testimonials = [
   {
-    quote: "RFNB transformed how we manage our property network clients. The multi-tenant setup is incredibly powerful.",
+    quote: "Reley completely changed how we manage developer relationships. We went from scattered spreadsheets to a unified command center overnight.",
     author: "Sarah Chen",
-    role: "CTO, TechScale Inc",
+    role: "Head of Lending, Meridian Capital",
     avatar: "SC",
+    metric: "3x faster deal processing",
   },
   {
-    quote: "The security features alone sold us. SOC 2 compliance out of the box saved us months of work.",
+    quote: "The role-based access is a game-changer. Our brokers see exactly what they need, and our compliance team sleeps easy at night.",
     author: "Marcus Johnson",
-    role: "VP Engineering, FinCore",
+    role: "VP Operations, FinCore Partners",
     avatar: "MJ",
+    metric: "Zero security incidents",
   },
   {
-    quote: "Best admin dashboard we've ever used. Our team onboarded in days, not weeks.",
+    quote: "We onboarded 50 broker organizations in our first month. The multi-tenant architecture makes it feel like each one has their own platform.",
     author: "Elena Rodriguez",
-    role: "Operations Director, CloudFirst",
+    role: "CEO, PropertyBridge",
     avatar: "ER",
+    metric: "50 orgs in 30 days",
   },
 ];
 
 const stats = [
-  { value: '99.99%', label: 'Uptime', suffix: '' },
-  { value: '500', label: 'Enterprise Clients', suffix: '+' },
-  { value: '50M', label: 'Daily Transactions', suffix: '+' },
-  { value: '150', label: 'Countries', suffix: '+' },
+  { value: '99.99', label: 'Uptime SLA', suffix: '%' },
+  { value: '500', label: 'Property Networks', suffix: '+' },
+  { value: '£2.4B', label: 'Loans Processed', suffix: '' },
+  { value: '<5', label: 'Min Setup Time', suffix: 'min' },
 ];
 
-const words = ['Faster', 'Smarter', 'Better', 'Secure'];
+const trustedBy = [
+  'Meridian Capital', 'PropertyBridge', 'FinCore Partners', 'Horizon Lending', 'Atlas Property Group'
+];
+
+const words = ['Faster', 'Smarter', 'Together', 'Securely'];
 
 export default function Landing() {
   const [currentWord, setCurrentWord] = useState(0);
@@ -116,11 +155,11 @@ export default function Landing() {
               <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Features
               </a>
+              <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                How It Works
+              </a>
               <a href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Testimonials
-              </a>
-              <a href="#pricing" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Pricing
               </a>
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
@@ -154,8 +193,8 @@ export default function Landing() {
           <div className="lg:hidden bg-background border-b border-border/50 animate-slide-up">
             <div className="container mx-auto px-4 py-4 space-y-4">
               <a href="#features" className="block py-2 text-foreground">Features</a>
+              <a href="#how-it-works" className="block py-2 text-foreground">How It Works</a>
               <a href="#testimonials" className="block py-2 text-foreground">Testimonials</a>
-              <a href="#pricing" className="block py-2 text-foreground">Pricing</a>
               <a href="#contact" className="block py-2 text-foreground">Contact</a>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
@@ -175,15 +214,15 @@ export default function Landing() {
         {/* Animated Background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent rounded-full blur-3xl" />
-          <div className="absolute top-40 left-10 w-72 h-72 bg-violet-500/10 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute top-40 left-10 w-72 h-72 bg-primary/8 rounded-full blur-3xl animate-pulse-slow" />
           <div className="absolute top-60 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
           
-          {/* Grid Pattern */}
+          {/* Dot Pattern */}
           <div 
-            className="absolute inset-0 opacity-[0.02]"
+            className="absolute inset-0 opacity-[0.03]"
             style={{
-              backgroundImage: `linear-gradient(to right, currentColor 1px, transparent 1px), linear-gradient(to bottom, currentColor 1px, transparent 1px)`,
-              backgroundSize: '60px 60px'
+              backgroundImage: `radial-gradient(circle, currentColor 1px, transparent 1px)`,
+              backgroundSize: '32px 32px'
             }}
           />
         </div>
@@ -192,17 +231,14 @@ export default function Landing() {
           <div className="max-w-5xl mx-auto text-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 animate-fade-in hover:bg-primary/15 transition-colors cursor-default">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
-              </span>
-              <span className="text-sm font-medium text-primary">Now with AI-Powered Analytics</span>
+              <Sparkles className="w-4 h-4 text-primary" />
+              <span className="text-sm font-medium text-primary">The #1 Platform for Property Finance Networks</span>
               <ChevronRight className="w-4 h-4 text-primary" />
             </div>
 
             {/* Headline */}
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
-              <span className="text-foreground">Build Networks</span>
+              <span className="text-foreground">Build Property Networks</span>
               <br />
               <span className="relative inline-block mt-2">
                 <span className="text-gradient">{words[currentWord]}</span>
@@ -212,18 +248,24 @@ export default function Landing() {
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 animate-slide-up stagger-1 leading-relaxed">
-              The all-in-one platform for enterprise management. 
-              <span className="text-foreground font-medium"> Replace 10+ tools</span> with one powerful solution.
+              Connect developers, brokers, and lenders in one powerful platform.
+              <span className="text-foreground font-medium"> Manage contacts, track applications, and close deals faster.</span>
             </p>
 
             {/* CTA Buttons */}
-            <div className="flex items-center justify-center mb-8 animate-slide-up stagger-2">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up stagger-2">
               <Link to="/login">
                 <Button variant="gradient" size="xl" className="btn-glow group text-base px-8 w-full sm:w-auto">
-                  Get Started — It's Free
+                  Start Free — No Card Needed
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
+              <a href="mailto:sales@rfnb.com">
+                <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
+                  <HeartHandshake className="w-5 h-5 mr-1" />
+                  Talk to Sales
+                </Button>
+              </a>
             </div>
 
             {/* Social Proof Mini */}
@@ -236,13 +278,13 @@ export default function Landing() {
                     </div>
                   ))}
                 </div>
-                <span className="ml-2">Join 10,000+ teams</span>
+                <span className="ml-2">Trusted by 500+ networks</span>
               </div>
               <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
-                <span className="ml-1">4.9/5 rating</span>
+                <span className="ml-1">4.9/5 from 200+ reviews</span>
               </div>
             </div>
           </div>
@@ -250,6 +292,9 @@ export default function Landing() {
           {/* Hero Visual - Floating Dashboard */}
           <div className="relative mt-16 lg:mt-24 max-w-6xl mx-auto animate-slide-up stagger-4">
             <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-transparent z-10 pointer-events-none" />
+            
+            {/* Glow behind dashboard */}
+            <div className="absolute inset-4 bg-primary/10 rounded-3xl blur-2xl -z-10" />
             
             {/* Main Dashboard Card */}
             <div className="relative rounded-2xl border border-border/50 bg-card/80 backdrop-blur-xl shadow-2xl overflow-hidden">
@@ -272,7 +317,7 @@ export default function Landing() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                   {/* Sidebar Mock */}
                   <div className="hidden lg:block space-y-3">
-                    {['Dashboard', 'Contacts', 'Users', 'Analytics', 'Settings'].map((item, i) => (
+                    {['Dashboard', 'Contacts', 'Users', 'Applications', 'Settings'].map((item, i) => (
                       <div 
                         key={item}
                         className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
@@ -280,9 +325,9 @@ export default function Landing() {
                         }`}
                       >
                         {i === 0 && <BarChart3 className="w-4 h-4" />}
-                        {i === 1 && <Layers className="w-4 h-4" />}
+                        {i === 1 && <Building2 className="w-4 h-4" />}
                         {i === 2 && <Users className="w-4 h-4" />}
-                        {i === 3 && <TrendingUp className="w-4 h-4" />}
+                        {i === 3 && <FileCheck className="w-4 h-4" />}
                         {i === 4 && <Settings className="w-4 h-4" />}
                         <span className="text-sm font-medium">{item}</span>
                       </div>
@@ -294,9 +339,9 @@ export default function Landing() {
                     {/* Stats Row */}
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                       {[
-                        { label: 'Active Users', value: '2,847', change: '+12%', icon: Users },
-                        { label: 'Revenue', value: '$48.5K', change: '+8%', icon: TrendingUp },
-                        { label: 'Uptime', value: '99.99%', change: '', icon: Zap },
+                        { label: 'Active Contacts', value: '2,847', change: '+12%', icon: Building2 },
+                        { label: 'Pipeline Value', value: '£48.5M', change: '+8%', icon: TrendingUp },
+                        { label: 'Approval Rate', value: '94.2%', change: '+3%', icon: FileCheck },
                       ].map((stat) => (
                         <div key={stat.label} className="p-4 rounded-xl bg-background/50 border border-border/50">
                           <div className="flex items-center justify-between mb-2">
@@ -314,7 +359,7 @@ export default function Landing() {
                     {/* Chart Mock */}
                     <div className="p-4 rounded-xl bg-background/50 border border-border/50">
                       <div className="flex items-center justify-between mb-4">
-                        <span className="font-medium">Performance Overview</span>
+                        <span className="font-medium">Loan Pipeline Overview</span>
                         <Bell className="w-4 h-4 text-muted-foreground" />
                       </div>
                       <div className="flex items-end gap-2 h-32">
@@ -341,8 +386,8 @@ export default function Landing() {
                       <CheckCircle2 className="w-5 h-5 text-success" />
                     </div>
                     <div>
-                      <div className="text-sm font-medium">Deployment Complete</div>
-                      <div className="text-xs text-muted-foreground">2 seconds ago</div>
+                      <div className="text-sm font-medium">Loan Approved</div>
+                      <div className="text-xs text-muted-foreground">£2.4M • Just now</div>
                     </div>
                   </div>
                 </CardContent>
@@ -354,10 +399,10 @@ export default function Landing() {
                 <CardContent className="p-4">
                   <div className="flex items-center gap-3">
                     <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
-                      <Users className="w-5 h-5 text-primary" />
+                      <Building2 className="w-5 h-5 text-primary" />
                     </div>
                     <div>
-                      <div className="text-sm font-medium">+847 new users</div>
+                      <div className="text-sm font-medium">+12 new contacts</div>
                       <div className="text-xs text-muted-foreground">This week</div>
                     </div>
                   </div>
@@ -368,13 +413,29 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* Trusted By Bar */}
+      <section className="py-10 sm:py-14 border-y border-border/50 bg-muted/20">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <p className="text-center text-xs font-medium uppercase tracking-widest text-muted-foreground mb-8">
+            Trusted by leading property finance firms
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
+            {trustedBy.map((name) => (
+              <span key={name} className="text-lg font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
+                {name}
+              </span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* Stats Bar */}
-      <section className="py-12 sm:py-16 border-y border-border/50 bg-muted/30">
+      <section className="py-16 sm:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {stats.map((stat, index) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-1">
+            {stats.map((stat) => (
+              <div key={stat.label} className="text-center group">
+                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
                   {stat.value}<span className="text-primary">{stat.suffix}</span>
                 </div>
                 <div className="text-sm sm:text-base text-muted-foreground">{stat.label}</div>
@@ -385,25 +446,25 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 sm:py-32">
+      <section id="features" className="py-20 sm:py-32 bg-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           {/* Section Header */}
           <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
               <Zap className="w-4 h-4" />
-              Powerful Features
+              Purpose-Built Features
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-              Everything you need to <span className="text-gradient">scale</span>
+              Everything your property network <span className="text-gradient">needs to thrive</span>
             </h2>
-            <p className="text-lg text-muted-foreground">
-              One platform to manage all your enterprise operations. Built for teams who move fast.
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              From contact management to loan tracking — one platform replaces your entire toolkit.
             </p>
           </div>
 
           {/* Features Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {features.map((feature, index) => (
+            {features.map((feature) => (
               <Card 
                 key={feature.title} 
                 className="group relative overflow-hidden border-border/50 hover:border-primary/30 transition-all duration-500 hover:shadow-xl hover:-translate-y-1"
@@ -412,8 +473,13 @@ export default function Landing() {
                 <div className={`absolute inset-0 bg-gradient-to-br ${feature.color} opacity-0 group-hover:opacity-5 transition-opacity duration-500`} />
                 
                 <CardContent className="relative p-6 sm:p-8">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center mb-5 group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
-                    <feature.icon className="w-6 h-6 text-white" />
+                  <div className="flex items-start justify-between mb-5">
+                    <div className={`w-12 h-12 rounded-xl bg-gradient-to-br ${feature.color} flex items-center justify-center group-hover:scale-110 transition-transform duration-300 shadow-lg`}>
+                      <feature.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground bg-muted px-2.5 py-1 rounded-full">
+                      {feature.stat}
+                    </span>
                   </div>
                   <h3 className="text-xl font-semibold mb-3 group-hover:text-primary transition-colors">{feature.title}</h3>
                   <p className="text-muted-foreground leading-relaxed">{feature.description}</p>
@@ -424,39 +490,106 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* How It Works Section */}
+      <section id="how-it-works" className="py-20 sm:py-32">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mx-auto text-center mb-16 sm:mb-20">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
+              <Clock className="w-4 h-4" />
+              Get Started in Minutes
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
+              Three steps to a <span className="text-gradient">smarter network</span>
+            </h2>
+            <p className="text-lg text-muted-foreground">
+              No complex setup. No lengthy onboarding. Just results.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-5xl mx-auto">
+            {steps.map((step, index) => (
+              <div key={step.number} className="relative group">
+                {/* Connector line */}
+                {index < steps.length - 1 && (
+                  <div className="hidden md:block absolute top-12 left-[calc(50%+40px)] w-[calc(100%-40px)] h-px bg-gradient-to-r from-primary/30 to-primary/10" />
+                )}
+                
+                <div className="text-center">
+                  {/* Step Number */}
+                  <div className="relative inline-flex mb-6">
+                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20 flex items-center justify-center group-hover:border-primary/40 group-hover:from-primary/20 group-hover:to-primary/10 transition-all duration-500">
+                      <step.icon className="w-10 h-10 text-primary group-hover:scale-110 transition-transform duration-300" />
+                    </div>
+                    <span className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-xs font-bold text-white shadow-lg">
+                      {step.number}
+                    </span>
+                  </div>
+                  
+                  <h3 className="text-xl font-semibold mb-3">{step.title}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{step.description}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* CTA under How It Works */}
+          <div className="text-center mt-16">
+            <Link to="/login">
+              <Button variant="gradient" size="lg" className="btn-glow group">
+                Start Your Free Trial
+                <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 sm:py-32 bg-muted/30">
+      <section id="testimonials" className="py-20 sm:py-32 bg-muted/20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mx-auto text-center mb-16">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
               <Star className="w-4 h-4" />
-              Testimonials
+              Customer Stories
             </div>
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-              Loved by <span className="text-gradient">teams everywhere</span>
+              Trusted by property <span className="text-gradient">professionals</span>
             </h2>
+            <p className="text-lg text-muted-foreground">
+              See how teams are transforming their property finance operations with Reley.
+            </p>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {testimonials.map((testimonial, index) => (
-              <Card key={index} className="relative overflow-hidden group hover:shadow-xl transition-all duration-300">
+              <Card key={index} className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
                 <CardContent className="p-6 sm:p-8">
-                  {/* Quote */}
+                  {/* Quote icon */}
+                  <Quote className="w-8 h-8 text-primary/20 mb-4" />
+                  
+                  {/* Rating */}
                   <div className="flex gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                     ))}
                   </div>
+                  
                   <p className="text-foreground mb-6 leading-relaxed">"{testimonial.quote}"</p>
                   
+                  {/* Metric highlight */}
+                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 text-success text-sm font-medium mb-6">
+                    <ArrowUpRight className="w-3.5 h-3.5" />
+                    {testimonial.metric}
+                  </div>
+                  
                   {/* Author */}
-                  <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-3 pt-4 border-t border-border/50">
                     <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-sm font-medium text-white">
                       {testimonial.avatar}
                     </div>
                     <div>
-                      <div className="font-medium">{testimonial.author}</div>
-                      <div className="text-sm text-muted-foreground">{testimonial.role}</div>
+                      <div className="font-medium text-sm">{testimonial.author}</div>
+                      <div className="text-xs text-muted-foreground">{testimonial.role}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -492,7 +625,7 @@ export default function Landing() {
             <div className="absolute -top-20 -right-20 w-64 h-64 bg-white/10 rounded-full blur-3xl animate-pulse-slow" />
             <div className="absolute -bottom-20 -left-20 w-48 h-48 bg-white/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
 
-            <div className="relative px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-36 text-center">
+            <div className="relative px-6 py-20 sm:px-12 sm:py-28 lg:px-20 lg:py-32 text-center">
               {/* Badge */}
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/15 backdrop-blur-sm border border-white/20 mb-8">
                 <span className="relative flex h-2 w-2">
@@ -503,11 +636,11 @@ export default function Landing() {
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
-                Start building the future<br className="hidden sm:block" />
-                <span className="text-white/80">of your enterprise today</span>
+                Ready to grow your<br className="hidden sm:block" />
+                <span className="text-white/80">property network?</span>
               </h2>
               <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
-                Join 10,000+ teams who trust RFNB to power their property networks. Setup takes less than 5 minutes.
+                Join 500+ property finance firms who trust Reley. Get started in under 5 minutes.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -520,6 +653,15 @@ export default function Landing() {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
+                <a href="mailto:sales@rfnb.com">
+                  <Button 
+                    variant="outline" 
+                    size="xl" 
+                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto text-base px-10 h-14"
+                  >
+                    Talk to Our Team
+                  </Button>
+                </a>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
@@ -548,7 +690,7 @@ export default function Landing() {
             <div className="col-span-2">
               <Logo size="sm" />
               <p className="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The modern platform for property network management. Build, scale, and succeed.
+                The modern platform for property finance networks. Connect, manage, and scale with confidence.
               </p>
               <div className="flex items-center gap-4 mt-6">
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
@@ -567,7 +709,7 @@ export default function Landing() {
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li><a href="#features" className="hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="#pricing" className="hover:text-foreground transition-colors">Pricing</a></li>
+                <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">Changelog</a></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">Roadmap</a></li>
               </ul>
