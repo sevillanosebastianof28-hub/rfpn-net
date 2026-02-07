@@ -14,22 +14,26 @@ export interface User {
   lastLoginAt: Date | null;
 }
 
-export interface Tenant {
+export interface Contact {
   id: string;
   name: string;
   slug: string;
   isActive: boolean;
-  branding: TenantBranding;
+  branding: ContactBranding;
   createdAt: Date;
   updatedAt: Date;
   userCount: number;
 }
 
-export interface TenantBranding {
+export interface ContactBranding {
   logo?: string;
   primaryColor: string;
   secondaryColor: string;
 }
+
+// Keep backwards-compatible aliases
+export type Tenant = Contact;
+export type TenantBranding = ContactBranding;
 
 export interface Application {
   id: string;
@@ -68,8 +72,8 @@ export type AuditAction =
   | 'application_status_change';
 
 export interface DashboardStats {
-  totalTenants: number;
-  activeTenants: number;
+  totalContacts: number;
+  activeContacts: number;
   totalUsers: number;
   activeUsers: number;
   pendingApplications: number;

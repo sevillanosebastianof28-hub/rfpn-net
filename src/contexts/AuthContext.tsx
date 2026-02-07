@@ -13,7 +13,7 @@ const AuthContext = createContext<AuthContextType | null>(null);
 
 // Features locked by role - for future milestones
 const roleFeatureAccess: Record<UserRole, string[]> = {
-  super_admin: ['dashboard', 'tenants', 'users', 'applications', 'audit_logs', 'settings'],
+  super_admin: ['dashboard', 'contacts', 'users', 'applications', 'audit_logs', 'settings'],
   central_admin: ['dashboard', 'users', 'applications', 'audit_logs'],
   developer: [], // Locked for Week 1
   broker: [], // Locked for Week 1

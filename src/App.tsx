@@ -13,7 +13,7 @@ import NotFound from "./pages/NotFound";
 // Admin Layout & Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
 import Dashboard from "./pages/admin/Dashboard";
-import Tenants from "./pages/admin/Tenants";
+import Contacts from "./pages/admin/Contacts";
 import Users from "./pages/admin/Users";
 import Applications from "./pages/admin/Applications";
 import AuditLogs from "./pages/admin/AuditLogs";
@@ -35,7 +35,7 @@ const App = () => (
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
-              <Route path="tenants" element={<Tenants />} />
+              <Route path="contacts" element={<Contacts />} />
               <Route path="users" element={<Users />} />
               <Route path="applications" element={<Applications />} />
               <Route path="audit-logs" element={<AuditLogs />} />

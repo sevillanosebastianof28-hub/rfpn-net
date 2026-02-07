@@ -26,7 +26,7 @@ interface AdminSidebarProps {
 
 const mainNavItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/admin', end: true },
-  { icon: Building2, label: 'Tenants', path: '/admin/tenants' },
+  { icon: Building2, label: 'Contacts', path: '/admin/contacts' },
   { icon: Users, label: 'Users', path: '/admin/users' },
   { icon: FileText, label: 'Applications', path: '/admin/applications' },
   { icon: ScrollText, label: 'Audit Logs', path: '/admin/audit-logs' },

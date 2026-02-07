@@ -22,10 +22,10 @@ const actionConfig: Record<AuditAction, { label: string; color: string }> = {
   role_change: { label: 'Role Change', color: 'bg-primary/20 text-primary' },
   user_activated: { label: 'User Activated', color: 'bg-success/20 text-success' },
   user_deactivated: { label: 'User Deactivated', color: 'bg-destructive/20 text-destructive' },
-  tenant_created: { label: 'Tenant Created', color: 'bg-success/20 text-success' },
-  tenant_updated: { label: 'Tenant Updated', color: 'bg-warning/20 text-warning' },
-  tenant_activated: { label: 'Tenant Activated', color: 'bg-success/20 text-success' },
-  tenant_deactivated: { label: 'Tenant Deactivated', color: 'bg-destructive/20 text-destructive' },
+  tenant_created: { label: 'Contact Created', color: 'bg-success/20 text-success' },
+  tenant_updated: { label: 'Contact Updated', color: 'bg-warning/20 text-warning' },
+  tenant_activated: { label: 'Contact Activated', color: 'bg-success/20 text-success' },
+  tenant_deactivated: { label: 'Contact Deactivated', color: 'bg-destructive/20 text-destructive' },
   application_created: { label: 'Application Created', color: 'bg-primary/20 text-primary' },
   application_status_change: { label: 'Status Change', color: 'bg-warning/20 text-warning' },
 };
@@ -140,8 +140,8 @@ export default function AuditLogs() {
             <SelectItem value="role_change">Role Change</SelectItem>
             <SelectItem value="user_activated">User Activated</SelectItem>
             <SelectItem value="user_deactivated">User Deactivated</SelectItem>
-            <SelectItem value="tenant_created">Tenant Created</SelectItem>
-            <SelectItem value="tenant_deactivated">Tenant Deactivated</SelectItem>
+            <SelectItem value="tenant_created">Contact Created</SelectItem>
+            <SelectItem value="tenant_deactivated">Contact Deactivated</SelectItem>
           </SelectContent>
         </Select>
 
@@ -152,7 +152,7 @@ export default function AuditLogs() {
           <SelectContent>
             <SelectItem value="all">All Resources</SelectItem>
             <SelectItem value="user">User</SelectItem>
-            <SelectItem value="tenant">Tenant</SelectItem>
+            <SelectItem value="tenant">Contact</SelectItem>
             <SelectItem value="application">Application</SelectItem>
             <SelectItem value="system">System</SelectItem>
           </SelectContent>

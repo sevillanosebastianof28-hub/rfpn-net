@@ -24,7 +24,7 @@ const settingsSections = [
     description: 'Manage email and system notifications',
     icon: Bell,
     settings: [
-      { id: 'new-tenant', label: 'New Tenant Registrations', description: 'Email alerts for new tenant sign-ups', enabled: true },
+      { id: 'new-contact', label: 'New Contact Registrations', description: 'Email alerts for new contact sign-ups', enabled: true },
       { id: 'security-alerts', label: 'Security Alerts', description: 'Immediate notification of suspicious activity', enabled: true },
       { id: 'application-updates', label: 'Application Status Updates', description: 'Updates on application processing', enabled: false },
     ],

@@ -12,7 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { mockApplications, mockTenants } from '@/data/mockData';
+import { mockApplications, mockContacts } from '@/data/mockData';
 import { Application } from '@/types';
 import { format } from 'date-fns';
 
@@ -89,7 +89,7 @@ export default function Applications() {
     <div className="animate-fade-in">
       <PageHeader 
         title="Applications"
-        description="View and manage funding applications across all tenants"
+        description="View and manage funding applications across all contacts"
       />
 
       {/* Info Banner */}
@@ -135,8 +135,8 @@ export default function Applications() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Organizations</SelectItem>
-            {mockTenants.map(tenant => (
-              <SelectItem key={tenant.id} value={tenant.id}>{tenant.name}</SelectItem>
+            {mockContacts.map(contact => (
+              <SelectItem key={contact.id} value={contact.id}>{contact.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>

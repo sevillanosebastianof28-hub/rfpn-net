@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Users as UsersIcon, MoreHorizontal, Power, PowerOff, Shield, Mail } from 'lucide-react';
+import { Users as UsersIcon, MoreHorizontal, Power, PowerOff, Shield, Mail, Plus, Pencil } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { DataTable } from '@/components/DataTable';
 import { StatusBadge } from '@/components/StatusBadge';
@@ -19,10 +19,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { mockUsers, mockTenants } from '@/data/mockData';
+import { mockUsers, mockContacts } from '@/data/mockData';
 import { User, UserRole } from '@/types';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
+import { UserFormDialog } from '@/components/UserFormDialog';
 
 const roleLabels: Record<UserRole, string> = {
   super_admin: 'Super Admin',
@@ -44,6 +45,8 @@ export default function Users() {
   const [tenantFilter, setTenantFilter] = useState<string>('all');
   const [roleFilter, setRoleFilter] = useState<string>('all');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [editingUser, setEditingUser] = useState<User | null>(null);
 
   const filteredUsers = users.filter(user => {
     const matchesSearch = 
@@ -68,10 +71,31 @@ export default function Users() {
     toast.success(`User ${user.isActive ? 'deactivated' : 'activated'}`);
   };
 
-  const getTenantName = (tenantId: string | null) => {
+  const handleSaveUser = (savedUser: User) => {
+    setUsers(prev => {
+      const exists = prev.find(u => u.id === savedUser.id);
+      if (exists) {
+        return prev.map(u => u.id === savedUser.id ? savedUser : u);
+      }
+      return [savedUser, ...prev];
+    });
+    setEditingUser(null);
+  };
+
+  const handleEditUser = (user: User) => {
+    setEditingUser(user);
+    setIsDialogOpen(true);
+  };
+
+  const handleCreateUser = () => {
+    setEditingUser(null);
+    setIsDialogOpen(true);
+  };
+
+  const getContactName = (tenantId: string | null) => {
     if (!tenantId) return 'Platform';
-    const tenant = mockTenants.find(t => t.id === tenantId);
-    return tenant?.name || 'Unknown';
+    const contact = mockContacts.find(c => c.id === tenantId);
+    return contact?.name || 'Unknown';
   };
 
   const columns = [
@@ -94,7 +118,7 @@ export default function Users() {
       key: 'tenantId',
       header: 'Organization',
       render: (user: User) => (
-        <span>{getTenantName(user.tenantId)}</span>
+        <span>{getContactName(user.tenantId)}</span>
       ),
     },
     {
@@ -141,13 +165,13 @@ export default function Users() {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => handleEditUser(user)}>
+              <Pencil className="mr-2 h-4 w-4" />
+              Edit User
+            </DropdownMenuItem>
             <DropdownMenuItem>
               <Mail className="mr-2 h-4 w-4" />
               Send Email
-            </DropdownMenuItem>
-            <DropdownMenuItem>
-              <Shield className="mr-2 h-4 w-4" />
-              Change Role
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem onClick={() => handleToggleStatus(user)}>
@@ -174,6 +198,12 @@ export default function Users() {
       <PageHeader 
         title="Users"
         description="Manage platform users across all organizations"
+        actions={
+          <Button variant="gradient" onClick={handleCreateUser}>
+            <Plus className="h-4 w-4" />
+            Add User
+          </Button>
+        }
       />
 
       {/* Filters */}
@@ -191,8 +221,8 @@ export default function Users() {
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="all">All Organizations</SelectItem>
-            {mockTenants.map(tenant => (
-              <SelectItem key={tenant.id} value={tenant.id}>{tenant.name}</SelectItem>
+            {mockContacts.map(contact => (
+              <SelectItem key={contact.id} value={contact.id}>{contact.name}</SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -230,6 +260,13 @@ export default function Users() {
           title: 'No users found',
           description: 'Try adjusting your search or filter criteria',
         }}
+      />
+
+      <UserFormDialog
+        open={isDialogOpen}
+        onOpenChange={setIsDialogOpen}
+        user={editingUser}
+        onSave={handleSaveUser}
       />
     </div>
   );
