@@ -22,7 +22,7 @@ import {
   FileCheck,
   Workflow,
   Clock,
-  HeartHandshake,
+  
   Sparkles,
   ArrowUpRight,
   Quote
@@ -260,12 +260,6 @@ export default function Landing() {
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
               </Link>
-              <a href="mailto:hello@reley.io">
-                <Button variant="outline" size="xl" className="group text-base px-8 w-full sm:w-auto">
-                  <HeartHandshake className="w-5 h-5 mr-1" />
-                  Contact Us
-                </Button>
-              </a>
             </div>
 
             {/* Social Proof Mini */}
@@ -653,15 +647,6 @@ export default function Landing() {
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
                 </Link>
-                <a href="mailto:hello@reley.io">
-                  <Button 
-                    variant="outline" 
-                    size="xl" 
-                    className="border-white/30 text-white hover:bg-white/10 backdrop-blur-sm w-full sm:w-auto text-base px-10 h-14"
-                  >
-                    Contact Us
-                  </Button>
-                </a>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
