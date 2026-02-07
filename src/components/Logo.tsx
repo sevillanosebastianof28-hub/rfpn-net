@@ -37,7 +37,7 @@ export function Logo({ className, showText = true, size = 'md' }: LogoProps) {
             RFNB
           </span>
           <span className="text-[10px] uppercase tracking-widest text-muted-foreground -mt-0.5">
-            Fast Network Building
+            Fast Property Network
           </span>
         </div>
       )}

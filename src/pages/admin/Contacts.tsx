@@ -22,69 +22,69 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { mockTenants } from '@/data/mockData';
-import { Tenant } from '@/types';
+import { mockContacts } from '@/data/mockData';
+import { Contact } from '@/types';
 import { format } from 'date-fns';
 import { toast } from 'sonner';
 
-export default function Tenants() {
-  const [tenants, setTenants] = useState(mockTenants);
+export default function Contacts() {
+  const [contacts, setContacts] = useState(mockContacts);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [newTenant, setNewTenant] = useState({
+  const [newContact, setNewContact] = useState({
     name: '',
     slug: '',
     primaryColor: '#7c3aed',
     secondaryColor: '#1f2937',
   });
 
-  const filteredTenants = tenants.filter(tenant =>
-    tenant.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    tenant.slug.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredContacts = contacts.filter(contact =>
+    contact.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    contact.slug.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
-  const handleCreateTenant = () => {
-    const tenant: Tenant = {
+  const handleCreateContact = () => {
+    const contact: Contact = {
       id: `t${Date.now()}`,
-      name: newTenant.name,
-      slug: newTenant.slug,
+      name: newContact.name,
+      slug: newContact.slug,
       isActive: true,
       branding: {
-        primaryColor: newTenant.primaryColor,
-        secondaryColor: newTenant.secondaryColor,
+        primaryColor: newContact.primaryColor,
+        secondaryColor: newContact.secondaryColor,
       },
       createdAt: new Date(),
       updatedAt: new Date(),
       userCount: 0,
     };
-    setTenants([tenant, ...tenants]);
+    setContacts([contact, ...contacts]);
     setIsCreateOpen(false);
-    setNewTenant({ name: '', slug: '', primaryColor: '#7c3aed', secondaryColor: '#1f2937' });
-    toast.success('Tenant created successfully');
+    setNewContact({ name: '', slug: '', primaryColor: '#7c3aed', secondaryColor: '#1f2937' });
+    toast.success('Contact created successfully');
   };
 
-  const handleToggleStatus = (tenant: Tenant) => {
-    setTenants(tenants.map(t => 
-      t.id === tenant.id ? { ...t, isActive: !t.isActive } : t
+  const handleToggleStatus = (contact: Contact) => {
+    setContacts(contacts.map(c => 
+      c.id === contact.id ? { ...c, isActive: !c.isActive } : c
     ));
-    toast.success(`Tenant ${tenant.isActive ? 'deactivated' : 'activated'}`);
+    toast.success(`Contact ${contact.isActive ? 'deactivated' : 'activated'}`);
   };
 
   const columns = [
     {
       key: 'name',
       header: 'Tenant',
-      render: (tenant: Tenant) => (
+      render: (contact: Contact) => (
         <div className="flex items-center gap-3">
           <div 
             className="flex h-10 w-10 items-center justify-center rounded-lg text-sm font-semibold text-white"
-            style={{ backgroundColor: tenant.branding.primaryColor }}
+            style={{ backgroundColor: contact.branding.primaryColor }}
           >
-            {tenant.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
+            {contact.name.split(' ').map(w => w[0]).join('').slice(0, 2)}
           </div>
           <div>
-            <p className="font-medium">{tenant.name}</p>
-            <p className="text-sm text-muted-foreground">{tenant.slug}</p>
+            <p className="font-medium">{contact.name}</p>
+            <p className="text-sm text-muted-foreground">{contact.slug}</p>
           </div>
         </div>
       ),
@@ -92,39 +92,39 @@ export default function Tenants() {
     {
       key: 'userCount',
       header: 'Users',
-      render: (tenant: Tenant) => (
-        <span className="font-medium">{tenant.userCount}</span>
+      render: (contact: Contact) => (
+        <span className="font-medium">{contact.userCount}</span>
       ),
     },
     {
       key: 'createdAt',
       header: 'Created',
-      render: (tenant: Tenant) => (
+      render: (contact: Contact) => (
         <span className="text-muted-foreground">
-          {format(tenant.createdAt, 'MMM d, yyyy')}
+          {format(contact.createdAt, 'MMM d, yyyy')}
         </span>
       ),
     },
     {
       key: 'isActive',
       header: 'Status',
-      render: (tenant: Tenant) => (
-        <StatusBadge status={tenant.isActive} />
+      render: (contact: Contact) => (
+        <StatusBadge status={contact.isActive} />
       ),
     },
     {
       key: 'branding',
       header: 'Branding',
-      render: (tenant: Tenant) => (
+      render: (contact: Contact) => (
         <div className="flex items-center gap-2">
           <div 
             className="h-5 w-5 rounded border border-border"
-            style={{ backgroundColor: tenant.branding.primaryColor }}
+            style={{ backgroundColor: contact.branding.primaryColor }}
             title="Primary"
           />
           <div 
             className="h-5 w-5 rounded border border-border"
-            style={{ backgroundColor: tenant.branding.secondaryColor }}
+            style={{ backgroundColor: contact.branding.secondaryColor }}
             title="Secondary"
           />
         </div>
@@ -134,7 +134,7 @@ export default function Tenants() {
       key: 'actions',
       header: '',
       className: 'w-12',
-      render: (tenant: Tenant) => (
+      render: (contact: Contact) => (
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" size="icon" className="h-8 w-8">
@@ -146,8 +146,8 @@ export default function Tenants() {
               <Pencil className="mr-2 h-4 w-4" />
               Edit
             </DropdownMenuItem>
-            <DropdownMenuItem onClick={() => handleToggleStatus(tenant)}>
-              {tenant.isActive ? (
+            <DropdownMenuItem onClick={() => handleToggleStatus(contact)}>
+              {contact.isActive ? (
                 <>
                   <PowerOff className="mr-2 h-4 w-4" />
                   Deactivate
@@ -173,19 +173,19 @@ export default function Tenants() {
   return (
     <div className="animate-fade-in">
       <PageHeader 
-        title="Tenants"
+        title="Contacts"
         description="Manage client organizations and their branding settings"
         actions={
           <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogTrigger asChild>
               <Button variant="gradient">
                 <Plus className="h-4 w-4" />
-                Add Tenant
+                Add Contact
               </Button>
             </DialogTrigger>
             <DialogContent className="sm:max-w-md">
               <DialogHeader>
-                <DialogTitle>Create New Tenant</DialogTitle>
+                <DialogTitle>Create New Contact</DialogTitle>
                 <DialogDescription>
                   Add a new client organization to the platform
                 </DialogDescription>
@@ -196,8 +196,8 @@ export default function Tenants() {
                   <Input
                     id="name"
                     placeholder="Acme Corporation"
-                    value={newTenant.name}
-                    onChange={(e) => setNewTenant({ ...newTenant, name: e.target.value })}
+                    value={newContact.name}
+                    onChange={(e) => setNewContact({ ...newContact, name: e.target.value })}
                   />
                 </div>
                 <div className="space-y-2">
@@ -205,8 +205,8 @@ export default function Tenants() {
                   <Input
                     id="slug"
                     placeholder="acme-corp"
-                    value={newTenant.slug}
-                    onChange={(e) => setNewTenant({ ...newTenant, slug: e.target.value })}
+                    value={newContact.slug}
+                    onChange={(e) => setNewContact({ ...newContact, slug: e.target.value })}
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-4">
@@ -216,13 +216,13 @@ export default function Tenants() {
                       <input
                         type="color"
                         id="primaryColor"
-                        value={newTenant.primaryColor}
-                        onChange={(e) => setNewTenant({ ...newTenant, primaryColor: e.target.value })}
+                        value={newContact.primaryColor}
+                        onChange={(e) => setNewContact({ ...newContact, primaryColor: e.target.value })}
                         className="h-10 w-10 cursor-pointer rounded-lg border border-border"
                       />
                       <Input
-                        value={newTenant.primaryColor}
-                        onChange={(e) => setNewTenant({ ...newTenant, primaryColor: e.target.value })}
+                        value={newContact.primaryColor}
+                        onChange={(e) => setNewContact({ ...newContact, primaryColor: e.target.value })}
                         className="font-mono text-sm"
                       />
                     </div>
@@ -233,13 +233,13 @@ export default function Tenants() {
                       <input
                         type="color"
                         id="secondaryColor"
-                        value={newTenant.secondaryColor}
-                        onChange={(e) => setNewTenant({ ...newTenant, secondaryColor: e.target.value })}
+                        value={newContact.secondaryColor}
+                        onChange={(e) => setNewContact({ ...newContact, secondaryColor: e.target.value })}
                         className="h-10 w-10 cursor-pointer rounded-lg border border-border"
                       />
                       <Input
-                        value={newTenant.secondaryColor}
-                        onChange={(e) => setNewTenant({ ...newTenant, secondaryColor: e.target.value })}
+                        value={newContact.secondaryColor}
+                        onChange={(e) => setNewContact({ ...newContact, secondaryColor: e.target.value })}
                         className="font-mono text-sm"
                       />
                     </div>
@@ -252,10 +252,10 @@ export default function Tenants() {
                 </Button>
                 <Button 
                   variant="gradient" 
-                  onClick={handleCreateTenant}
-                  disabled={!newTenant.name || !newTenant.slug}
+                  onClick={handleCreateContact}
+                  disabled={!newContact.name || !newContact.slug}
                 >
-                  Create Tenant
+                  Create Contact
                 </Button>
               </DialogFooter>
             </DialogContent>
@@ -266,7 +266,7 @@ export default function Tenants() {
       {/* Filters */}
       <div className="mb-6">
         <Input
-          placeholder="Search tenants..."
+          placeholder="Search contacts..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           className="max-w-sm"
@@ -275,17 +275,17 @@ export default function Tenants() {
 
       <DataTable
         columns={columns}
-        data={filteredTenants}
+        data={filteredContacts}
         emptyState={{
           icon: <Building2 className="h-8 w-8 text-muted-foreground" />,
-          title: 'No tenants found',
+          title: 'No contacts found',
           description: searchQuery 
             ? 'Try adjusting your search query'
-            : 'Get started by adding your first tenant',
+            : 'Get started by adding your first contact',
           action: !searchQuery && (
             <Button variant="outline" onClick={() => setIsCreateOpen(true)}>
               <Plus className="mr-2 h-4 w-4" />
-              Add Tenant
+              Add Contact
             </Button>
           ),
         }}

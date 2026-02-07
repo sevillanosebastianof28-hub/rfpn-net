@@ -56,7 +56,7 @@ export default function Dashboard() {
     },
     {
       key: 'tenantName',
-      header: 'Tenant',
+      header: 'Contact',
     },
     {
       key: 'type',
@@ -91,9 +91,9 @@ export default function Dashboard() {
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <div className="animate-slide-up stagger-1" style={{ opacity: 0 }}>
           <StatCard
-            title="Total Tenants"
-            value={mockDashboardStats.totalTenants}
-            subtitle={`${mockDashboardStats.activeTenants} active`}
+            title="Total Contacts"
+            value={mockDashboardStats.totalContacts}
+            subtitle={`${mockDashboardStats.activeContacts} active`}
             icon={Building2}
             trend={{ value: 12, isPositive: true }}
           />

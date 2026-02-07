@@ -1,4 +1,4 @@
-import { User, Tenant, Application, AuditLog, DashboardStats } from '@/types';
+import { User, Contact, Application, AuditLog, DashboardStats } from '@/types';
 
 export const mockUsers: User[] = [
   {
@@ -75,7 +75,7 @@ export const mockUsers: User[] = [
   },
 ];
 
-export const mockTenants: Tenant[] = [
+export const mockContacts: Contact[] = [
   {
     id: 't1',
     name: 'Acme Corporation',
@@ -288,10 +288,13 @@ export const mockAuditLogs: AuditLog[] = [
 ];
 
 export const mockDashboardStats: DashboardStats = {
-  totalTenants: 5,
-  activeTenants: 4,
+  totalContacts: 5,
+  activeContacts: 4,
   totalUsers: 6,
   activeUsers: 5,
   pendingApplications: 2,
   recentActivity: 8,
 };
+
+// Backwards-compatible alias
+export const mockTenants = mockContacts;

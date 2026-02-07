@@ -64,7 +64,7 @@ const features = [
 
 const testimonials = [
   {
-    quote: "RFNB transformed how we manage our enterprise clients. The multi-tenant setup is incredibly powerful.",
+    quote: "RFNB transformed how we manage our property network clients. The multi-tenant setup is incredibly powerful.",
     author: "Sarah Chen",
     role: "CTO, TechScale Inc",
     avatar: "SC",
@@ -262,7 +262,7 @@ export default function Landing() {
                 </div>
                 <div className="flex-1 flex justify-center">
                   <div className="px-4 py-1 rounded-md bg-background/50 text-xs text-muted-foreground">
-                    app.rfnb.io/dashboard
+                    app.reley.io/dashboard
                   </div>
                 </div>
               </div>
@@ -272,7 +272,7 @@ export default function Landing() {
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 lg:gap-6">
                   {/* Sidebar Mock */}
                   <div className="hidden lg:block space-y-3">
-                    {['Dashboard', 'Tenants', 'Users', 'Analytics', 'Settings'].map((item, i) => (
+                    {['Dashboard', 'Contacts', 'Users', 'Analytics', 'Settings'].map((item, i) => (
                       <div 
                         key={item}
                         className={`flex items-center gap-3 px-4 py-2.5 rounded-lg transition-colors ${
@@ -507,7 +507,7 @@ export default function Landing() {
                 <span className="text-white/80">of your enterprise today</span>
               </h2>
               <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
-                Join 10,000+ teams who trust RFNB to power their most critical operations. Setup takes less than 5 minutes.
+                Join 10,000+ teams who trust RFNB to power their property networks. Setup takes less than 5 minutes.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
@@ -548,7 +548,7 @@ export default function Landing() {
             <div className="col-span-2">
               <Logo size="sm" />
               <p className="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The modern platform for enterprise management. Build, scale, and succeed.
+                The modern platform for property network management. Build, scale, and succeed.
               </p>
               <div className="flex items-center gap-4 mt-6">
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
@@ -595,7 +595,7 @@ export default function Landing() {
 
           <div className="pt-8 border-t border-border/50 text-center">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} RFNB. All rights reserved.
+              © {new Date().getFullYear()} Reley Fast Property Network. All rights reserved.
             </p>
           </div>
         </div>
