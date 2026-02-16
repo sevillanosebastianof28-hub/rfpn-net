@@ -8,7 +8,7 @@
 @layer base {
   :root {
     /* Light mode - RFNB Crest Palette */
-    --background: 0 0% 98%;
+    --background: 280 30% 96%;
     --foreground: 280 15% 10%;
 
     --card: 0 0% 100%;
@@ -18,20 +18,20 @@
     --popover-foreground: 280 15% 10%;
 
     /* Deep Royal Purple - from RFNB crest shield */
-    --primary: 288 45% 38%;
+    --primary: 280 60% 35%;
     --primary-foreground: 0 0% 100%;
-    --primary-glow: 288 50% 50%;
+    --primary-glow: 280 65% 48%;
 
     /* Light Secondary */
-    --secondary: 280 5% 94%;
+    --secondary: 280 20% 92%;
     --secondary-foreground: 280 15% 15%;
 
-    /* Muted - Light Gray */
-    --muted: 280 5% 92%;
+    /* Muted - Light Purple Gray */
+    --muted: 280 15% 90%;
     --muted-foreground: 280 8% 45%;
 
-    /* Accent - Light Silver */
-    --accent: 280 5% 94%;
+    /* Accent - Light Purple */
+    --accent: 280 20% 92%;
     --accent-foreground: 280 15% 15%;
     --silver: 210 10% 70%;
 
@@ -44,32 +44,32 @@
     --warning: 38 92% 50%;
     --warning-foreground: 0 0% 0%;
 
-    --border: 280 5% 88%;
-    --input: 280 5% 88%;
-    --ring: 288 45% 38%;
+    --border: 280 15% 85%;
+    --input: 280 15% 85%;
+    --ring: 280 60% 35%;
 
     --radius: 0.75rem;
 
-    /* Sidebar - Light theme with purple accent */
-    --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 280 15% 30%;
-    --sidebar-primary: 288 45% 38%;
+    /* Sidebar - Deep purple with white text */
+    --sidebar-background: 280 55% 25%;
+    --sidebar-foreground: 0 0% 95%;
+    --sidebar-primary: 280 65% 48%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 288 30% 96%;
-    --sidebar-accent-foreground: 288 45% 35%;
-    --sidebar-border: 280 5% 90%;
-    --sidebar-ring: 288 45% 38%;
+    --sidebar-accent: 280 50% 32%;
+    --sidebar-accent-foreground: 0 0% 100%;
+    --sidebar-border: 280 45% 30%;
+    --sidebar-ring: 280 65% 48%;
 
     /* Custom gradients - RFNB Purple */
-    --gradient-primary: linear-gradient(135deg, hsl(288 45% 38%), hsl(288 50% 50%));
-    --gradient-dark: linear-gradient(180deg, hsl(0 0% 100%), hsl(0 0% 98%));
-    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(0 0% 99%));
+    --gradient-primary: linear-gradient(135deg, hsl(280 60% 35%), hsl(280 65% 48%));
+    --gradient-dark: linear-gradient(180deg, hsl(280 30% 96%), hsl(280 25% 94%));
+    --gradient-card: linear-gradient(145deg, hsl(0 0% 100%), hsl(280 15% 98%));
     
     /* Shadows */
     --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
     --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.05);
     --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.05);
-    --shadow-glow: 0 0 20px -5px hsl(288 45% 38% / 0.3);
+    --shadow-glow: 0 0 20px -5px hsl(280 60% 35% / 0.3);
   }
 
   .dark {
@@ -79,7 +79,7 @@
     --card-foreground: 0 0% 95%;
     --popover: 280 12% 7%;
     --popover-foreground: 0 0% 95%;
-    --primary: 288 45% 38%;
+    --primary: 280 60% 35%;
     --primary-foreground: 0 0% 100%;
     --secondary: 280 10% 12%;
     --secondary-foreground: 0 0% 95%;
@@ -91,7 +91,7 @@
     --destructive-foreground: 0 0% 100%;
     --border: 280 8% 18%;
     --input: 280 8% 18%;
-    --ring: 288 45% 38%;
+    --ring: 280 60% 35%;
   }
 }
 
@@ -155,7 +155,7 @@
   }
 
   .hover-glow:hover {
-    box-shadow: 0 0 30px -5px hsl(288 45% 38% / 0.25);
+    box-shadow: 0 0 30px -5px hsl(280 60% 35% / 0.25);
   }
 
   .stat-card {
@@ -180,7 +180,7 @@
   .stat-card::after {
     content: '';
     @apply absolute -right-8 -top-8 h-24 w-24 rounded-full opacity-0 transition-opacity duration-500;
-    background: radial-gradient(circle, hsl(288 45% 38% / 0.15), transparent 70%);
+    background: radial-gradient(circle, hsl(280 60% 35% / 0.15), transparent 70%);
   }
 
   .stat-card:hover::after {
@@ -229,7 +229,7 @@
 
   .nav-item {
     @apply flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-all duration-200;
-    @apply text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
+    @apply text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground;
   }
 
   .nav-item:hover {
@@ -237,8 +237,8 @@
   }
 
   .nav-item.active {
-    @apply bg-primary/10 text-primary;
-    box-shadow: inset 3px 0 0 hsl(288 45% 38%);
+    @apply bg-sidebar-accent text-white;
+    box-shadow: inset 3px 0 0 hsl(280 65% 60%);
   }
 
   .nav-item.locked {
@@ -266,7 +266,7 @@
 
   .btn-glow:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 25px -5px hsl(288 45% 38% / 0.35);
+    box-shadow: 0 8px 25px -5px hsl(280 60% 35% / 0.35);
   }
 
   .btn-glow:active {
@@ -306,7 +306,7 @@
   }
 
   .input-glow:focus {
-    box-shadow: 0 0 0 3px hsl(288 45% 38% / 0.15);
+    box-shadow: 0 0 0 3px hsl(280 60% 35% / 0.15);
   }
 
   /* Floating animation for decorative elements */
@@ -331,7 +331,7 @@
   .pulse-ring::after {
     content: '';
     @apply absolute inset-0 rounded-full opacity-0;
-    border: 2px solid hsl(288 45% 38% / 0.5);
+    border: 2px solid hsl(280 60% 35% / 0.5);
     animation: pulse-ring 2s ease-out infinite;
   }
 

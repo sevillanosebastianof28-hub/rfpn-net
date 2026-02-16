@@ -62,7 +62,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
       )}>
         <Icon className="h-5 w-5 shrink-0" />
         {!collapsed && <span>{label}</span>}
-        {locked && !collapsed && <Lock className="ml-auto h-3.5 w-3.5 text-muted-foreground/50" />}
+        {locked && !collapsed && <Lock className="ml-auto h-3.5 w-3.5 text-sidebar-foreground/30" />}
       </div>
     );
 
@@ -118,7 +118,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
           variant="ghost" 
           size="icon" 
           onClick={onToggle}
-          className={cn('h-8 w-8 text-muted-foreground hover:text-foreground', collapsed && 'hidden')}
+          className={cn('h-8 w-8 text-sidebar-foreground/60 hover:text-sidebar-foreground', collapsed && 'hidden')}
         >
           <ChevronLeft className="h-4 w-4" />
         </Button>
@@ -129,7 +129,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
         {/* Main Navigation */}
         <div className="space-y-1">
           {!collapsed && (
-            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
               Main
             </p>
           )}
@@ -141,7 +141,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
         {/* Portal Links */}
         <div className="mt-6 space-y-1">
           {!collapsed && (
-            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">
               Portals
             </p>
           )}
@@ -167,14 +167,14 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
           </div>
           {!collapsed && (
             <div className="flex-1 overflow-hidden">
-              <p className="truncate text-sm font-medium">{user?.firstName} {user?.lastName}</p>
-              <p className="truncate text-xs text-muted-foreground capitalize">
+              <p className="truncate text-sm font-medium text-sidebar-foreground">{user?.firstName} {user?.lastName}</p>
+              <p className="truncate text-xs text-sidebar-foreground/60 capitalize">
                 {user?.role.replace('_', ' ')}
               </p>
             </div>
           )}
           {!collapsed && (
-            <Button variant="ghost" size="icon" onClick={logout} className="h-8 w-8 shrink-0">
+            <Button variant="ghost" size="icon" onClick={logout} className="h-8 w-8 shrink-0 text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent">
               <LogOut className="h-4 w-4" />
             </Button>
           )}
@@ -187,7 +187,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
           variant="ghost" 
           size="icon" 
           onClick={onToggle}
-          className="absolute -right-3 top-20 h-6 w-6 rounded-full border border-sidebar-border bg-sidebar text-muted-foreground hover:text-foreground"
+          className="absolute -right-3 top-20 h-6 w-6 rounded-full border border-sidebar-border bg-sidebar text-sidebar-foreground/60 hover:text-sidebar-foreground"
         >
           <ChevronRight className="h-3 w-3" />
         </Button>
