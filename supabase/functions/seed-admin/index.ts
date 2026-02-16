@@ -6,45 +6,43 @@ Deno.serve(async () => {
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!
   );
 
-  const email = "admin@reley.io";
-  const password = "demo123";
+  const users = [
+    { email: "admin@reley.io", password: "demo123", firstName: "Super", lastName: "Admin", role: "super_admin" },
+    { email: "centraladmin@reley.io", password: "demo123", firstName: "Central", lastName: "Admin", role: "central_admin" },
+    { email: "developer@reley.io", password: "demo123", firstName: "Dev", lastName: "User", role: "developer" },
+    { email: "broker@reley.io", password: "demo123", firstName: "Broker", lastName: "User", role: "broker" },
+  ];
 
-  // Check if user already exists
-  const { data: existing } = await supabase.auth.admin.listUsers();
-  const found = existing?.users?.find((u) => u.email === email);
+  const results = [];
 
-  if (found) {
-    // Ensure role is super_admin
-    const { data: role } = await supabase
-      .from("user_roles")
-      .select("role")
-      .eq("user_id", found.id)
-      .maybeSingle();
+  for (const u of users) {
+    const { data: existing } = await supabase.auth.admin.listUsers();
+    const found = existing?.users?.find((x) => x.email === u.email);
 
-    if (role?.role !== "super_admin") {
+    if (found) {
+      // Ensure correct role
       await supabase
         .from("user_roles")
-        .upsert({ user_id: found.id, role: "super_admin" }, { onConflict: "user_id" });
+        .upsert({ user_id: found.id, role: u.role }, { onConflict: "user_id" });
+      results.push({ email: u.email, status: "exists", role: u.role });
+      continue;
     }
 
-    return new Response(JSON.stringify({ message: "Admin already exists", userId: found.id }), {
-      headers: { "Content-Type": "application/json" },
+    const { data, error } = await supabase.auth.admin.createUser({
+      email: u.email,
+      password: u.password,
+      email_confirm: true,
+      user_metadata: { first_name: u.firstName, last_name: u.lastName, role: u.role },
     });
+
+    if (error) {
+      results.push({ email: u.email, status: "error", error: error.message });
+    } else {
+      results.push({ email: u.email, status: "created", role: u.role });
+    }
   }
 
-  // Create user with auto-confirm
-  const { data: newUser, error } = await supabase.auth.admin.createUser({
-    email,
-    password,
-    email_confirm: true,
-    user_metadata: { first_name: "Super", last_name: "Admin", role: "super_admin" },
-  });
-
-  if (error) {
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 });
-  }
-
-  return new Response(JSON.stringify({ message: "Admin created", userId: newUser.user.id }), {
+  return new Response(JSON.stringify({ results }), {
     headers: { "Content-Type": "application/json" },
   });
 });
