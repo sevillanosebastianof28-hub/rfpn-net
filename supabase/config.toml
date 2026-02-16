@@ -1,1 +1,4 @@
 project_id = "poqiuoyhzbzbkshlwfxt"
+
+[functions.credas-webhook]
+verify_jwt = false

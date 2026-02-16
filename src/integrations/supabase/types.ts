@@ -122,6 +122,9 @@ export type Database = {
           company_registration_number: string | null
           consent_captured_at: string | null
           created_at: string
+          credas_entity_id: string | null
+          credas_journey_id: string | null
+          credas_process_id: string | null
           id: string
           kyc_checked_at: string | null
           kyc_status: Database["public"]["Enums"]["verification_status"]
@@ -139,6 +142,9 @@ export type Database = {
           company_registration_number?: string | null
           consent_captured_at?: string | null
           created_at?: string
+          credas_entity_id?: string | null
+          credas_journey_id?: string | null
+          credas_process_id?: string | null
           id?: string
           kyc_checked_at?: string | null
           kyc_status?: Database["public"]["Enums"]["verification_status"]
@@ -156,6 +162,9 @@ export type Database = {
           company_registration_number?: string | null
           consent_captured_at?: string | null
           created_at?: string
+          credas_entity_id?: string | null
+          credas_journey_id?: string | null
+          credas_process_id?: string | null
           id?: string
           kyc_checked_at?: string | null
           kyc_status?: Database["public"]["Enums"]["verification_status"]
