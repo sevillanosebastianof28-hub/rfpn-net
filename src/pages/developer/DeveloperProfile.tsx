@@ -59,13 +59,26 @@ export default function DeveloperProfile() {
 
   const handleRequestVerification = async () => {
     if (!user) return;
-    // Mock verification - in production this would trigger Credas
-    await supabase.from('developer_profiles').update({
-      verification_status: 'in_progress' as any,
-    }).eq('user_id', user.id);
-    toast.success('Verification request submitted. This is a placeholder — Credas integration coming soon.');
-    const { data } = await supabase.from('developer_profiles').select('*').eq('user_id', user.id).maybeSingle();
-    setProfile(data);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData?.session?.access_token;
+      if (!token) { toast.error('Please log in again'); return; }
+
+      const res = await supabase.functions.invoke('credas-verify', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+
+      if (res.error) {
+        toast.error(res.error.message || 'Verification request failed');
+        return;
+      }
+
+      toast.success('Verification invite sent! Check your email for the Credas link.');
+      const { data } = await supabase.from('developer_profiles').select('*').eq('user_id', user.id).maybeSingle();
+      setProfile(data);
+    } catch (err: any) {
+      toast.error(err.message || 'Verification request failed');
+    }
   };
 
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
