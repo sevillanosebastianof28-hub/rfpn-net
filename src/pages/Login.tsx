@@ -1,65 +1,55 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { useAuth } from '@/contexts/AuthContext';
-import { Loader2, AlertCircle, Shield, ArrowLeft } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { Loader2, AlertCircle, ArrowLeft } from 'lucide-react';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const { login } = useAuth();
+  const { login, isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+
+  // Role-based redirect when auth state changes
+  useEffect(() => {
+    if (isAuthenticated && user) {
+      if (user.role === 'super_admin' || user.role === 'central_admin') navigate('/admin');
+      else if (user.role === 'developer') navigate('/developer');
+      else if (user.role === 'broker') navigate('/broker');
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setIsSubmitting(true);
-
-    const success = await login(email, password);
-    
-    if (success) {
-      navigate('/admin');
-    } else {
-      setError('Invalid credentials or insufficient permissions');
-    }
-    
+    const result = await login(email, password);
+    if (!result.success) setError(result.error || 'Invalid credentials');
     setIsSubmitting(false);
   };
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background">
-      {/* Animated Background Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary/5 blur-3xl float" />
         <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-primary/10 blur-3xl float-delayed" />
         <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl animate-pulse-slow" />
-        
-        {/* Decorative circles */}
         <div className="absolute top-20 right-20 h-32 w-32 rounded-full border border-primary/10 float" />
         <div className="absolute bottom-32 left-20 h-24 w-24 rounded-full border border-primary/5 float-delayed" />
         <div className="absolute top-1/3 left-1/4 h-16 w-16 rounded-full bg-primary/5 float" />
       </div>
 
-      {/* Grid Pattern */}
-      <div 
-        className="absolute inset-0 opacity-[0.03]"
-        style={{
-          backgroundImage: `
-            linear-gradient(hsl(288 45% 38% / 0.3) 1px, transparent 1px),
-            linear-gradient(90deg, hsl(288 45% 38% / 0.3) 1px, transparent 1px)
-          `,
-          backgroundSize: '64px 64px',
-        }}
-      />
+      <div className="absolute inset-0 opacity-[0.03]" style={{
+        backgroundImage: `linear-gradient(hsl(288 45% 38% / 0.3) 1px, transparent 1px), linear-gradient(90deg, hsl(288 45% 38% / 0.3) 1px, transparent 1px)`,
+        backgroundSize: '64px 64px',
+      }} />
 
       <div className="relative flex min-h-screen items-center justify-center p-4">
-        {/* Back to Landing */}
         <Link to="/" className="absolute top-6 left-6 z-10 animate-fade-in">
           <Button variant="ghost" size="sm" className="group gap-2 text-muted-foreground hover:text-foreground">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
@@ -68,92 +58,46 @@ export default function Login() {
         </Link>
 
         <div className="w-full max-w-md animate-fade-in">
-          {/* Logo */}
           <div className="mb-8 flex justify-center animate-slide-up">
-            <Link to="/">
-              <Logo size="lg" />
-            </Link>
+            <Link to="/"><Logo size="lg" /></Link>
           </div>
 
-          {/* Login Card */}
           <div className="glass-card hover-glow rounded-2xl border border-border/50 p-8 animate-slide-up stagger-1">
             <div className="mb-6 text-center">
               <h1 className="text-2xl font-bold text-gradient">Welcome back</h1>
-              <p className="mt-1 text-sm text-muted-foreground">
-                Sign in to access the admin dashboard
-              </p>
+              <p className="mt-1 text-sm text-muted-foreground">Sign in to access your portal</p>
             </div>
 
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2 animate-slide-in-left stagger-2" style={{ opacity: 0 }}>
                 <Label htmlFor="email">Email address</Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="admin@rfnb.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                  autoComplete="email"
-                  className="input-glow"
-                />
+                <Input id="email" type="email" placeholder="you@example.com" value={email}
+                  onChange={(e) => setEmail(e.target.value)} required autoComplete="email" className="input-glow" />
               </div>
-
               <div className="space-y-2 animate-slide-in-left stagger-3" style={{ opacity: 0 }}>
                 <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                  autoComplete="current-password"
-                  className="input-glow"
-                />
+                <Input id="password" type="password" placeholder="••••••••" value={password}
+                  onChange={(e) => setPassword(e.target.value)} required autoComplete="current-password" className="input-glow" />
               </div>
 
               {error && (
                 <div className="flex items-center gap-2 rounded-lg bg-destructive/10 p-3 text-sm text-destructive animate-fade-in">
-                  <AlertCircle className="h-4 w-4 shrink-0" />
-                  <p>{error}</p>
+                  <AlertCircle className="h-4 w-4 shrink-0" /><p>{error}</p>
                 </div>
               )}
 
               <div className="animate-slide-up stagger-4" style={{ opacity: 0 }}>
-                <Button
-                  type="submit"
-                  variant="gradient"
-                  size="lg"
-                  className="w-full"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? (
-                    <>
-                      <Loader2 className="h-4 w-4 animate-spin" />
-                      Signing in...
-                    </>
-                  ) : (
-                    'Sign in'
-                  )}
+                <Button type="submit" variant="gradient" size="lg" className="w-full" disabled={isSubmitting}>
+                  {isSubmitting ? <><Loader2 className="h-4 w-4 animate-spin" /> Signing in...</> : 'Sign in'}
                 </Button>
               </div>
             </form>
 
-            {/* Demo Credentials */}
-            <div className="mt-6 rounded-lg bg-muted/50 p-4 card-shine animate-slide-up stagger-5" style={{ opacity: 0 }}>
-              <div className="mb-2 flex items-center gap-2 text-xs font-medium uppercase tracking-wider text-muted-foreground">
-                <Shield className="h-3.5 w-3.5" />
-                Demo Credentials
-              </div>
-              <div className="space-y-1 text-sm">
-                <p><span className="text-muted-foreground">Email:</span> admin@rfnb.com</p>
-                <p><span className="text-muted-foreground">Password:</span> demo123</p>
-              </div>
-            </div>
+            <p className="mt-4 text-center text-sm text-muted-foreground">
+              Don't have an account? <Link to="/register" className="text-primary hover:underline">Register as Developer</Link>
+            </p>
           </div>
 
-          {/* Footer */}
           <p className="mt-6 text-center text-xs text-muted-foreground animate-fade-in stagger-5" style={{ opacity: 0 }}>
             Protected by enterprise-grade security
           </p>

@@ -33,8 +33,8 @@ const mainNavItems = [
 ];
 
 const lockedNavItems = [
-  { icon: Code2, label: 'Developer Portal', locked: true },
-  { icon: Briefcase, label: 'Broker Portal', locked: true },
+  { icon: Code2, label: 'Developer Portal', path: '/developer' },
+  { icon: Briefcase, label: 'Broker Portal', path: '/broker' },
 ];
 
 const bottomNavItems = [
@@ -138,15 +138,15 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
           ))}
         </div>
 
-        {/* Locked Features */}
+        {/* Portal Links */}
         <div className="mt-6 space-y-1">
           {!collapsed && (
             <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Coming Soon
+              Portals
             </p>
           )}
           {lockedNavItems.map((item) => (
-            <NavItem key={item.label} {...item} />
+            <NavItem key={item.label} icon={item.icon} label={item.label} path={item.path} />
           ))}
         </div>
       </nav>
