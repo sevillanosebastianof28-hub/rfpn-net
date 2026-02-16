@@ -5,17 +5,20 @@ import { Loader2 } from 'lucide-react';
 
 const Index = () => {
   const navigate = useNavigate();
-  const { isAuthenticated, isLoading } = useAuth();
+  const { isAuthenticated, isLoading, user } = useAuth();
 
   useEffect(() => {
     if (!isLoading) {
-      if (isAuthenticated) {
-        navigate('/admin');
+      if (isAuthenticated && user) {
+        if (user.role === 'super_admin' || user.role === 'central_admin') navigate('/admin');
+        else if (user.role === 'developer') navigate('/developer');
+        else if (user.role === 'broker') navigate('/broker');
+        else navigate('/login');
       } else {
-        navigate('/login');
+        navigate('/');
       }
     }
-  }, [isAuthenticated, isLoading, navigate]);
+  }, [isAuthenticated, isLoading, user, navigate]);
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background">
