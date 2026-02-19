@@ -24,8 +24,7 @@ import {
   Clock,
   
   Sparkles,
-  ArrowUpRight,
-  Quote
+  ArrowUpRight
 } from 'lucide-react';
 
 const features = [
@@ -94,29 +93,6 @@ const steps = [
   },
 ];
 
-const testimonials = [
-  {
-    quote: "Reley completely changed how we manage developer relationships. We went from scattered spreadsheets to a unified command center overnight.",
-    author: "Sarah Chen",
-    role: "Head of Lending, Meridian Capital",
-    avatar: "SC",
-    metric: "3x faster deal processing",
-  },
-  {
-    quote: "The role-based access is a game-changer. Our brokers see exactly what they need, and our compliance team sleeps easy at night.",
-    author: "Marcus Johnson",
-    role: "VP Operations, FinCore Partners",
-    avatar: "MJ",
-    metric: "Zero security incidents",
-  },
-  {
-    quote: "We onboarded 50 broker organizations in our first month. The multi-tenant architecture makes it feel like each one has their own platform.",
-    author: "Elena Rodriguez",
-    role: "CEO, PropertyBridge",
-    avatar: "ER",
-    metric: "50 orgs in 30 days",
-  },
-];
 
 const stats = [
   { value: '99.99', label: 'Uptime SLA', suffix: '%' },
@@ -158,9 +134,6 @@ export default function Landing() {
               <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 How It Works
               </a>
-              <a href="#testimonials" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
-                Testimonials
-              </a>
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
               </a>
@@ -194,7 +167,7 @@ export default function Landing() {
             <div className="container mx-auto px-4 py-4 space-y-4">
               <a href="#features" className="block py-2 text-foreground">Features</a>
               <a href="#how-it-works" className="block py-2 text-foreground">How It Works</a>
-              <a href="#testimonials" className="block py-2 text-foreground">Testimonials</a>
+              
               <a href="#contact" className="block py-2 text-foreground">Contact</a>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
@@ -534,61 +507,6 @@ export default function Landing() {
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
             </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section id="testimonials" className="py-20 sm:py-32 bg-muted/20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mx-auto text-center mb-16">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-sm font-medium mb-6">
-              <Star className="w-4 h-4" />
-              Customer Stories
-            </div>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight mb-4">
-              Trusted by property <span className="text-gradient">professionals</span>
-            </h2>
-            <p className="text-lg text-muted-foreground">
-              See how teams are transforming their property finance operations with Reley.
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
-            {testimonials.map((testimonial, index) => (
-              <Card key={index} className="relative overflow-hidden group hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <CardContent className="p-6 sm:p-8">
-                  {/* Quote icon */}
-                  <Quote className="w-8 h-8 text-primary/20 mb-4" />
-                  
-                  {/* Rating */}
-                  <div className="flex gap-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
-                    ))}
-                  </div>
-                  
-                  <p className="text-foreground mb-6 leading-relaxed">"{testimonial.quote}"</p>
-                  
-                  {/* Metric highlight */}
-                  <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-success/10 text-success text-sm font-medium mb-6">
-                    <ArrowUpRight className="w-3.5 h-3.5" />
-                    {testimonial.metric}
-                  </div>
-                  
-                  {/* Author */}
-                  <div className="flex items-center gap-3 pt-4 border-t border-border/50">
-                    <div className="w-10 h-10 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-sm font-medium text-white">
-                      {testimonial.avatar}
-                    </div>
-                    <div>
-                      <div className="font-medium text-sm">{testimonial.author}</div>
-                      <div className="text-xs text-muted-foreground">{testimonial.role}</div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
           </div>
         </div>
       </section>
