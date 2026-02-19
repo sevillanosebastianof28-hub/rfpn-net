@@ -36,12 +36,12 @@ export default function Login() {
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background">
       <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary/5 blur-3xl float" />
-        <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-primary/10 blur-3xl float-delayed" />
-        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/5 blur-3xl animate-pulse-slow" />
-        <div className="absolute top-20 right-20 h-32 w-32 rounded-full border border-primary/10 float" />
-        <div className="absolute bottom-32 left-20 h-24 w-24 rounded-full border border-primary/5 float-delayed" />
-        <div className="absolute top-1/3 left-1/4 h-16 w-16 rounded-full bg-primary/5 float" />
+        <div className="absolute -left-1/4 -top-1/4 h-1/2 w-1/2 rounded-full bg-primary/8 blur-3xl float" />
+        <div className="absolute -bottom-1/4 -right-1/4 h-1/2 w-1/2 rounded-full bg-teal/10 blur-3xl float-delayed" />
+        <div className="absolute left-1/2 top-1/2 h-96 w-96 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber/5 blur-3xl animate-pulse-slow" />
+        <div className="absolute top-20 right-20 h-32 w-32 rounded-full border border-teal/15 float" />
+        <div className="absolute bottom-32 left-20 h-24 w-24 rounded-full border border-rose/10 float-delayed" />
+        <div className="absolute top-1/3 left-1/4 h-16 w-16 rounded-full bg-primary/8 float" />
       </div>
 
       <div className="absolute inset-0 opacity-[0.03]" style={{

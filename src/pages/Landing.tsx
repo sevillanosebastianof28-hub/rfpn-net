@@ -95,17 +95,22 @@ const steps = [
 
 
 const stats = [
-  { value: '99.99', label: 'Uptime SLA', suffix: '%' },
-  { value: '500', label: 'Property Networks', suffix: '+' },
-  { value: '£2.4B', label: 'Loans Processed', suffix: '' },
-  { value: '<5', label: 'Min Setup Time', suffix: 'min' },
+  { value: '99.99', label: 'Uptime SLA', suffix: '%', color: 'text-teal-500' },
+  { value: '500', label: 'Property Networks', suffix: '+', color: 'text-primary' },
+  { value: '£2.4B', label: 'Loans Processed', suffix: '', color: 'text-amber-500' },
+  { value: '<5', label: 'Min Setup Time', suffix: 'min', color: 'text-rose-500' },
 ];
 
 const trustedBy = [
   'Meridian Capital', 'PropertyBridge', 'FinCore Partners', 'Horizon Lending', 'Atlas Property Group'
 ];
 
-const words = ['Faster', 'Smarter', 'Together', 'Securely'];
+const words = [
+  { text: 'Faster', color: 'from-amber-500 to-orange-500' },
+  { text: 'Smarter', color: 'from-teal-400 to-emerald-500' },
+  { text: 'Together', color: 'from-primary to-primary-glow' },
+  { text: 'Securely', color: 'from-rose-500 to-pink-500' },
+];
 
 export default function Landing() {
   const [currentWord, setCurrentWord] = useState(0);
@@ -190,8 +195,8 @@ export default function Landing() {
         {/* Animated Background */}
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1200px] h-[600px] bg-gradient-to-b from-primary/20 via-primary/5 to-transparent rounded-full blur-3xl" />
-          <div className="absolute top-40 left-10 w-72 h-72 bg-primary/8 rounded-full blur-3xl animate-pulse-slow" />
-          <div className="absolute top-60 right-10 w-96 h-96 bg-primary/10 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-40 left-10 w-72 h-72 bg-teal/8 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute top-60 right-10 w-96 h-96 bg-rose/8 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1s' }} />
           
           {/* Dot Pattern */}
           <div 
@@ -216,8 +221,13 @@ export default function Landing() {
             <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold tracking-tight mb-6 animate-slide-up">
               <span className="text-foreground">Build Property Networks</span>
               <br />
-              <span className="relative inline-block mt-2">
-                <span className="text-gradient">{words[currentWord]}</span>
+              <span className="relative inline-flex items-center justify-center mt-2 min-w-[280px] sm:min-w-[340px] h-[1.2em]">
+                <span
+                  key={words[currentWord].text}
+                  className={`absolute bg-gradient-to-r ${words[currentWord].color} bg-clip-text text-transparent animate-fade-in`}
+                >
+                  {words[currentWord].text}
+                </span>
                 <span className="absolute -bottom-2 left-0 right-0 h-1 bg-gradient-to-r from-primary to-primary-glow rounded-full animate-pulse" />
               </span>
             </h1>
@@ -406,7 +416,7 @@ export default function Landing() {
             {stats.map((stat) => (
               <div key={stat.label} className="text-center group">
                 <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                  {stat.value}<span className="text-primary">{stat.suffix}</span>
+                  {stat.value}<span className={stat.color}>{stat.suffix}</span>
                 </div>
                 <div className="text-sm sm:text-base text-muted-foreground">{stat.label}</div>
               </div>

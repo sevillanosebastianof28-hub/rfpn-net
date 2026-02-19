@@ -22,6 +22,18 @@
     --primary-foreground: 0 0% 100%;
     --primary-glow: 280 65% 48%;
 
+    /* Teal Accent */
+    --teal: 172 66% 40%;
+    --teal-foreground: 0 0% 100%;
+
+    /* Amber Accent */
+    --amber: 38 92% 50%;
+    --amber-foreground: 0 0% 0%;
+
+    /* Rose Accent */
+    --rose: 350 65% 55%;
+    --rose-foreground: 0 0% 100%;
+
     /* Light Secondary */
     --secondary: 280 20% 92%;
     --secondary-foreground: 280 15% 15%;
