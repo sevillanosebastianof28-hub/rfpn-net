@@ -7,6 +7,7 @@ import { AuthProvider } from "@/contexts/AuthContext";
 
 // Pages
 import Landing from "./pages/Landing";
+import FAQ from "./pages/FAQ";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
@@ -48,6 +49,7 @@ const App = () => (
         <BrowserRouter>
           <Routes>
             <Route path="/" element={<Landing />} />
+            <Route path="/faq" element={<FAQ />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             
