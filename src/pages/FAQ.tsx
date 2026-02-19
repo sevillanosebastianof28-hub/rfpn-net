@@ -81,6 +81,8 @@ export default function FAQPage() {
       <section className="relative pt-32 pb-12 lg:pt-40 lg:pb-16 overflow-hidden">
         <div className="absolute inset-0 pointer-events-none">
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-gradient-to-b from-primary/15 via-primary/5 to-transparent rounded-full blur-3xl" />
+          <div className="absolute top-20 right-1/4 w-64 h-64 bg-teal/8 rounded-full blur-3xl animate-pulse-slow" />
+          <div className="absolute bottom-0 left-1/4 w-48 h-48 bg-amber/6 rounded-full blur-3xl animate-pulse-slow" style={{ animationDelay: '1.5s' }} />
         </div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative text-center">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6">
@@ -182,7 +184,7 @@ export default function FAQPage() {
       {/* CTA */}
       <section className="py-16 lg:py-20">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 border border-primary/20">
+          <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-teal/5 to-primary/10 border border-primary/20">
             <h2 className="text-2xl font-bold mb-3">Still have questions?</h2>
             <p className="text-muted-foreground mb-6">Our team is here to help. Get in touch and we'll respond as soon as possible.</p>
             <Link to="/login">
