@@ -134,6 +134,9 @@ export default function Landing() {
               <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 How It Works
               </a>
+              <Link to="/faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                FAQ
+              </Link>
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
               </a>
@@ -167,7 +170,7 @@ export default function Landing() {
             <div className="container mx-auto px-4 py-4 space-y-4">
               <a href="#features" className="block py-2 text-foreground">Features</a>
               <a href="#how-it-works" className="block py-2 text-foreground">How It Works</a>
-              
+              <Link to="/faq" className="block py-2 text-foreground">FAQ</Link>
               <a href="#contact" className="block py-2 text-foreground">Contact</a>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
