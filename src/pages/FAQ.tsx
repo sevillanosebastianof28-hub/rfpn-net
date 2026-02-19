@@ -66,12 +66,12 @@ export default function FAQPage() {
                   Back to Home
                 </Button>
               </Link>
-              <Link to="/login">
+              <a href="https://customers.rfpn.net/waitlist-sign-up">
                 <Button variant="gradient" size="sm" className="group">
                   Get Started
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </Link>
+              </a>
             </div>
           </div>
         </div>
@@ -187,12 +187,12 @@ export default function FAQPage() {
           <div className="max-w-2xl mx-auto p-8 rounded-2xl bg-gradient-to-br from-primary/10 via-teal/5 to-primary/10 border border-primary/20">
             <h2 className="text-2xl font-bold mb-3">Still have questions?</h2>
             <p className="text-muted-foreground mb-6">Our team is here to help. Get in touch and we'll respond as soon as possible.</p>
-            <Link to="/login">
+            <a href="https://customers.rfpn.net/waitlist-sign-up">
               <Button variant="gradient" size="lg" className="btn-glow group">
                 Get Started Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-            </Link>
+            </a>
           </div>
         </div>
       </section>
