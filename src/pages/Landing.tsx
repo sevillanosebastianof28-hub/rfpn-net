@@ -94,17 +94,6 @@ const steps = [
 ];
 
 
-const stats = [
-  { value: '99.99', label: 'Uptime SLA', suffix: '%', color: 'text-teal-500' },
-  { value: '500', label: 'Property Networks', suffix: '+', color: 'text-primary' },
-  { value: '£2.4B', label: 'Loans Processed', suffix: '', color: 'text-amber-500' },
-  { value: '<5', label: 'Min Setup Time', suffix: 'min', color: 'text-rose-500' },
-];
-
-const trustedBy = [
-  'Meridian Capital', 'PropertyBridge', 'FinCore Partners', 'Horizon Lending', 'Atlas Property Group'
-];
-
 const words = [
   { text: 'Faster', color: 'from-amber-500 to-orange-500' },
   { text: 'Smarter', color: 'from-teal-400 to-emerald-500' },
@@ -251,16 +240,6 @@ export default function Landing() {
             {/* Social Proof Mini */}
             <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-muted-foreground animate-fade-in stagger-3">
               <div className="flex items-center gap-1">
-                <div className="flex -space-x-2">
-                  {['SC', 'MJ', 'ER', 'AK'].map((initials, i) => (
-                    <div key={i} className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-primary-glow flex items-center justify-center text-xs font-medium text-white border-2 border-background">
-                      {initials}
-                    </div>
-                  ))}
-                </div>
-                <span className="ml-2">Trusted by 500+ networks</span>
-              </div>
-              <div className="flex items-center gap-1">
                 {[...Array(5)].map((_, i) => (
                   <Star key={i} className="w-4 h-4 fill-amber-400 text-amber-400" />
                 ))}
@@ -287,7 +266,7 @@ export default function Landing() {
                 </div>
                 <div className="flex-1 flex justify-center">
                   <div className="px-4 py-1 rounded-md bg-background/50 text-xs text-muted-foreground">
-                    app.reley.io/dashboard
+                    rfpn.net/dashboard
                   </div>
                 </div>
               </div>
@@ -393,37 +372,6 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* Trusted By Bar */}
-      <section className="py-10 sm:py-14 border-y border-border/50 bg-muted/20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-center text-xs font-medium uppercase tracking-widest text-muted-foreground mb-8">
-            Trusted by leading property finance firms
-          </p>
-          <div className="flex flex-wrap items-center justify-center gap-x-12 gap-y-4">
-            {trustedBy.map((name) => (
-              <span key={name} className="text-lg font-semibold text-muted-foreground/50 hover:text-muted-foreground transition-colors">
-                {name}
-              </span>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Bar */}
-      <section className="py-16 sm:py-20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-12">
-            {stats.map((stat) => (
-              <div key={stat.label} className="text-center group">
-                <div className="text-3xl sm:text-4xl lg:text-5xl font-bold text-foreground mb-1 group-hover:text-primary transition-colors">
-                  {stat.value}<span className={stat.color}>{stat.suffix}</span>
-                </div>
-                <div className="text-sm sm:text-base text-muted-foreground">{stat.label}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Features Section */}
       <section id="features" className="py-20 sm:py-32 bg-muted/20">
