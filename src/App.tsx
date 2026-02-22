@@ -32,8 +32,10 @@ import SocialFeed from "./pages/developer/SocialFeed";
 // Broker Portal
 import BrokerLayout from "./pages/broker/BrokerLayout";
 import BrokerDashboard from "./pages/broker/BrokerDashboard";
+import BrokerProfile from "./pages/broker/BrokerProfile";
 import BrokerApplications from "./pages/broker/BrokerApplications";
 import BrokerMessages from "./pages/broker/BrokerMessages";
+import BrokerFeed from "./pages/broker/BrokerFeed";
 
 // Components
 import { ChatBot } from "./components/ChatBot";
@@ -75,8 +77,10 @@ const App = () => (
             {/* Broker Routes */}
             <Route path="/broker" element={<BrokerLayout />}>
               <Route index element={<BrokerDashboard />} />
+              <Route path="profile" element={<BrokerProfile />} />
               <Route path="applications" element={<BrokerApplications />} />
               <Route path="messages" element={<BrokerMessages />} />
+              <Route path="feed" element={<BrokerFeed />} />
             </Route>
             
             {/* Catch-all */}

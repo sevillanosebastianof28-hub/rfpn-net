@@ -5,12 +5,14 @@ import { cn } from '@/lib/utils';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
-import { LayoutDashboard, FileText, MessageSquare, LogOut, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { LayoutDashboard, FileText, MessageSquare, User, Rss, LogOut, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/broker', end: true },
-  { icon: FileText, label: 'Assigned Applications', path: '/broker/applications' },
+  { icon: User, label: 'My Profile', path: '/broker/profile' },
+  { icon: FileText, label: 'Applications', path: '/broker/applications' },
   { icon: MessageSquare, label: 'Messages', path: '/broker/messages' },
+  { icon: Rss, label: 'Social Feed', path: '/broker/feed' },
 ];
 
 export default function BrokerLayout() {

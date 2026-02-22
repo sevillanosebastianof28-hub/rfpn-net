@@ -4,8 +4,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { PageHeader } from '@/components/PageHeader';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
+import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import { MessageSquare, Send, Loader2 } from 'lucide-react';
+import { MessageSquare, Send, Loader2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
 
@@ -31,26 +33,29 @@ export default function Messages() {
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [sending, setSending] = useState(false);
+  const [newThreadOpen, setNewThreadOpen] = useState(false);
+  const [newSubject, setNewSubject] = useState('');
+  const [newRecipientEmail, setNewRecipientEmail] = useState('');
+  const [creating, setCreating] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  const fetchThreads = async () => {
     if (!user) return;
-    supabase.from('message_thread_participants').select('thread_id').eq('user_id', user.id)
-      .then(async ({ data: participants }) => {
-        if (!participants?.length) { setLoading(false); return; }
-        const threadIds = participants.map(p => p.thread_id);
-        const { data: threadData } = await supabase.from('message_threads').select('*').in('id', threadIds).order('updated_at', { ascending: false });
-        setThreads(threadData || []);
-        setLoading(false);
-      });
-  }, [user]);
+    const { data: participants } = await supabase.from('message_thread_participants').select('thread_id').eq('user_id', user.id);
+    if (!participants?.length) { setLoading(false); return; }
+    const threadIds = participants.map(p => p.thread_id);
+    const { data: threadData } = await supabase.from('message_threads').select('*').in('id', threadIds).order('updated_at', { ascending: false });
+    setThreads(threadData || []);
+    setLoading(false);
+  };
+
+  useEffect(() => { fetchThreads(); }, [user]);
 
   useEffect(() => {
     if (!selectedThread) return;
     supabase.from('messages').select('*').eq('thread_id', selectedThread).order('created_at', { ascending: true })
       .then(({ data }) => setMessages(data || []));
 
-    // Realtime subscription
     const channel = supabase.channel(`messages-${selectedThread}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${selectedThread}` },
         (payload) => setMessages(prev => [...prev, payload.new as Message]))
@@ -65,23 +70,52 @@ export default function Messages() {
     if (!newMessage.trim() || !selectedThread || !user) return;
     setSending(true);
     await supabase.from('messages').insert({ thread_id: selectedThread, sender_id: user.id, content: newMessage.trim() });
+    await supabase.from('message_threads').update({ updated_at: new Date().toISOString() }).eq('id', selectedThread);
     setNewMessage('');
     setSending(false);
+  };
+
+  const handleCreateThread = async () => {
+    if (!user || !newSubject.trim() || !newRecipientEmail.trim()) return;
+    setCreating(true);
+    // Find recipient by email
+    const { data: recipient } = await supabase.from('profiles').select('user_id').eq('email', newRecipientEmail.trim()).maybeSingle();
+    if (!recipient) { toast.error('User not found with that email'); setCreating(false); return; }
+
+    // Create thread
+    const { data: thread, error } = await supabase.from('message_threads').insert({ subject: newSubject.trim() }).select().single();
+    if (error || !thread) { toast.error('Failed to create conversation'); setCreating(false); return; }
+
+    // Add participants
+    await supabase.from('message_thread_participants').insert([
+      { thread_id: thread.id, user_id: user.id },
+      { thread_id: thread.id, user_id: recipient.user_id },
+    ]);
+
+    toast.success('Conversation created');
+    setNewThreadOpen(false);
+    setNewSubject('');
+    setNewRecipientEmail('');
+    setCreating(false);
+    fetchThreads();
+    setSelectedThread(thread.id);
   };
 
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
 
   return (
     <div className="animate-fade-in">
-      <PageHeader title="Messages" description="Communicate with brokers and admins" />
+      <PageHeader title="Messages" description="Communicate with brokers and admins"
+        actions={<Button variant="gradient" size="sm" onClick={() => setNewThreadOpen(true)}><Plus className="h-4 w-4 mr-1" /> New Conversation</Button>}
+      />
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-200px)]">
-        {/* Thread List */}
         <div className="rounded-xl border border-border bg-card overflow-y-auto">
           {threads.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-12 text-center px-4">
               <MessageSquare className="h-8 w-8 text-muted-foreground mb-3" />
               <p className="text-sm text-muted-foreground">No conversations yet</p>
+              <Button variant="outline" size="sm" className="mt-3" onClick={() => setNewThreadOpen(true)}>Start one</Button>
             </div>
           ) : threads.map(t => (
             <button key={t.id} onClick={() => setSelectedThread(t.id)}
@@ -92,10 +126,9 @@ export default function Messages() {
           ))}
         </div>
 
-        {/* Messages */}
         <div className="lg:col-span-2 rounded-xl border border-border bg-card flex flex-col">
           {!selectedThread ? (
-            <div className="flex-1 flex items-center justify-center text-muted-foreground"><p>Select a conversation</p></div>
+            <div className="flex-1 flex items-center justify-center text-muted-foreground"><p>Select a conversation or start a new one</p></div>
           ) : (
             <>
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
@@ -116,6 +149,22 @@ export default function Messages() {
           )}
         </div>
       </div>
+
+      <Dialog open={newThreadOpen} onOpenChange={setNewThreadOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>New Conversation</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div className="space-y-2"><Label>Recipient Email</Label><Input value={newRecipientEmail} onChange={e => setNewRecipientEmail(e.target.value)} placeholder="email@example.com" /></div>
+            <div className="space-y-2"><Label>Subject</Label><Input value={newSubject} onChange={e => setNewSubject(e.target.value)} placeholder="Conversation subject" /></div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setNewThreadOpen(false)}>Cancel</Button>
+            <Button variant="gradient" onClick={handleCreateThread} disabled={creating || !newSubject.trim() || !newRecipientEmail.trim()}>
+              {creating ? <Loader2 className="h-4 w-4 animate-spin" /> : 'Create'}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
