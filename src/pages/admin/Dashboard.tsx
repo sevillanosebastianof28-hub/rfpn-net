@@ -59,10 +59,10 @@ export default function Dashboard() {
       <PageHeader title={`Welcome back, ${user?.firstName}`} description="Here's what's happening across your platform today" />
 
       <div className="mb-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard title="Total Contacts" value={stats.totalContacts} subtitle={`${stats.activeContacts} active`} icon={Building2} />
-        <StatCard title="Total Users" value={stats.totalUsers} subtitle={`${stats.activeUsers} active`} icon={Users} />
-        <StatCard title="Pending Applications" value={stats.pendingApps} subtitle="Awaiting review" icon={FileText} />
-        <StatCard title="Activity (Recent)" value={stats.recentActivity} subtitle="Actions logged" icon={Activity} />
+        <StatCard title="Total Contacts" value={stats.totalContacts} subtitle={`${stats.activeContacts} active`} icon={Building2} href="/admin/contacts" />
+        <StatCard title="Total Users" value={stats.totalUsers} subtitle={`${stats.activeUsers} active`} icon={Users} href="/admin/users" />
+        <StatCard title="Pending Applications" value={stats.pendingApps} subtitle="Awaiting review" icon={FileText} href="/admin/applications" />
+        <StatCard title="Activity (Recent)" value={stats.recentActivity} subtitle="Actions logged" icon={Activity} href="/admin/audit-logs" />
       </div>
 
       <div className="grid gap-6 lg:grid-cols-2">

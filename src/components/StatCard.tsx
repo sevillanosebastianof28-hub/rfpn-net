@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import { LucideIcon } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface StatCardProps {
   title: string;
@@ -11,11 +12,12 @@ interface StatCardProps {
     isPositive: boolean;
   };
   className?: string;
+  href?: string;
 }
 
-export function StatCard({ title, value, subtitle, icon: Icon, trend, className }: StatCardProps) {
-  return (
-    <div className={cn('stat-card group', className)}>
+export function StatCard({ title, value, subtitle, icon: Icon, trend, className, href }: StatCardProps) {
+  const content = (
+    <div className={cn('stat-card group', href && 'cursor-pointer hover:border-primary/30', className)}>
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -38,4 +40,7 @@ export function StatCard({ title, value, subtitle, icon: Icon, trend, className 
       </div>
     </div>
   );
+
+  if (href) return <Link to={href}>{content}</Link>;
+  return content;
 }
