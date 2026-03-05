@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { FileText } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { DataTable } from '@/components/DataTable';
@@ -12,6 +13,7 @@ import type { Database } from '@/integrations/supabase/types';
 type AppRow = Database['public']['Tables']['applications']['Row'];
 
 export default function Applications() {
+  const navigate = useNavigate();
   const [apps, setApps] = useState<AppRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
@@ -30,7 +32,11 @@ export default function Applications() {
 
   const columns = [
     { key: 'id', header: 'ID', render: (a: AppRow) => <span className="font-mono text-sm text-muted-foreground">{a.id.slice(0, 8)}</span> },
-    { key: 'title', header: 'Title', render: (a: AppRow) => <span className="font-medium">{a.title}</span> },
+    { key: 'title', header: 'Title', render: (a: AppRow) => (
+      <button className="font-medium text-primary hover:underline text-left" onClick={() => navigate(`/admin/applications/${a.id}`)}>
+        {a.title}
+      </button>
+    )},
     { key: 'type', header: 'Type' },
     { key: 'amount', header: 'Amount', render: (a: AppRow) => <span className="font-semibold">{a.amount ? `£${Number(a.amount).toLocaleString()}` : '—'}</span> },
     { key: 'created_at', header: 'Created', render: (a: AppRow) => <span className="text-muted-foreground">{format(new Date(a.created_at), 'MMM d, yyyy')}</span> },
@@ -39,7 +45,7 @@ export default function Applications() {
 
   return (
     <div className="animate-fade-in">
-      <PageHeader title="Applications" description="View and manage funding applications across all contacts" />
+      <PageHeader title="Application Pipeline" description="View and manage all funding applications" />
       <div className="mb-6 flex flex-wrap items-center gap-4">
         <Input placeholder="Search applications..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)} className="max-w-xs" />
         <Select value={statusFilter} onValueChange={setStatusFilter}>
