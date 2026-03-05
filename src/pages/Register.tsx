@@ -39,8 +39,8 @@ export default function Register() {
     const result = await register(form.email, form.password, form.firstName, form.lastName);
     
     if (result.success) {
-      setRegistered(true);
-      toast.success('Registration successful! Please check your email to verify your account.');
+      toast.success('Registration successful! Redirecting to login...');
+      navigate('/login');
     } else {
       setError(result.error || 'Registration failed');
     }

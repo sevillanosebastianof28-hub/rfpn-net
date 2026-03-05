@@ -251,7 +251,7 @@ export default function ApplicationForm() {
             <Button variant="outline" className="mt-4" onClick={() => saveProgress(false)}>Save Now</Button>
           </div>
         )}
-        {currentStep === 12 && <Step12Review data={formData} onGoToStep={handleStepClick} />}
+        {currentStep === 12 && <Step12Review data={formData} onGoToStep={handleStepClick} applicationTitle={`${formData.personalDetails.firstName} ${formData.personalDetails.surname} - Application`} />}
       </div>
 
       {/* Navigation */}
@@ -265,7 +265,7 @@ export default function ApplicationForm() {
             Next <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
         ) : (
-          <Button onClick={handleSubmit} disabled={submitting} className="bg-green-600 hover:bg-green-700">
+          <Button onClick={handleSubmit} disabled={submitting} variant="success">
             {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Send className="h-4 w-4 mr-1" />}
             Submit Application
           </Button>
