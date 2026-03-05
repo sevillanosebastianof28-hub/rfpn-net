@@ -1,9 +1,13 @@
 import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Download } from 'lucide-react';
 import { EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, STEP_LABELS, type ApplicationFormData } from '@/types/application-form';
+import { exportApplicationToPDF } from '@/lib/export-pdf';
 
 interface Props {
   data: ApplicationFormData;
   onGoToStep: (step: number) => void;
+  applicationTitle?: string;
 }
 
 function Section({ title, step, onEdit, children }: { title: string; step: number; onEdit: (s: number) => void; children: React.ReactNode }) {
@@ -28,17 +32,24 @@ function Field({ label, value }: { label: string; value: any }) {
   );
 }
 
-export function Step12Review({ data, onGoToStep }: Props) {
+export function Step12Review({ data, onGoToStep, applicationTitle }: Props) {
   const pd = data.personalDetails;
   const ah = data.addressHistory;
   const al = data.assetsLiabilities;
   const inc = data.income;
   const ld = data.loanDetails;
 
+  const handleExportPDF = () => {
+    exportApplicationToPDF(data, applicationTitle);
+  };
+
   return (
     <div className="space-y-6">
-      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20">
+      <div className="p-4 rounded-lg bg-primary/5 border border-primary/20 flex items-center justify-between flex-wrap gap-3">
         <p className="text-sm font-medium">Please review all information before submitting. Click "Edit" on any section to make changes.</p>
+        <Button variant="outline" size="sm" onClick={handleExportPDF}>
+          <Download className="h-4 w-4 mr-1" /> Export PDF
+        </Button>
       </div>
 
       <Section title="1. Personal Details" step={1} onEdit={onGoToStep}>
