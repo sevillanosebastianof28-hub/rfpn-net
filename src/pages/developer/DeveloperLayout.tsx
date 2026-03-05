@@ -31,7 +31,7 @@ export default function DeveloperLayout() {
     <div className="min-h-screen bg-background">
       <aside className={cn('fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300', collapsed ? 'w-[72px]' : 'w-64')}>
         <div className={cn('flex h-16 items-center border-b border-sidebar-border px-4', collapsed ? 'justify-center' : 'justify-between')}>
-          <Logo showText={!collapsed} size="sm" />
+          <Logo showText={!collapsed} size="sm" variant="sidebar" />
           {!collapsed && <Button variant="ghost" size="icon" onClick={() => setCollapsed(true)} className="h-8 w-8 text-muted-foreground"><ChevronLeft className="h-4 w-4" /></Button>}
         </div>
 

@@ -113,7 +113,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
         'flex h-16 items-center border-b border-sidebar-border px-4',
         collapsed ? 'justify-center' : 'justify-between'
       )}>
-        <Logo showText={!collapsed} size="sm" />
+        <Logo showText={!collapsed} size="sm" variant="sidebar" />
         <Button 
           variant="ghost" 
           size="icon" 
