@@ -33,10 +33,11 @@ export default function ApplicationForm() {
   const autosaveTimer = useRef<ReturnType<typeof setTimeout>>();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
-  // Load existing application
+  // Load existing application or pre-fill from profile for new ones
   useEffect(() => {
     const load = async () => {
       if (id && id !== 'new') {
+        // Load existing application
         const { data } = await supabase.from('applications').select('*').eq('id', id).single();
         if (data) {
           const pd = (data.project_details as any) || {};
@@ -45,11 +46,52 @@ export default function ApplicationForm() {
           setCurrentStep(merged.currentStep || 1);
           setAppId(data.id);
         }
+      } else if (user) {
+        // NEW application — pre-fill from profile + developer_profiles to avoid repeat data entry
+        const defaultData = getDefaultFormData();
+        const [profileRes, devProfileRes] = await Promise.all([
+          supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle(),
+          supabase.from('developer_profiles').select('*').eq('user_id', user.id).maybeSingle(),
+        ]);
+
+        const profile = profileRes.data;
+        const devProfile = devProfileRes.data;
+
+        if (profile) {
+          defaultData.personalDetails.firstName = profile.first_name || '';
+          defaultData.personalDetails.surname = profile.last_name || '';
+          defaultData.personalDetails.email = profile.email || '';
+          defaultData.personalDetails.mobilePhone = profile.phone || '';
+        }
+
+        // Pre-fill company details from developer_profiles into businesses
+        if (devProfile?.company_name) {
+          defaultData.businesses = [{
+            businessName: devProfile.company_name || '',
+            businessType: '',
+            startDate: '',
+            ownershipPercentage: null,
+            businessAddress: devProfile.company_address || '',
+            companyStatus: '',
+            yearlyNetProfit: [{ year: new Date().getFullYear().toString(), profit: null }],
+            payeIncome: null,
+            dividendIncome: null,
+          }];
+        }
+
+        // If KYC/Credas data is available (verification passed), we can trust the profile data
+        // This is where future Credas API pre-fill will slot in
+        if (devProfile?.verification_status === 'passed') {
+          // Mark that data has been KYC-verified (informational only for now)
+          (defaultData as any)._kycVerified = true;
+        }
+
+        setFormData(defaultData);
       }
       setLoading(false);
     };
     load();
-  }, [id]);
+  }, [id, user]);
 
   // Autosave every 30 seconds
   useEffect(() => {
@@ -174,7 +216,17 @@ export default function ApplicationForm() {
 
       {/* Step Content */}
       <div className="min-h-[400px]">
-        {currentStep === 1 && <Step1PersonalDetails data={formData.personalDetails} onChange={d => updateSection('personalDetails', d)} />}
+        {currentStep === 1 && (
+          <>
+            {!appId && formData.personalDetails.firstName && (
+              <div className="mb-4 p-3 rounded-lg bg-primary/5 border border-primary/20 text-sm">
+                <span className="font-medium">✨ Fields pre-filled from your profile.</span>{' '}
+                <span className="text-muted-foreground">Review and update as needed.</span>
+              </div>
+            )}
+            <Step1PersonalDetails data={formData.personalDetails} onChange={d => updateSection('personalDetails', d)} />
+          </>
+        )}
         {currentStep === 2 && <Step2AddressHistory data={formData.addressHistory} onChange={d => updateSection('addressHistory', d)} />}
         {currentStep === 3 && <Step3Expenditure data={formData.expenditure} onChange={d => updateSection('expenditure', d)} />}
         {currentStep === 4 && <Step4BankAccounts data={formData.bankAccounts} onChange={d => updateSection('bankAccounts', d)} />}
