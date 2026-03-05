@@ -18,6 +18,7 @@ import Dashboard from "./pages/admin/Dashboard";
 import Contacts from "./pages/admin/Contacts";
 import Users from "./pages/admin/Users";
 import Applications from "./pages/admin/Applications";
+import AdminApplicationDetail from "./pages/admin/ApplicationDetail";
 import AuditLogs from "./pages/admin/AuditLogs";
 import Settings from "./pages/admin/Settings";
 
@@ -26,6 +27,7 @@ import DeveloperLayout from "./pages/developer/DeveloperLayout";
 import DeveloperDashboard from "./pages/developer/DeveloperDashboard";
 import DeveloperProfile from "./pages/developer/DeveloperProfile";
 import DeveloperApplications from "./pages/developer/DeveloperApplications";
+import ApplicationForm from "./pages/developer/ApplicationForm";
 import DevMessages from "./pages/developer/Messages";
 import SocialFeed from "./pages/developer/SocialFeed";
 
@@ -61,6 +63,7 @@ const App = () => (
               <Route path="contacts" element={<Contacts />} />
               <Route path="users" element={<Users />} />
               <Route path="applications" element={<Applications />} />
+              <Route path="applications/:id" element={<AdminApplicationDetail />} />
               <Route path="audit-logs" element={<AuditLogs />} />
               <Route path="settings" element={<Settings />} />
             </Route>
@@ -70,6 +73,8 @@ const App = () => (
               <Route index element={<DeveloperDashboard />} />
               <Route path="profile" element={<DeveloperProfile />} />
               <Route path="applications" element={<DeveloperApplications />} />
+              <Route path="applications/new" element={<ApplicationForm />} />
+              <Route path="applications/:id" element={<ApplicationForm />} />
               <Route path="messages" element={<DevMessages />} />
               <Route path="feed" element={<SocialFeed />} />
             </Route>
