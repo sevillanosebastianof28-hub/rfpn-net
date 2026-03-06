@@ -142,6 +142,13 @@ export interface DocumentUpload {
   type: string;
   fileId: string;
   fileName: string;
+  documentDate?: string; // Date of the document (not upload date)
+}
+
+export interface ESignature {
+  signatureData: string; // base64 SVG or canvas data
+  signedAt: string;
+  signerName: string;
 }
 
 export interface ApplicationFormData {
@@ -161,6 +168,7 @@ export interface ApplicationFormData {
   properties: PropertyEntry[];
   loanDetails: LoanDetails;
   documents: DocumentUpload[];
+  eSignature?: ESignature;
   currentStep: number;
   adminNotes: Array<{ note: string; author: string; createdAt: string }>;
 }
