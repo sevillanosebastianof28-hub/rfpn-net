@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Save, ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react';
+import { ESignatureDialog } from '@/components/application-steps/ESignatureDialog';
 import { StepIndicator } from '@/components/application-steps/StepIndicator';
 import { Step1PersonalDetails } from '@/components/application-steps/Step1PersonalDetails';
 import { Step2AddressHistory } from '@/components/application-steps/Step2AddressHistory';
@@ -18,7 +19,7 @@ import { Step9PropertyPortfolio } from '@/components/application-steps/Step9Prop
 import { Step10LoanDetails } from '@/components/application-steps/Step10LoanDetails';
 import { Step11Documents } from '@/components/application-steps/Step11Documents';
 import { Step12Review } from '@/components/application-steps/Step12Review';
-import { STEP_LABELS, getDefaultFormData, type ApplicationFormData } from '@/types/application-form';
+import { STEP_LABELS, getDefaultFormData, type ApplicationFormData, type ESignature } from '@/types/application-form';
 
 export default function ApplicationForm() {
   const { id } = useParams<{ id: string }>();
@@ -30,6 +31,7 @@ export default function ApplicationForm() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [submitting, setSubmitting] = useState(false);
+  const [showSignature, setShowSignature] = useState(false);
   const autosaveTimer = useRef<ReturnType<typeof setTimeout>>();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
@@ -159,19 +161,28 @@ export default function ApplicationForm() {
     window.scrollTo(0, 0);
   };
 
-  const handleSubmit = async () => {
+  const handleSubmitClick = () => {
+    setShowSignature(true);
+  };
+
+  const handleSignAndSubmit = async (sig: ESignature) => {
     setSubmitting(true);
-    await saveProgress(true);
-    const { error } = await supabase.from('applications').update({
+    const updatedForm = { ...formData, eSignature: sig };
+    setFormData(updatedForm);
+    
+    // Save with signature data
+    const projectDetails = { ...updatedForm, currentStep };
+    await supabase.from('applications').update({
+      project_details: projectDetails as any,
       status: 'submitted' as any,
       submitted_at: new Date().toISOString(),
+      signature_data: sig.signatureData,
+      signed_at: sig.signedAt,
     }).eq('id', appId!);
-    if (error) {
-      toast.error('Failed to submit');
-    } else {
-      toast.success('Application submitted successfully!');
-      navigate('/developer/applications');
-    }
+
+    toast.success('Application signed and submitted successfully!');
+    setShowSignature(false);
+    navigate('/developer/applications');
     setSubmitting(false);
   };
 
@@ -265,12 +276,21 @@ export default function ApplicationForm() {
             Next <ArrowRight className="h-4 w-4 ml-1" />
           </Button>
         ) : (
-          <Button onClick={handleSubmit} disabled={submitting} variant="success">
-            {submitting ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Send className="h-4 w-4 mr-1" />}
-            Submit Application
+          <Button onClick={handleSubmitClick} disabled={submitting} variant="default" className="gap-1">
+            <Send className="h-4 w-4" />
+            Sign & Submit
           </Button>
         )}
       </div>
+
+      {/* E-Signature Dialog */}
+      <ESignatureDialog
+        open={showSignature}
+        onClose={() => setShowSignature(false)}
+        onSign={handleSignAndSubmit}
+        applicantName={`${formData.personalDetails.firstName} ${formData.personalDetails.surname}`.trim()}
+        submitting={submitting}
+      />
     </div>
   );
 }

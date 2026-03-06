@@ -25,6 +25,9 @@ export type Database = {
           funding_requirements: Json | null
           id: string
           project_details: Json | null
+          signature_data: string | null
+          signed_at: string | null
+          signer_ip: string | null
           status: Database["public"]["Enums"]["application_status"]
           status_timeline: Json | null
           submitted_at: string | null
@@ -43,6 +46,9 @@ export type Database = {
           funding_requirements?: Json | null
           id?: string
           project_details?: Json | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signer_ip?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           status_timeline?: Json | null
           submitted_at?: string | null
@@ -61,6 +67,9 @@ export type Database = {
           funding_requirements?: Json | null
           id?: string
           project_details?: Json | null
+          signature_data?: string | null
+          signed_at?: string | null
+          signer_ip?: string | null
           status?: Database["public"]["Enums"]["application_status"]
           status_timeline?: Json | null
           submitted_at?: string | null
@@ -182,6 +191,7 @@ export type Database = {
         Row: {
           application_id: string | null
           created_at: string
+          document_date: string | null
           document_type: string
           file_name: string
           file_size: number
@@ -195,6 +205,7 @@ export type Database = {
         Insert: {
           application_id?: string | null
           created_at?: string
+          document_date?: string | null
           document_type?: string
           file_name: string
           file_size?: number
@@ -208,6 +219,7 @@ export type Database = {
         Update: {
           application_id?: string | null
           created_at?: string
+          document_date?: string | null
           document_type?: string
           file_name?: string
           file_size?: number
