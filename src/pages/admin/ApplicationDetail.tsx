@@ -115,6 +115,9 @@ export default function AdminApplicationDetail() {
           <p className="text-sm text-muted-foreground">Created {format(new Date(app.created_at), 'PPP')}</p>
         </div>
         <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
+            <FileDown className="h-4 w-4 mr-1" /> Export PDF
+          </Button>
           <StatusBadge status={app.status as any} />
           <Select value={app.status} onValueChange={changeStatus} disabled={statusUpdating}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
