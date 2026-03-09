@@ -5,14 +5,14 @@ interface LogoProps {
   className?: string;
   showText?: boolean;
   size?: 'sm' | 'md' | 'lg' | 'xl';
-  variant?: 'default' | 'sidebar';
+  variant?: 'default' | 'sidebar' | 'landing';
 }
 
 export function Logo({ className, showText = true, size = 'md', variant = 'default' }: LogoProps) {
   const sizeClasses = {
     sm: 'h-8',
     md: 'h-20',
-    lg: 'h-28',
+    lg: 'h-14',
     xl: 'h-36',
   };
 
@@ -23,8 +23,10 @@ export function Logo({ className, showText = true, size = 'md', variant = 'defau
     xl: 'text-base',
   };
 
+  const displayText = variant === 'sidebar' ? 'RFPN' : 'Reley Fast Property Network';
+
   return (
-    <div className={cn('flex items-center gap-2', className)}>
+    <div className={cn('flex items-center gap-3', className)}>
       <img
         src={rfnbLogo}
         alt="RFPN Logo"
@@ -35,8 +37,9 @@ export function Logo({ className, showText = true, size = 'md', variant = 'defau
           'font-bold uppercase tracking-wider leading-tight',
           textSizeClasses[size],
           variant === 'sidebar' ? 'text-sidebar-foreground' : 'text-foreground/80',
+          variant === 'landing' && 'text-lg tracking-widest',
         )}>
-          RFPN
+          {displayText}
         </span>
       )}
     </div>
