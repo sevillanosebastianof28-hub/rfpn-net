@@ -6,9 +6,10 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StatusBadge } from '@/components/StatusBadge';
 import { toast } from 'sonner';
-import { ArrowLeft, Loader2, Download, Plus } from 'lucide-react';
+import { ArrowLeft, Loader2, Download, Plus, FileDown } from 'lucide-react';
 import { format } from 'date-fns';
 import { STEP_LABELS, EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, getDefaultFormData, type ApplicationFormData } from '@/types/application-form';
+import { exportApplicationToPDF } from '@/lib/export-pdf';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRow = Database['public']['Tables']['applications']['Row'];
@@ -114,6 +115,9 @@ export default function AdminApplicationDetail() {
           <p className="text-sm text-muted-foreground">Created {format(new Date(app.created_at), 'PPP')}</p>
         </div>
         <div className="flex items-center gap-3">
+          <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
+            <FileDown className="h-4 w-4 mr-1" /> Export PDF
+          </Button>
           <StatusBadge status={app.status as any} />
           <Select value={app.status} onValueChange={changeStatus} disabled={statusUpdating}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
