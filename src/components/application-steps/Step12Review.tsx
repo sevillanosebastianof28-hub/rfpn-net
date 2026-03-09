@@ -1,8 +1,5 @@
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Download } from 'lucide-react';
 import { EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, STEP_LABELS, type ApplicationFormData } from '@/types/application-form';
-import { exportApplicationToPDF } from '@/lib/export-pdf';
 
 interface Props {
   data: ApplicationFormData;
