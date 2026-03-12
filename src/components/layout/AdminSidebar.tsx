@@ -32,7 +32,7 @@ const mainNavItems = [
   { icon: ScrollText, label: 'Audit Logs', path: '/admin/audit-logs' },
 ];
 
-const lockedNavItems = [
+const portalNavItems = [
   { icon: Code2, label: 'Developer Portal', path: '/developer' },
   { icon: Briefcase, label: 'Broker Portal', path: '/broker' },
 ];
