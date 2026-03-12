@@ -32,7 +32,7 @@ const mainNavItems = [
   { icon: ScrollText, label: 'Audit Logs', path: '/admin/audit-logs' },
 ];
 
-const lockedNavItems = [
+const portalNavItems = [
   { icon: Code2, label: 'Developer Portal', path: '/developer' },
   { icon: Briefcase, label: 'Broker Portal', path: '/broker' },
 ];
@@ -145,7 +145,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
               Portals
             </p>
           )}
-          {lockedNavItems.map((item) => (
+          {portalNavItems.map((item) => (
             <NavItem key={item.label} icon={item.icon} label={item.label} path={item.path} />
           ))}
         </div>

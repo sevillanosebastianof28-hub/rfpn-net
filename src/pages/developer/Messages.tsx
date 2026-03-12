@@ -23,6 +23,7 @@ interface Message {
   content: string;
   sender_id: string;
   created_at: string;
+  sender_name?: string;
 }
 
 export default function Messages() {
@@ -53,8 +54,16 @@ export default function Messages() {
 
   useEffect(() => {
     if (!selectedThread) return;
-    supabase.from('messages').select('*').eq('thread_id', selectedThread).order('created_at', { ascending: true })
-      .then(({ data }) => setMessages(data || []));
+    const loadMessages = async () => {
+      const { data: msgs } = await supabase.from('messages').select('*').eq('thread_id', selectedThread).order('created_at', { ascending: true });
+      if (msgs) {
+        const senderIds = [...new Set(msgs.map(m => m.sender_id))];
+        const { data: profiles } = await supabase.from('profiles').select('user_id, first_name, last_name').in('user_id', senderIds);
+        const profileMap = new Map(profiles?.map(p => [p.user_id, `${p.first_name} ${p.last_name}`]));
+        setMessages(msgs.map(m => ({ ...m, sender_name: profileMap.get(m.sender_id) || 'Unknown' })));
+      }
+    };
+    loadMessages();
 
     const channel = supabase.channel(`messages-${selectedThread}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${selectedThread}` },
@@ -134,6 +143,7 @@ export default function Messages() {
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {messages.map(m => (
                   <div key={m.id} className={cn('max-w-[70%] rounded-xl p-3 text-sm', m.sender_id === user?.id ? 'ml-auto bg-primary text-primary-foreground' : 'bg-muted')}>
+                    {m.sender_id !== user?.id && <p className="text-xs font-medium mb-1 opacity-70">{m.sender_name}</p>}
                     <p>{m.content}</p>
                     <p className={cn('text-xs mt-1', m.sender_id === user?.id ? 'text-primary-foreground/70' : 'text-muted-foreground')}>{format(new Date(m.created_at), 'HH:mm')}</p>
                   </div>

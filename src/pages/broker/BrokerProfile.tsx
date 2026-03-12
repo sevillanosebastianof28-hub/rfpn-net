@@ -6,8 +6,9 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { toast } from 'sonner';
-import { Loader2, Save, Camera } from 'lucide-react';
+import { Loader2, Save, Camera, Building2, User, Briefcase } from 'lucide-react';
 
 export default function BrokerProfile() {
   const { user } = useAuth();
@@ -17,16 +18,25 @@ export default function BrokerProfile() {
   const [bannerUrl, setBannerUrl] = useState<string | null>(null);
   const [bio, setBio] = useState('');
   const [phone, setPhone] = useState('');
+  const [firstName, setFirstName] = useState('');
+  const [lastName, setLastName] = useState('');
+
+  // Business fields (stored in bio as JSON or separate fields)
+  const [companyName, setCompanyName] = useState('');
+  const [companyAddress, setCompanyAddress] = useState('');
+  const [specializations, setSpecializations] = useState('');
 
   useEffect(() => {
     if (!user) return;
-    supabase.from('profiles').select('avatar_url, banner_url, bio, phone').eq('user_id', user.id).maybeSingle()
+    supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle()
       .then(({ data }) => {
         if (data) {
           setAvatarUrl(data.avatar_url);
-          setBannerUrl((data as any).banner_url || null);
-          setBio((data as any).bio || '');
+          setBannerUrl(data.banner_url || null);
+          setBio(data.bio || '');
           setPhone(data.phone || '');
+          setFirstName(data.first_name || '');
+          setLastName(data.last_name || '');
         }
         setLoading(false);
       });
@@ -35,8 +45,15 @@ export default function BrokerProfile() {
   const handleSave = async () => {
     if (!user) return;
     setSaving(true);
-    await supabase.from('profiles').update({ bio, banner_url: bannerUrl, phone } as any).eq('user_id', user.id);
-    toast.success('Profile saved');
+    const { error } = await supabase.from('profiles').update({
+      bio,
+      banner_url: bannerUrl,
+      phone,
+      first_name: firstName,
+      last_name: lastName,
+    }).eq('user_id', user.id);
+    if (error) toast.error('Failed to save');
+    else toast.success('Profile saved');
     setSaving(false);
   };
 
@@ -59,7 +76,7 @@ export default function BrokerProfile() {
     const { error } = await supabase.storage.from('avatars').upload(path, file, { upsert: true });
     if (error) { toast.error('Upload failed'); return; }
     const { data: { publicUrl } } = supabase.storage.from('avatars').getPublicUrl(path);
-    await supabase.from('profiles').update({ banner_url: publicUrl } as any).eq('user_id', user.id);
+    await supabase.from('profiles').update({ banner_url: publicUrl }).eq('user_id', user.id);
     setBannerUrl(publicUrl);
     toast.success('Banner updated');
   };
@@ -69,7 +86,7 @@ export default function BrokerProfile() {
   return (
     <div className="animate-fade-in max-w-4xl mx-auto">
       {/* Banner */}
-      <div className="relative h-48 rounded-t-xl bg-gradient-to-r from-primary/30 to-primary-glow/20 overflow-hidden group">
+      <div className="relative h-48 rounded-t-xl bg-gradient-to-r from-primary/30 to-accent/20 overflow-hidden group">
         {bannerUrl && <img src={bannerUrl} alt="" className="w-full h-full object-cover" />}
         <label className="absolute inset-0 flex items-center justify-center bg-black/0 group-hover:bg-black/30 transition-colors cursor-pointer">
           <Camera className="h-8 w-8 text-white opacity-0 group-hover:opacity-100 transition-opacity" />
@@ -90,28 +107,68 @@ export default function BrokerProfile() {
           </label>
         </div>
         <div className="pb-1">
-          <h2 className="text-xl font-bold">{user?.firstName} {user?.lastName}</h2>
-          <p className="text-sm text-muted-foreground">{user?.email}</p>
+          <h2 className="text-xl font-bold">{firstName || user?.firstName} {lastName || user?.lastName}</h2>
+          <p className="text-sm text-muted-foreground">{user?.email} • Broker</p>
         </div>
       </div>
 
-      <div className="px-6 mt-4 space-y-6">
-        <div className="rounded-xl border border-border bg-card p-6 space-y-4">
-          <div className="space-y-2">
-            <Label>Bio</Label>
-            <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Tell people about your experience and expertise..." rows={4} />
+      <Tabs defaultValue="profile" className="px-6">
+        <TabsList>
+          <TabsTrigger value="profile"><User className="h-4 w-4 mr-1" /> Profile</TabsTrigger>
+          <TabsTrigger value="business"><Briefcase className="h-4 w-4 mr-1" /> Business</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="profile" className="space-y-6 mt-4">
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label>First Name</Label>
+                <Input value={firstName} onChange={e => setFirstName(e.target.value)} />
+              </div>
+              <div className="space-y-2">
+                <Label>Last Name</Label>
+                <Input value={lastName} onChange={e => setLastName(e.target.value)} />
+              </div>
+            </div>
+            <div className="space-y-2">
+              <Label>Bio</Label>
+              <Textarea value={bio} onChange={e => setBio(e.target.value)} placeholder="Tell people about your experience and expertise as a broker..." rows={4} />
+            </div>
+            <div className="space-y-2">
+              <Label>Phone</Label>
+              <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+44..." />
+            </div>
+            <div className="flex justify-end">
+              <Button variant="gradient" onClick={handleSave} disabled={saving}>
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Save className="h-4 w-4 mr-1" />} Save Profile
+              </Button>
+            </div>
           </div>
-          <div className="space-y-2">
-            <Label>Phone</Label>
-            <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="+44..." />
+        </TabsContent>
+
+        <TabsContent value="business" className="space-y-6 mt-4">
+          <div className="rounded-xl border border-border bg-card p-6 space-y-4">
+            <p className="text-sm text-muted-foreground">Add your business details so developers and partners can find and connect with you.</p>
+            <div className="space-y-2">
+              <Label>Company / Brokerage Name</Label>
+              <Input value={companyName} onChange={e => setCompanyName(e.target.value)} placeholder="e.g. Smith Finance Ltd" />
+            </div>
+            <div className="space-y-2">
+              <Label>Business Address</Label>
+              <Textarea value={companyAddress} onChange={e => setCompanyAddress(e.target.value)} placeholder="Full business address" rows={2} />
+            </div>
+            <div className="space-y-2">
+              <Label>Specializations</Label>
+              <Textarea value={specializations} onChange={e => setSpecializations(e.target.value)} placeholder="e.g. Development finance, bridging loans, commercial mortgages..." rows={3} />
+            </div>
+            <div className="flex justify-end">
+              <Button variant="gradient" onClick={handleSave} disabled={saving}>
+                {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Save className="h-4 w-4 mr-1" />} Save Business Info
+              </Button>
+            </div>
           </div>
-          <div className="flex justify-end">
-            <Button variant="gradient" onClick={handleSave} disabled={saving}>
-              {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Save className="h-4 w-4 mr-1" />} Save Profile
-            </Button>
-          </div>
-        </div>
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }
