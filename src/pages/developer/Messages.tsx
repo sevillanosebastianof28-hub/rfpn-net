@@ -23,6 +23,7 @@ interface Message {
   content: string;
   sender_id: string;
   created_at: string;
+  sender_name?: string;
 }
 
 export default function Messages() {
