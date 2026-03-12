@@ -143,6 +143,7 @@ export default function Messages() {
               <div className="flex-1 overflow-y-auto p-4 space-y-3">
                 {messages.map(m => (
                   <div key={m.id} className={cn('max-w-[70%] rounded-xl p-3 text-sm', m.sender_id === user?.id ? 'ml-auto bg-primary text-primary-foreground' : 'bg-muted')}>
+                    {m.sender_id !== user?.id && <p className="text-xs font-medium mb-1 opacity-70">{m.sender_name}</p>}
                     <p>{m.content}</p>
                     <p className={cn('text-xs mt-1', m.sender_id === user?.id ? 'text-primary-foreground/70' : 'text-muted-foreground')}>{format(new Date(m.created_at), 'HH:mm')}</p>
                   </div>
