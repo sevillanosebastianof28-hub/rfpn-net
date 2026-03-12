@@ -54,8 +54,16 @@ export default function Messages() {
 
   useEffect(() => {
     if (!selectedThread) return;
-    supabase.from('messages').select('*').eq('thread_id', selectedThread).order('created_at', { ascending: true })
-      .then(({ data }) => setMessages(data || []));
+    const loadMessages = async () => {
+      const { data: msgs } = await supabase.from('messages').select('*').eq('thread_id', selectedThread).order('created_at', { ascending: true });
+      if (msgs) {
+        const senderIds = [...new Set(msgs.map(m => m.sender_id))];
+        const { data: profiles } = await supabase.from('profiles').select('user_id, first_name, last_name').in('user_id', senderIds);
+        const profileMap = new Map(profiles?.map(p => [p.user_id, `${p.first_name} ${p.last_name}`]));
+        setMessages(msgs.map(m => ({ ...m, sender_name: profileMap.get(m.sender_id) || 'Unknown' })));
+      }
+    };
+    loadMessages();
 
     const channel = supabase.channel(`messages-${selectedThread}`)
       .on('postgres_changes', { event: 'INSERT', schema: 'public', table: 'messages', filter: `thread_id=eq.${selectedThread}` },
