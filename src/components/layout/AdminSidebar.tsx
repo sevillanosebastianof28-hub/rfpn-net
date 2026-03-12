@@ -145,7 +145,7 @@ export function AdminSidebar({ collapsed, onToggle }: AdminSidebarProps) {
               Portals
             </p>
           )}
-          {lockedNavItems.map((item) => (
+          {portalNavItems.map((item) => (
             <NavItem key={item.label} icon={item.icon} label={item.label} path={item.path} />
           ))}
         </div>
