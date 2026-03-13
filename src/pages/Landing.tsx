@@ -223,7 +223,7 @@ export default function Landing() {
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 animate-slide-up stagger-1 leading-relaxed">
-              Connect developers, brokers, and lenders in one powerful platform.
+              Connect developers, brokers, solicitors, insurers, trades and suppliers in one powerful platform.
               <span className="text-foreground font-medium"> Manage contacts, track applications, and close deals faster.</span>
             </p>
 
