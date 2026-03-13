@@ -128,12 +128,12 @@ export default function AdminApplicationDetail() {
       </button>
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{app.title}</h1>
           <p className="text-sm text-muted-foreground">Created {format(new Date(app.created_at), 'PPP')}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
             <FileDown className="h-4 w-4 mr-1" /> Export PDF
           </Button>
@@ -147,6 +147,24 @@ export default function AdminApplicationDetail() {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      {/* Broker Assignment */}
+      <div className="flex items-center gap-3 p-4 rounded-lg border bg-muted/20">
+        <UserPlus className="h-5 w-5 text-primary shrink-0" />
+        <div className="flex-1">
+          <p className="text-sm font-medium">Assign Broker</p>
+          <p className="text-xs text-muted-foreground">Application will appear in the assigned broker's portal</p>
+        </div>
+        <Select value={app.assigned_broker_id || 'unassigned'} onValueChange={v => v !== 'unassigned' && assignBroker(v)}>
+          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Select broker..." /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="unassigned" disabled>Unassigned</SelectItem>
+            {brokers.map(b => (
+              <SelectItem key={b.user_id} value={b.user_id}>{b.first_name} {b.last_name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Application Data Sections */}
