@@ -509,8 +509,8 @@ export default function Landing() {
               </div>
 
               <h2 className="text-3xl sm:text-4xl lg:text-6xl font-bold tracking-tight text-white mb-6 leading-tight">
-                Ready to grow your<br className="hidden sm:block" />
-                <span className="text-white/80">property network?</span>
+                Ready to connect with<br className="hidden sm:block" />
+                <span className="text-white/80">property developers, investors, suppliers, trades and services?</span>
               </h2>
               <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
                 Join 500+ property finance firms who trust Reley. Get started in under 5 minutes.
