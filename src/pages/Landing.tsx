@@ -554,7 +554,7 @@ export default function Landing() {
             <div className="col-span-2">
               <Logo size="sm" />
               <p className="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The modern platform for property finance networks. Connect, manage, and scale with confidence.
+                The modern platform for property developers, investors, suppliers, trades and services. Connect, manage, and scale with confidence.
               </p>
               <div className="flex items-center gap-4 mt-6">
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
