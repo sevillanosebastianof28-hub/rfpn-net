@@ -59,7 +59,7 @@ const features = [
   {
     icon: Users,
     title: 'Role-Based Access',
-    description: 'Super Admins, Developers, Brokers — everyone gets exactly the access they need.',
+    description: 'Super Admins, Developers, Brokers, Solicitors, Insurers, Trades & Suppliers — everyone gets exactly the access they need.',
     color: 'from-pink-500 to-rose-600',
     stat: '4 role types',
   },

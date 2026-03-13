@@ -307,6 +307,7 @@ export default function AdminApplicationDetail() {
       </Section>
 
       <Section title="10. Loan Details">
+        <p className="font-medium text-sm mb-1">Loan Application 1</p>
         <Field label="Application Type" value={ld.applicationType} />
         <Field label="Loan Type" value={ld.loanType} />
         <Field label="Loan %" value={ld.loanPercentage ? `${ld.loanPercentage}%` : '—'} />
@@ -318,6 +319,17 @@ export default function AdminApplicationDetail() {
         <Field label="Expected Rental" value={ld.rentalIncomeExpected ? `£${ld.rentalIncomeExpected}/mo` : '—'} />
         <Field label="Planned Use" value={ld.plannedUse} />
         <Field label="Repayment Plan" value={ld.repaymentPlan} />
+        {(formData.additionalLoans || []).map((loan: any, i: number) => (
+          <div key={i} className="mt-3 pt-3 border-t">
+            <p className="font-medium text-sm mb-1">Loan Application {i + 2}</p>
+            <Field label="Application Type" value={loan.applicationType} />
+            <Field label="Loan Type" value={loan.loanType} />
+            <Field label="Loan %" value={loan.loanPercentage ? `${loan.loanPercentage}%` : '—'} />
+            <Field label="Purchase Price" value={loan.purchasePrice ? `£${loan.purchasePrice.toLocaleString()}` : '—'} />
+            <Field label="Property Address" value={loan.propertyAddress} />
+            <Field label="Planned Use" value={loan.plannedUse} />
+          </div>
+        ))}
       </Section>
 
       {/* Documents */}
