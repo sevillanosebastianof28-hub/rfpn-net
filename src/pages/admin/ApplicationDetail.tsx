@@ -41,18 +41,37 @@ export default function AdminApplicationDetail() {
   const [loading, setLoading] = useState(true);
   const [newNote, setNewNote] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
+  const [brokers, setBrokers] = useState<{ user_id: string; first_name: string; last_name: string }[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('applications').select('*').eq('id', id).single().then(({ data }) => {
-      if (data) {
-        setApp(data);
-        const pd = (data.project_details as any) || {};
+    // Load app and brokers in parallel
+    Promise.all([
+      supabase.from('applications').select('*').eq('id', id).single(),
+      supabase.from('user_roles').select('user_id').eq('role', 'broker'),
+    ]).then(async ([appRes, rolesRes]) => {
+      if (appRes.data) {
+        setApp(appRes.data);
+        const pd = (appRes.data.project_details as any) || {};
         setFormData({ ...getDefaultFormData(), ...pd });
+      }
+      // Fetch broker profiles
+      const brokerIds = (rolesRes.data || []).map(r => r.user_id);
+      if (brokerIds.length > 0) {
+        const { data: profiles } = await supabase.from('profiles').select('user_id, first_name, last_name').in('user_id', brokerIds);
+        setBrokers(profiles || []);
       }
       setLoading(false);
     });
   }, [id]);
+
+  const assignBroker = async (brokerId: string) => {
+    if (!app) return;
+    const { error } = await supabase.from('applications').update({ assigned_broker_id: brokerId }).eq('id', app.id);
+    if (error) { toast.error('Failed to assign broker'); return; }
+    toast.success('Broker assigned');
+    setApp({ ...app, assigned_broker_id: brokerId });
+  };
 
   const changeStatus = async (status: string) => {
     if (!app) return;
