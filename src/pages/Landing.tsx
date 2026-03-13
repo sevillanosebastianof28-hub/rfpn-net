@@ -513,7 +513,7 @@ export default function Landing() {
                 <span className="text-white/80">property developers, investors, suppliers, trades and services?</span>
               </h2>
               <p className="text-lg sm:text-xl text-white/70 max-w-2xl mx-auto mb-12 leading-relaxed">
-                Join 500+ property finance firms who trust Reley. Get started in under 5 minutes.
+                Join property developers, investors, suppliers, trades and services who trust Reley. Get started in under 5 minutes.
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
