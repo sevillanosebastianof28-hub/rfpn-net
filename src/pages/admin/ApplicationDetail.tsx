@@ -219,11 +219,39 @@ export default function AdminApplicationDetail() {
 
       <Section title="5. Assets & Liabilities">
         <Field label="Property Owner" value={al.propertyOwner} />
-        <Field label="Property Value" value={al.currentPropertyValue ? `£${al.currentPropertyValue.toLocaleString()}` : '—'} />
-        <Field label="Mortgage Lender" value={al.mortgageLender} />
-        <Field label="Outstanding Balance" value={al.outstandingMortgageBalance ? `£${al.outstandingMortgageBalance.toLocaleString()}` : '—'} />
-        <Field label="Interest Rate" value={al.interestRate ? `${al.interestRate}%` : '—'} />
-        <Field label="Monthly Payment" value={al.monthlyMortgagePayment ? `£${al.monthlyMortgagePayment}` : '—'} />
+        {/* Show new multi-property format */}
+        {(al.ownedProperties || []).length > 0 ? (
+          (al.ownedProperties || []).map((p: any, i: number) => (
+            <div key={i} className={i > 0 ? 'mt-2 pt-2 border-t' : 'mt-2'}>
+              <Field label={`Property ${i + 1}`} value={p.address} />
+              <Field label="Held In" value={p.heldIn === 'personal' ? 'Personal Name' : p.heldIn === 'company' ? 'Company Name' : '—'} />
+              <Field label="Ownership" value={p.ownershipStatus?.replace(/_/g, ' ') || '—'} />
+              <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Mortgage Lender" value={p.mortgageLender} />
+              <Field label="Outstanding" value={p.outstandingMortgageBalance ? `£${p.outstandingMortgageBalance.toLocaleString()}` : '—'} />
+              <Field label="Monthly Payment" value={p.monthlyMortgagePayment ? `£${p.monthlyMortgagePayment}` : '—'} />
+              <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+            </div>
+          ))
+        ) : (
+          <>
+            <Field label="Property Value" value={al.currentPropertyValue ? `£${al.currentPropertyValue.toLocaleString()}` : '—'} />
+            <Field label="Mortgage Lender" value={al.mortgageLender} />
+            <Field label="Outstanding Balance" value={al.outstandingMortgageBalance ? `£${al.outstandingMortgageBalance.toLocaleString()}` : '—'} />
+            <Field label="Interest Rate" value={al.interestRate ? `${al.interestRate}%` : '—'} />
+            <Field label="Monthly Payment" value={al.monthlyMortgagePayment ? `£${al.monthlyMortgagePayment}` : '—'} />
+          </>
+        )}
+        {al.securedLoans?.length > 0 && (
+          <>
+            <p className="font-medium text-sm mt-3">Secured Loans</p>
+            {al.securedLoans.map((l: any, i: number) => (
+              <div key={i} className="mt-1">
+                <Field label={`Loan ${i + 1} — ${l.lender}`} value={l.amount ? `£${l.amount.toLocaleString()}` : '—'} />
+              </div>
+            ))}
+          </>
+        )}
       </Section>
 
       <Section title="6. Debts & Credit">
