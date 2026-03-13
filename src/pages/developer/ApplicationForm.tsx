@@ -252,7 +252,7 @@ export default function ApplicationForm() {
         {currentStep === 7 && <Step7Income data={formData.income} onChange={d => updateSection('income', d)} />}
         {currentStep === 8 && <Step8BusinessIncome data={formData.businesses} onChange={d => updateSection('businesses', d)} />}
         {currentStep === 9 && <Step9PropertyPortfolio data={formData.properties} onChange={d => updateSection('properties', d)} />}
-        {currentStep === 10 && <Step10LoanDetails data={formData.loanDetails} onChange={d => updateSection('loanDetails', d)} />}
+        {currentStep === 10 && <Step10LoanDetails data={formData.loanDetails} additionalLoans={formData.additionalLoans || []} onChange={d => updateSection('loanDetails', d)} onAdditionalChange={d => updateSection('additionalLoans', d)} />}
         {currentStep === 11 && appId && user && (
           <Step11Documents data={formData.documents} onChange={d => updateSection('documents', d)} applicationId={appId} userId={user.id} />
         )}

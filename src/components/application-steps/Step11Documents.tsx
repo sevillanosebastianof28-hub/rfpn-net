@@ -87,6 +87,7 @@ export function Step11Documents({ data, onChange, applicationId, userId }: Props
       onChange(newDocs);
       toast.success('Document uploaded');
     } catch (err: any) {
+      console.error('Upload error:', err);
       toast.error(err.message || 'Upload failed');
     } finally {
       setUploading(null);
@@ -99,6 +100,11 @@ export function Step11Documents({ data, onChange, applicationId, userId }: Props
     toast.success('Document removed');
   };
 
+  const triggerFileInput = (type: string) => {
+    const input = document.getElementById(`file-${type}`) as HTMLInputElement;
+    if (input) input.click();
+  };
+
   return (
     <div className="space-y-6">
       <div className="p-3 rounded-lg bg-primary/5 border border-primary/20 text-sm space-y-1">
@@ -109,6 +115,7 @@ export function Step11Documents({ data, onChange, applicationId, userId }: Props
       <div className="space-y-4">
         {DOCUMENT_TYPES.map(dt => {
           const docs = getDocsForType(dt.key);
+          const isUploading = uploading === dt.key;
           return (
             <div key={dt.key} className="p-4 rounded-lg border bg-muted/20 space-y-3">
               <div className="flex items-center justify-between">
@@ -139,16 +146,21 @@ export function Step11Documents({ data, onChange, applicationId, userId }: Props
                     multiple
                     id={`file-${dt.key}`}
                     className="hidden"
-                    onChange={e => handleUpload(dt.key, e.target.files)}
+                    onChange={e => {
+                      handleUpload(dt.key, e.target.files);
+                      // Reset input so same file can be re-selected
+                      e.target.value = '';
+                    }}
                   />
                   <Button
-                    type="button" variant="outline" size="sm" asChild
-                    disabled={uploading === dt.key}
+                    type="button"
+                    variant="outline"
+                    size="sm"
+                    disabled={isUploading}
+                    onClick={() => triggerFileInput(dt.key)}
                   >
-                    <label htmlFor={`file-${dt.key}`} className="cursor-pointer">
-                      <Upload className="h-4 w-4 mr-1" />
-                      {uploading === dt.key ? 'Uploading...' : 'Upload'}
-                    </label>
+                    <Upload className="h-4 w-4 mr-1" />
+                    {isUploading ? 'Uploading...' : 'Upload'}
                   </Button>
                 </div>
               </div>

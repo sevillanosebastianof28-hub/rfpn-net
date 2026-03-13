@@ -1,19 +1,33 @@
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
+import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import type { LoanDetails } from '@/types/application-form';
+import { Plus, Trash2 } from 'lucide-react';
+import type { LoanDetailEntry } from '@/types/application-form';
+import { getEmptyLoanDetail } from '@/types/application-form';
 
 interface Props {
-  data: LoanDetails;
-  onChange: (data: LoanDetails) => void;
+  data: LoanDetailEntry;
+  additionalLoans?: LoanDetailEntry[];
+  onChange: (data: LoanDetailEntry) => void;
+  onAdditionalChange?: (data: LoanDetailEntry[]) => void;
 }
 
-export function Step10LoanDetails({ data, onChange }: Props) {
+function LoanForm({ data, onChange, label, onRemove }: { data: LoanDetailEntry; onChange: (d: LoanDetailEntry) => void; label: string; onRemove?: () => void }) {
   const update = (field: string, value: any) => onChange({ ...data, [field]: value });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4 p-4 rounded-lg border bg-muted/30">
+      <div className="flex items-center justify-between">
+        <h4 className="font-semibold">{label}</h4>
+        {onRemove && (
+          <Button type="button" variant="ghost" size="sm" onClick={onRemove}>
+            <Trash2 className="h-4 w-4 text-destructive" />
+          </Button>
+        )}
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <div className="space-y-2">
           <Label>Application Type *</Label>
@@ -32,7 +46,7 @@ export function Step10LoanDetails({ data, onChange }: Props) {
             <SelectContent>
               <SelectItem value="commercial">Commercial</SelectItem>
               <SelectItem value="bridge">Bridge</SelectItem>
-              <SelectItem value="development">Development</SelectItem>
+              <SelectItem value="development">Development Finance</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -69,6 +83,47 @@ export function Step10LoanDetails({ data, onChange }: Props) {
       </div>
 
       <div className="space-y-2"><Label>Loan Repayment Plan</Label><Textarea value={data.repaymentPlan} onChange={e => update('repaymentPlan', e.target.value)} rows={3} placeholder="How do you plan to repay the loan?" /></div>
+    </div>
+  );
+}
+
+export function Step10LoanDetails({ data, additionalLoans = [], onChange, onAdditionalChange }: Props) {
+  const addLoan = () => {
+    onAdditionalChange?.([...additionalLoans, getEmptyLoanDetail()]);
+  };
+
+  const removeLoan = (idx: number) => {
+    onAdditionalChange?.(additionalLoans.filter((_, i) => i !== idx));
+  };
+
+  const updateAdditional = (idx: number, d: LoanDetailEntry) => {
+    const items = [...additionalLoans];
+    items[idx] = d;
+    onAdditionalChange?.(items);
+  };
+
+  return (
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          You can apply for multiple loan types simultaneously (e.g. bridge and development finance).
+        </p>
+        <Button type="button" variant="outline" size="sm" onClick={addLoan}>
+          <Plus className="h-4 w-4 mr-1" /> Add Another Loan
+        </Button>
+      </div>
+
+      <LoanForm data={data} onChange={onChange} label="Loan Application 1" />
+
+      {additionalLoans.map((loan, idx) => (
+        <LoanForm
+          key={idx}
+          data={loan}
+          onChange={d => updateAdditional(idx, d)}
+          label={`Loan Application ${idx + 2}`}
+          onRemove={() => removeLoan(idx)}
+        />
+      ))}
     </div>
   );
 }

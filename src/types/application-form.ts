@@ -59,8 +59,23 @@ export interface SecuredLoan {
   purpose: string;
 }
 
+export interface OwnedProperty {
+  address: string;
+  currentValue: number | null;
+  heldIn: string; // 'personal' | 'company'
+  ownershipStatus: string; // 'sole_owner' | 'joint_owner' | 'joint_mortgage'
+  mortgageLender: string;
+  outstandingMortgageBalance: number | null;
+  monthlyMortgagePayment: number | null;
+  interestRate: number | null;
+  repaymentMethod: string;
+  mortgageTermRemaining: string;
+  earlyRepaymentCharges: number | null;
+}
+
 export interface AssetsLiabilities {
   propertyOwner: boolean | null;
+  // Legacy single-property fields (kept for backward compat with existing data)
   currentPropertyValue: number | null;
   monthlyMortgagePayment: number | null;
   mortgageLender: string;
@@ -69,6 +84,8 @@ export interface AssetsLiabilities {
   repaymentMethod: string;
   mortgageTermRemaining: string;
   earlyRepaymentCharges: number | null;
+  // New multi-property support
+  ownedProperties: OwnedProperty[];
   securedLoans: SecuredLoan[];
 }
 
@@ -123,7 +140,7 @@ export interface PropertyEntry {
   rentalIncome: number | null;
 }
 
-export interface LoanDetails {
+export interface LoanDetailEntry {
   applicationType: string;
   loanType: string;
   loanPercentage: number | null;
@@ -138,15 +155,18 @@ export interface LoanDetails {
   repaymentPlan: string;
 }
 
+// Keep backward compat alias
+export type LoanDetails = LoanDetailEntry;
+
 export interface DocumentUpload {
   type: string;
   fileId: string;
   fileName: string;
-  documentDate?: string; // Date of the document (not upload date)
+  documentDate?: string;
 }
 
 export interface ESignature {
-  signatureData: string; // base64 SVG or canvas data
+  signatureData: string;
   signedAt: string;
   signerName: string;
 }
@@ -166,7 +186,9 @@ export interface ApplicationFormData {
   };
   businesses: BusinessEntry[];
   properties: PropertyEntry[];
-  loanDetails: LoanDetails;
+  loanDetails: LoanDetailEntry;
+  // Support multiple loan applications
+  additionalLoans: LoanDetailEntry[];
   documents: DocumentUpload[];
   eSignature?: ESignature;
   currentStep: number;
@@ -233,6 +255,22 @@ export const DOCUMENT_TYPES = [
   { key: 'businessDocuments', label: 'Business Documents' },
 ];
 
+export function getEmptyLoanDetail(): LoanDetailEntry {
+  return {
+    applicationType: '', loanType: '', loanPercentage: null, loanTerm: '',
+    repaymentMethod: '', purchasePrice: null, propertyValue: null, propertyAddress: '',
+    propertyDescription: '', rentalIncomeExpected: null, plannedUse: '', repaymentPlan: '',
+  };
+}
+
+export function getEmptyOwnedProperty(): OwnedProperty {
+  return {
+    address: '', currentValue: null, heldIn: '', ownershipStatus: '',
+    mortgageLender: '', outstandingMortgageBalance: null, monthlyMortgagePayment: null,
+    interestRate: null, repaymentMethod: '', mortgageTermRemaining: '', earlyRepaymentCharges: null,
+  };
+}
+
 export function getDefaultFormData(): ApplicationFormData {
   const expenditure: Record<string, ExpenditureItem> = {};
   EXPENDITURE_CATEGORIES.forEach(c => { expenditure[c.key] = { current: null, proposed: null }; });
@@ -257,6 +295,7 @@ export function getDefaultFormData(): ApplicationFormData {
       propertyOwner: null, currentPropertyValue: null, monthlyMortgagePayment: null,
       mortgageLender: '', outstandingMortgageBalance: null, interestRate: null,
       repaymentMethod: '', mortgageTermRemaining: '', earlyRepaymentCharges: null,
+      ownedProperties: [],
       securedLoans: [],
     },
     debts: [],
@@ -271,11 +310,8 @@ export function getDefaultFormData(): ApplicationFormData {
     },
     businesses: [],
     properties: [],
-    loanDetails: {
-      applicationType: '', loanType: '', loanPercentage: null, loanTerm: '',
-      repaymentMethod: '', purchasePrice: null, propertyValue: null, propertyAddress: '',
-      propertyDescription: '', rentalIncomeExpected: null, plannedUse: '', repaymentPlan: '',
-    },
+    loanDetails: getEmptyLoanDetail(),
+    additionalLoans: [],
     documents: [],
     currentStep: 1,
     adminNotes: [],

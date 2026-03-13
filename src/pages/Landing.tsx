@@ -59,7 +59,7 @@ const features = [
   {
     icon: Users,
     title: 'Role-Based Access',
-    description: 'Super Admins, Developers, Brokers — everyone gets exactly the access they need.',
+    description: 'Super Admins, Developers, Brokers, Solicitors, Insurers, Trades & Suppliers — everyone gets exactly the access they need.',
     color: 'from-pink-500 to-rose-600',
     stat: '4 role types',
   },
@@ -223,7 +223,7 @@ export default function Landing() {
 
             {/* Subheadline */}
             <p className="text-lg sm:text-xl lg:text-2xl text-muted-foreground max-w-3xl mx-auto mb-10 animate-slide-up stagger-1 leading-relaxed">
-              Connect developers, brokers, and lenders in one powerful platform.
+              Connect developers, brokers, solicitors, insurers, trades and suppliers in one powerful platform.
               <span className="text-foreground font-medium"> Manage contacts, track applications, and close deals faster.</span>
             </p>
 
@@ -554,7 +554,7 @@ export default function Landing() {
             <div className="col-span-2">
               <Logo size="sm" />
               <p className="mt-4 text-sm text-muted-foreground max-w-xs leading-relaxed">
-                The modern platform for property finance networks. Connect, manage, and scale with confidence.
+                The modern platform for property developers, investors, suppliers, trades and services. Connect, manage, and scale with confidence.
               </p>
               <div className="flex items-center gap-4 mt-6">
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">

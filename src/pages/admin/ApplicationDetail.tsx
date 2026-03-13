@@ -6,7 +6,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { StatusBadge } from '@/components/StatusBadge';
 import { toast } from 'sonner';
-import { ArrowLeft, Loader2, Download, Plus, FileDown } from 'lucide-react';
+import { ArrowLeft, Loader2, Download, Plus, FileDown, UserPlus } from 'lucide-react';
 import { format } from 'date-fns';
 import { STEP_LABELS, EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, getDefaultFormData, type ApplicationFormData } from '@/types/application-form';
 import { exportApplicationToPDF } from '@/lib/export-pdf';
@@ -41,18 +41,37 @@ export default function AdminApplicationDetail() {
   const [loading, setLoading] = useState(true);
   const [newNote, setNewNote] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
+  const [brokers, setBrokers] = useState<{ user_id: string; first_name: string; last_name: string }[]>([]);
 
   useEffect(() => {
     if (!id) return;
-    supabase.from('applications').select('*').eq('id', id).single().then(({ data }) => {
-      if (data) {
-        setApp(data);
-        const pd = (data.project_details as any) || {};
+    // Load app and brokers in parallel
+    Promise.all([
+      supabase.from('applications').select('*').eq('id', id).single(),
+      supabase.from('user_roles').select('user_id').eq('role', 'broker'),
+    ]).then(async ([appRes, rolesRes]) => {
+      if (appRes.data) {
+        setApp(appRes.data);
+        const pd = (appRes.data.project_details as any) || {};
         setFormData({ ...getDefaultFormData(), ...pd });
+      }
+      // Fetch broker profiles
+      const brokerIds = (rolesRes.data || []).map(r => r.user_id);
+      if (brokerIds.length > 0) {
+        const { data: profiles } = await supabase.from('profiles').select('user_id, first_name, last_name').in('user_id', brokerIds);
+        setBrokers(profiles || []);
       }
       setLoading(false);
     });
   }, [id]);
+
+  const assignBroker = async (brokerId: string) => {
+    if (!app) return;
+    const { error } = await supabase.from('applications').update({ assigned_broker_id: brokerId }).eq('id', app.id);
+    if (error) { toast.error('Failed to assign broker'); return; }
+    toast.success('Broker assigned');
+    setApp({ ...app, assigned_broker_id: brokerId });
+  };
 
   const changeStatus = async (status: string) => {
     if (!app) return;
@@ -109,12 +128,12 @@ export default function AdminApplicationDetail() {
       </button>
 
       {/* Header */}
-      <div className="flex items-center justify-between">
+      <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold">{app.title}</h1>
           <p className="text-sm text-muted-foreground">Created {format(new Date(app.created_at), 'PPP')}</p>
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
             <FileDown className="h-4 w-4 mr-1" /> Export PDF
           </Button>
@@ -128,6 +147,24 @@ export default function AdminApplicationDetail() {
             </SelectContent>
           </Select>
         </div>
+      </div>
+
+      {/* Broker Assignment */}
+      <div className="flex items-center gap-3 p-4 rounded-lg border bg-muted/20">
+        <UserPlus className="h-5 w-5 text-primary shrink-0" />
+        <div className="flex-1">
+          <p className="text-sm font-medium">Assign Broker</p>
+          <p className="text-xs text-muted-foreground">Application will appear in the assigned broker's portal</p>
+        </div>
+        <Select value={app.assigned_broker_id || 'unassigned'} onValueChange={v => v !== 'unassigned' && assignBroker(v)}>
+          <SelectTrigger className="w-[200px]"><SelectValue placeholder="Select broker..." /></SelectTrigger>
+          <SelectContent>
+            <SelectItem value="unassigned" disabled>Unassigned</SelectItem>
+            {brokers.map(b => (
+              <SelectItem key={b.user_id} value={b.user_id}>{b.first_name} {b.last_name}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       {/* Application Data Sections */}
@@ -182,11 +219,39 @@ export default function AdminApplicationDetail() {
 
       <Section title="5. Assets & Liabilities">
         <Field label="Property Owner" value={al.propertyOwner} />
-        <Field label="Property Value" value={al.currentPropertyValue ? `£${al.currentPropertyValue.toLocaleString()}` : '—'} />
-        <Field label="Mortgage Lender" value={al.mortgageLender} />
-        <Field label="Outstanding Balance" value={al.outstandingMortgageBalance ? `£${al.outstandingMortgageBalance.toLocaleString()}` : '—'} />
-        <Field label="Interest Rate" value={al.interestRate ? `${al.interestRate}%` : '—'} />
-        <Field label="Monthly Payment" value={al.monthlyMortgagePayment ? `£${al.monthlyMortgagePayment}` : '—'} />
+        {/* Show new multi-property format */}
+        {(al.ownedProperties || []).length > 0 ? (
+          (al.ownedProperties || []).map((p: any, i: number) => (
+            <div key={i} className={i > 0 ? 'mt-2 pt-2 border-t' : 'mt-2'}>
+              <Field label={`Property ${i + 1}`} value={p.address} />
+              <Field label="Held In" value={p.heldIn === 'personal' ? 'Personal Name' : p.heldIn === 'company' ? 'Company Name' : '—'} />
+              <Field label="Ownership" value={p.ownershipStatus?.replace(/_/g, ' ') || '—'} />
+              <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Mortgage Lender" value={p.mortgageLender} />
+              <Field label="Outstanding" value={p.outstandingMortgageBalance ? `£${p.outstandingMortgageBalance.toLocaleString()}` : '—'} />
+              <Field label="Monthly Payment" value={p.monthlyMortgagePayment ? `£${p.monthlyMortgagePayment}` : '—'} />
+              <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+            </div>
+          ))
+        ) : (
+          <>
+            <Field label="Property Value" value={al.currentPropertyValue ? `£${al.currentPropertyValue.toLocaleString()}` : '—'} />
+            <Field label="Mortgage Lender" value={al.mortgageLender} />
+            <Field label="Outstanding Balance" value={al.outstandingMortgageBalance ? `£${al.outstandingMortgageBalance.toLocaleString()}` : '—'} />
+            <Field label="Interest Rate" value={al.interestRate ? `${al.interestRate}%` : '—'} />
+            <Field label="Monthly Payment" value={al.monthlyMortgagePayment ? `£${al.monthlyMortgagePayment}` : '—'} />
+          </>
+        )}
+        {al.securedLoans?.length > 0 && (
+          <>
+            <p className="font-medium text-sm mt-3">Secured Loans</p>
+            {al.securedLoans.map((l: any, i: number) => (
+              <div key={i} className="mt-1">
+                <Field label={`Loan ${i + 1} — ${l.lender}`} value={l.amount ? `£${l.amount.toLocaleString()}` : '—'} />
+              </div>
+            ))}
+          </>
+        )}
       </Section>
 
       <Section title="6. Debts & Credit">
@@ -242,6 +307,7 @@ export default function AdminApplicationDetail() {
       </Section>
 
       <Section title="10. Loan Details">
+        <p className="font-medium text-sm mb-1">Loan Application 1</p>
         <Field label="Application Type" value={ld.applicationType} />
         <Field label="Loan Type" value={ld.loanType} />
         <Field label="Loan %" value={ld.loanPercentage ? `${ld.loanPercentage}%` : '—'} />
@@ -253,6 +319,17 @@ export default function AdminApplicationDetail() {
         <Field label="Expected Rental" value={ld.rentalIncomeExpected ? `£${ld.rentalIncomeExpected}/mo` : '—'} />
         <Field label="Planned Use" value={ld.plannedUse} />
         <Field label="Repayment Plan" value={ld.repaymentPlan} />
+        {(formData.additionalLoans || []).map((loan: any, i: number) => (
+          <div key={i} className="mt-3 pt-3 border-t">
+            <p className="font-medium text-sm mb-1">Loan Application {i + 2}</p>
+            <Field label="Application Type" value={loan.applicationType} />
+            <Field label="Loan Type" value={loan.loanType} />
+            <Field label="Loan %" value={loan.loanPercentage ? `${loan.loanPercentage}%` : '—'} />
+            <Field label="Purchase Price" value={loan.purchasePrice ? `£${loan.purchasePrice.toLocaleString()}` : '—'} />
+            <Field label="Property Address" value={loan.propertyAddress} />
+            <Field label="Planned Use" value={loan.plannedUse} />
+          </div>
+        ))}
       </Section>
 
       {/* Documents */}
