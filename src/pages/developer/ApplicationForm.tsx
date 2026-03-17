@@ -237,6 +237,26 @@ export default function ApplicationForm() {
               </div>
             )}
             <Step1PersonalDetails data={formData.personalDetails} onChange={d => updateSection('personalDetails', d)} />
+            
+            {/* KYC Verification - shown after personal details are filled */}
+            {user && (formData.personalDetails.firstName && formData.personalDetails.surname && formData.personalDetails.dateOfBirth && formData.addressHistory.currentAddress.postcode) && (
+              <div className="mt-6">
+                <KycVerification
+                  personalDetails={formData.personalDetails}
+                  addressHistory={formData.addressHistory}
+                  applicationId={appId}
+                  userId={user.id}
+                  onVerified={(verifiedFields) => {
+                    // Mark verified fields in form data
+                    const updated = { ...formData };
+                    if (verifiedFields.firstName) updated.personalDetails.firstName = verifiedFields.firstName as string;
+                    if (verifiedFields.lastName) updated.personalDetails.surname = verifiedFields.lastName as string;
+                    if (verifiedFields.dateOfBirth) updated.personalDetails.dateOfBirth = verifiedFields.dateOfBirth as string;
+                    setFormData(updated);
+                  }}
+                />
+              </div>
+            )}
           </>
         )}
         {currentStep === 2 && <Step2AddressHistory data={formData.addressHistory} onChange={d => updateSection('addressHistory', d)} />}
