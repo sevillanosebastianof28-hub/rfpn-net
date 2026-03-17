@@ -2,3 +2,6 @@ project_id = "poqiuoyhzbzbkshlwfxt"
 
 [functions.credas-webhook]
 verify_jwt = false
+
+[functions.experian-kyc]
+verify_jwt = false
