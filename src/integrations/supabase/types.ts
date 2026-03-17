@@ -317,6 +317,71 @@ export type Database = {
           },
         ]
       }
+      kyc_verifications: {
+        Row: {
+          applicant_user_id: string
+          application_id: string | null
+          created_at: string
+          decision: string | null
+          error_message: string | null
+          id: string
+          match_summary: Json | null
+          provider: string
+          provider_reference: string | null
+          request_timestamp: string | null
+          response_timestamp: string | null
+          score: number | null
+          sub_decisions: Json | null
+          updated_at: string
+          verification_status: string
+          verified_fields: Json | null
+        }
+        Insert: {
+          applicant_user_id: string
+          application_id?: string | null
+          created_at?: string
+          decision?: string | null
+          error_message?: string | null
+          id?: string
+          match_summary?: Json | null
+          provider?: string
+          provider_reference?: string | null
+          request_timestamp?: string | null
+          response_timestamp?: string | null
+          score?: number | null
+          sub_decisions?: Json | null
+          updated_at?: string
+          verification_status?: string
+          verified_fields?: Json | null
+        }
+        Update: {
+          applicant_user_id?: string
+          application_id?: string | null
+          created_at?: string
+          decision?: string | null
+          error_message?: string | null
+          id?: string
+          match_summary?: Json | null
+          provider?: string
+          provider_reference?: string | null
+          request_timestamp?: string | null
+          response_timestamp?: string | null
+          score?: number | null
+          sub_decisions?: Json | null
+          updated_at?: string
+          verification_status?: string
+          verified_fields?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "kyc_verifications_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       message_thread_participants: {
         Row: {
           id: string
