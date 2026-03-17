@@ -6,6 +6,7 @@ import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
 import { Save, ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react';
 import { ESignatureDialog } from '@/components/application-steps/ESignatureDialog';
+import { KycVerification } from '@/components/application-steps/KycVerification';
 import { StepIndicator } from '@/components/application-steps/StepIndicator';
 import { Step1PersonalDetails } from '@/components/application-steps/Step1PersonalDetails';
 import { Step2AddressHistory } from '@/components/application-steps/Step2AddressHistory';
