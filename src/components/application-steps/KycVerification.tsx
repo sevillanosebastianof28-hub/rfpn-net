@@ -174,7 +174,7 @@ export function KycVerification({
             {(status === 'idle' || status === 'FAILED' || status === 'error') && (
               <Button
                 onClick={handleVerify}
-                disabled={!canVerify || status === 'loading'}
+                disabled={!canVerify}
                 variant={status === 'idle' ? 'default' : 'outline'}
                 size="sm"
               >
