@@ -20,6 +20,7 @@ type AppStatus = Database['public']['Enums']['application_status'];
 
 export default function BrokerApplications() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [apps, setApps] = useState<AppRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [updateApp, setUpdateApp] = useState<AppRow | null>(null);
