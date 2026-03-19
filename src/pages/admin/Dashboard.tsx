@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Building2, Users, FileText, Activity, TrendingUp, Clock } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { StatCard } from '@/components/StatCard';
