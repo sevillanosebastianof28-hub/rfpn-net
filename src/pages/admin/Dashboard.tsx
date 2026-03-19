@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Building2, Users, FileText, Activity, TrendingUp, Clock } from 'lucide-react';
 import { PageHeader } from '@/components/PageHeader';
 import { StatCard } from '@/components/StatCard';
@@ -48,7 +49,9 @@ export default function Dashboard() {
   ];
 
   const appColumns = [
-    { key: 'title', header: 'Title', render: (app: any) => <span className="font-medium">{app.title}</span> },
+    { key: 'title', header: 'Title', render: (app: any) => (
+      <Link to={`/admin/applications/${app.id}`} className="font-medium text-primary hover:underline">{app.title}</Link>
+    )},
     { key: 'type', header: 'Type' },
     { key: 'amount', header: 'Amount', render: (app: any) => <span className="font-medium">{app.amount ? `£${Number(app.amount).toLocaleString()}` : '—'}</span> },
     { key: 'status', header: 'Status', render: (app: any) => <StatusBadge status={app.status} /> },
@@ -69,14 +72,14 @@ export default function Dashboard() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" /> Recent Activity</h2>
-            <a href="/admin/audit-logs" className="text-sm text-primary hover:underline">View all</a>
+            <Link to="/admin/audit-logs" className="text-sm text-primary hover:underline">View all</Link>
           </div>
           <DataTable columns={auditColumns} data={recentLogs} isLoading={loading} emptyState={{ title: 'No recent activity' }} />
         </div>
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-lg font-semibold"><TrendingUp className="h-5 w-5 text-primary" /> Recent Applications</h2>
-            <a href="/admin/applications" className="text-sm text-primary hover:underline">View all</a>
+            <Link to="/admin/applications" className="text-sm text-primary hover:underline">View all</Link>
           </div>
           <DataTable columns={appColumns} data={recentApps} isLoading={loading} emptyState={{ title: 'No applications yet' }} />
         </div>
