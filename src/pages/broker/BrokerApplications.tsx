@@ -10,6 +10,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { toast } from 'sonner';
 import { FileText, Loader2, MessageSquare } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { format } from 'date-fns';
 import { logAudit } from '@/lib/audit';
 import type { Database } from '@/integrations/supabase/types';
@@ -19,6 +20,7 @@ type AppStatus = Database['public']['Enums']['application_status'];
 
 export default function BrokerApplications() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [apps, setApps] = useState<AppRow[]>([]);
   const [loading, setLoading] = useState(true);
   const [updateApp, setUpdateApp] = useState<AppRow | null>(null);
@@ -53,7 +55,11 @@ export default function BrokerApplications() {
   };
 
   const columns = [
-    { key: 'title', header: 'Title', render: (a: AppRow) => <span className="font-medium">{a.title}</span> },
+    { key: 'title', header: 'Title', render: (a: AppRow) => (
+      <button className="font-medium text-primary hover:underline text-left" onClick={() => navigate(`/broker/applications/${a.id}`)}>
+        {a.title}
+      </button>
+    )},
     { key: 'type', header: 'Type' },
     { key: 'amount', header: 'Amount', render: (a: AppRow) => <span>{a.amount ? `£${Number(a.amount).toLocaleString()}` : '—'}</span> },
     { key: 'status', header: 'Status', render: (a: AppRow) => <StatusBadge status={a.status as any} /> },
