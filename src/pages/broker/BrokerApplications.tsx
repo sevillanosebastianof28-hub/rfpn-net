@@ -55,7 +55,11 @@ export default function BrokerApplications() {
   };
 
   const columns = [
-    { key: 'title', header: 'Title', render: (a: AppRow) => <span className="font-medium">{a.title}</span> },
+    { key: 'title', header: 'Title', render: (a: AppRow) => (
+      <button className="font-medium text-primary hover:underline text-left" onClick={() => navigate(`/broker/applications/${a.id}`)}>
+        {a.title}
+      </button>
+    )},
     { key: 'type', header: 'Type' },
     { key: 'amount', header: 'Amount', render: (a: AppRow) => <span>{a.amount ? `£${Number(a.amount).toLocaleString()}` : '—'}</span> },
     { key: 'status', header: 'Status', render: (a: AppRow) => <StatusBadge status={a.status as any} /> },

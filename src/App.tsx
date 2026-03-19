@@ -85,6 +85,7 @@ const App = () => (
               <Route index element={<BrokerDashboard />} />
               <Route path="profile" element={<BrokerProfile />} />
               <Route path="applications" element={<BrokerApplications />} />
+              <Route path="applications/:id" element={<BrokerApplicationDetail />} />
               <Route path="messages" element={<BrokerMessages />} />
               <Route path="feed" element={<BrokerFeed />} />
             </Route>
