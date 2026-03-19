@@ -36,6 +36,7 @@ import BrokerLayout from "./pages/broker/BrokerLayout";
 import BrokerDashboard from "./pages/broker/BrokerDashboard";
 import BrokerProfile from "./pages/broker/BrokerProfile";
 import BrokerApplications from "./pages/broker/BrokerApplications";
+import BrokerApplicationDetail from "./pages/broker/BrokerApplicationDetail";
 import BrokerMessages from "./pages/broker/BrokerMessages";
 import BrokerFeed from "./pages/broker/BrokerFeed";
 
