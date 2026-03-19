@@ -49,7 +49,9 @@ export default function Dashboard() {
   ];
 
   const appColumns = [
-    { key: 'title', header: 'Title', render: (app: any) => <span className="font-medium">{app.title}</span> },
+    { key: 'title', header: 'Title', render: (app: any) => (
+      <Link to={`/admin/applications/${app.id}`} className="font-medium text-primary hover:underline">{app.title}</Link>
+    )},
     { key: 'type', header: 'Type' },
     { key: 'amount', header: 'Amount', render: (app: any) => <span className="font-medium">{app.amount ? `£${Number(app.amount).toLocaleString()}` : '—'}</span> },
     { key: 'status', header: 'Status', render: (app: any) => <StatusBadge status={app.status} /> },
