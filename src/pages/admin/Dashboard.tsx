@@ -72,7 +72,7 @@ export default function Dashboard() {
         <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="flex items-center gap-2 text-lg font-semibold"><Clock className="h-5 w-5 text-primary" /> Recent Activity</h2>
-            <a href="/admin/audit-logs" className="text-sm text-primary hover:underline">View all</a>
+            <Link to="/admin/audit-logs" className="text-sm text-primary hover:underline">View all</Link>
           </div>
           <DataTable columns={auditColumns} data={recentLogs} isLoading={loading} emptyState={{ title: 'No recent activity' }} />
         </div>
