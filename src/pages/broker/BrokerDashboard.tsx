@@ -60,7 +60,7 @@ export default function BrokerDashboard() {
       ) : (
         <div className="space-y-3">
           {apps.map(app => (
-            <Link key={app.id} to="/broker/applications" className="block">
+            <Link key={app.id} to={`/broker/applications/${app.id}`} className="block">
               <div className="rounded-xl border border-border bg-card p-4 flex items-center justify-between hover:border-primary/30 transition-colors">
                 <div>
                   <p className="font-medium">{app.title}</p>
