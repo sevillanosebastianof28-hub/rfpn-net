@@ -105,7 +105,9 @@ Deno.serve(async (req) => {
     });
 
     if (!authResponse.ok) {
-      console.error(`Experian auth failed: ${authResponse.status}`);
+      const authErrorBody = await authResponse.text();
+      console.error(`Experian auth failed: ${authResponse.status} - ${authErrorBody}`);
+      console.error(`Auth URL used: ${authUrl}`);
       return new Response(
         JSON.stringify({
           error: "Unable to complete verification at this time",
