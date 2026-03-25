@@ -96,8 +96,7 @@ Deno.serve(async (req) => {
 
     // Step 1: Get OAuth token from Experian using password grant
     const authUrl = `${hostRoot}/oauth2/v1/token`;
-    const authBody = new URLSearchParams({
-      grant_type: "password",
+    const authBodyJson = JSON.stringify({
       username: EXPERIAN_USERNAME,
       password: EXPERIAN_PASSWORD,
       client_id: EXPERIAN_API_KEY,
@@ -109,10 +108,11 @@ Deno.serve(async (req) => {
     const authResponse = await fetch(authUrl, {
       method: "POST",
       headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
+        "Content-Type": "application/json",
         Accept: "application/json",
+        Grant_type: "password",
       },
-      body: authBody.toString(),
+      body: authBodyJson,
     });
 
     if (!authResponse.ok) {
