@@ -101,6 +101,7 @@ Deno.serve(async (req) => {
       username: EXPERIAN_USERNAME,
       password: EXPERIAN_PASSWORD,
       client_id: EXPERIAN_API_KEY,
+      client_secret: EXPERIAN_CLIENT_SECRET,
     });
 
     console.log(`Requesting token from: ${authUrl}`);
