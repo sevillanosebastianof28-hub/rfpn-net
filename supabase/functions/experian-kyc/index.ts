@@ -12,8 +12,13 @@ interface KycRequest {
   middleName?: string;
   lastName: string;
   dateOfBirth: string; // YYYY-MM-DD
-  address: string;
+  // Address can be a single line OR structured
+  address?: string;
+  buildingNumber?: string;
+  buildingName?: string;
+  street?: string;
   city: string;
+  county?: string;
   postcode: string;
   country?: string;
   email?: string;
@@ -43,15 +48,14 @@ Deno.serve(async (req) => {
       global: { headers: { Authorization: authHeader } },
     });
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: claimsData, error: claimsError } = await userClient.auth.getClaims(token);
-    if (claimsError || !claimsData?.claims) {
+    const { data: { user }, error: userError } = await userClient.auth.getUser();
+    if (userError || !user) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 401,
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
-    const userId = claimsData.claims.sub as string;
+    const userId = user.id;
 
     // Parse request
     const body: KycRequest = await req.json();
@@ -75,7 +79,7 @@ Deno.serve(async (req) => {
     const EXPERIAN_BASE_URL = Deno.env.get("EXPERIAN_BASE_URL");
     const EXPERIAN_USERNAME = Deno.env.get("EXPERIAN_USERNAME");
     const EXPERIAN_PASSWORD = Deno.env.get("EXPERIAN_PASSWORD");
-    const EXPERIAN_API_KEY = Deno.env.get("EXPERIAN_API_KEY");
+    const EXPERIAN_API_KEY = Deno.env.get("EXPERIAN_API_KEY"); // Client ID
     const EXPERIAN_CLIENT_SECRET = Deno.env.get("EXPERIAN_CLIENT_SECRET");
 
     if (!EXPERIAN_BASE_URL || !EXPERIAN_USERNAME || !EXPERIAN_PASSWORD || !EXPERIAN_API_KEY || !EXPERIAN_CLIENT_SECRET) {
@@ -90,11 +94,10 @@ Deno.serve(async (req) => {
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
     // Extract the host root from EXPERIAN_BASE_URL for OAuth
-    // e.g. "https://sandbox-uk-api.experian.com/da/ccis-devportalapis/" -> "https://sandbox-uk-api.experian.com"
     const baseUrlObj = new URL(EXPERIAN_BASE_URL);
     const hostRoot = `${baseUrlObj.protocol}//${baseUrlObj.host}`;
 
-    // Step 1: Get OAuth token from Experian using password grant
+    // Step 1: Get OAuth token - POST JSON with Grant_type header per Experian docs
     const authUrl = `${hostRoot}/oauth2/v1/token`;
     const authBodyJson = JSON.stringify({
       username: EXPERIAN_USERNAME,
@@ -119,13 +122,12 @@ Deno.serve(async (req) => {
       const authErrorBody = await authResponse.text();
       console.error(`Experian auth failed [${authResponse.status}]: ${authErrorBody}`);
 
-      // Save failed attempt
       await adminClient.from("kyc_verifications").insert({
         application_id: body.applicationId || null,
         applicant_user_id: userId,
         provider: "experian",
         verification_status: "FAILED",
-        error_message: `OAuth failed: HTTP ${authResponse.status}`,
+        error_message: `OAuth failed: HTTP ${authResponse.status} - ${authErrorBody}`,
         request_timestamp: requestTimestamp,
         response_timestamp: new Date().toISOString(),
       });
@@ -134,7 +136,7 @@ Deno.serve(async (req) => {
         JSON.stringify({
           error: "Unable to complete verification at this time",
           status: "FAILED",
-          debug: `Auth returned ${authResponse.status}`,
+          debug: `Auth returned ${authResponse.status}: ${authErrorBody}`,
         }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -144,10 +146,15 @@ Deno.serve(async (req) => {
     const accessToken = authResult.access_token;
     console.log("Experian OAuth token obtained successfully");
 
-    // Step 2: Build CrossCore KYC request payload (matching sandbox spec)
+    // Step 2: Build CrossCore KYC request payload matching sandbox swagger spec exactly
+    // Parse address into structured fields if not already structured
+    const streetValue = body.street || body.address?.trim() || "";
+    const buildingNumber = body.buildingNumber || "";
+    const buildingName = body.buildingName || "";
+
     const kycPayload = {
       header: {
-        tenantId: "",
+        tenantId: "c7f8f55045884847b993d81ca8cdaf",
         requestType: "UKCCIS-QA",
         clientReferenceId: body.applicationId || `rfpn-${Date.now()}`,
         expRequestId: "",
@@ -166,15 +173,19 @@ Deno.serve(async (req) => {
             person: {
               personDetails: {
                 dateOfBirth: body.dateOfBirth,
-                typeOfPerson: "APPLICANT",
               },
+              typeOfPerson: "APPLICANT",
+              personIdentifier: "P12345",
               names: [
                 {
                   id: "MAINPERSONNAME_1",
                   type: "CURRENT",
-                  firstName: body.firstName.trim(),
+                  firstName: body.firstName.trim().toUpperCase(),
                   middleNames: body.middleName?.trim() || "",
-                  surName: body.lastName.trim(),
+                  initials: "",
+                  surName: body.lastName.trim().toUpperCase(),
+                  namePrefix: "",
+                  nameSuffix: "",
                 },
               ],
             },
@@ -184,9 +195,18 @@ Deno.serve(async (req) => {
                 addressIdentifier: "ADDRESS_1",
                 indicator: "RESIDENTIAL",
                 addressType: "CURRENT",
-                street: body.address.trim(),
-                postTown: body.city.trim(),
+                poBoxNumber: "",
+                subBuilding: "",
+                buildingName: buildingName,
+                buildingNumber: buildingNumber,
+                street: streetValue.toUpperCase(),
+                street2: "",
+                subLocality: "",
+                locality: "",
+                postTown: body.city.trim().toUpperCase(),
+                county: body.county?.trim().toUpperCase() || "",
                 postal: body.postcode.trim().toUpperCase(),
+                stateProvinceCode: "",
                 countryCode: body.country || "GBR",
               },
             ],
@@ -200,6 +220,7 @@ Deno.serve(async (req) => {
               type: "INDIVIDUAL",
               applicantType: "APPLICANT",
               consent: true,
+              knownCustomer: true,
             },
           ],
         },
@@ -207,10 +228,10 @@ Deno.serve(async (req) => {
     };
 
     // Step 3: Call Experian KYC endpoint
-    // EXPERIAN_BASE_URL may include the sandbox path like /da/ccis-devportalapis/
     const kycBase = EXPERIAN_BASE_URL.replace(/\/+$/, "");
     const kycUrl = `${kycBase}/v1/KYC`;
     console.log(`Calling KYC endpoint: ${kycUrl}`);
+    console.log(`KYC payload: ${JSON.stringify(kycPayload)}`);
 
     const kycResponse = await fetch(kycUrl, {
       method: "POST",
@@ -233,7 +254,7 @@ Deno.serve(async (req) => {
         applicant_user_id: userId,
         provider: "experian",
         verification_status: "FAILED",
-        error_message: `KYC endpoint returned HTTP ${kycResponse.status}`,
+        error_message: `KYC endpoint returned HTTP ${kycResponse.status}: ${errorText}`,
         request_timestamp: requestTimestamp,
         response_timestamp: responseTimestamp,
       });
@@ -242,13 +263,14 @@ Deno.serve(async (req) => {
         JSON.stringify({
           status: "FAILED",
           message: "Unable to complete verification at this time. Please try again later.",
+          debug: `KYC ${kycResponse.status}: ${errorText}`,
         }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const kycResult = await kycResponse.json();
-    console.log("Experian KYC response received:", JSON.stringify(kycResult).substring(0, 500));
+    console.log("Experian KYC response received:", JSON.stringify(kycResult).substring(0, 1000));
 
     // Step 4: Normalize Experian response
     const responseHeader = kycResult?.responseHeader || kycResult?.header || {};
@@ -262,6 +284,7 @@ Deno.serve(async (req) => {
     let userMessage: string;
 
     switch (overallDecision.toUpperCase()) {
+      case "CONTINUE":
       case "ACCEPT":
         verificationStatus = "VERIFIED";
         userMessage = "Identity verified successfully";
@@ -277,14 +300,19 @@ Deno.serve(async (req) => {
         verificationStatus = "FAILED";
         userMessage = "Verification was not successful";
         break;
+      case "NODECISION":
+        verificationStatus = "REVIEW_REQUIRED";
+        userMessage = "Verification could not reach a decision — manual review required";
+        break;
       default:
         verificationStatus = "REVIEW_REQUIRED";
         userMessage = `Verification returned decision: ${overallDecision}`;
     }
 
     // Extract sub-decisions
-    const decisionElements = kycResult?.clientResponsePayload?.decisionElements || [];
-    const orchestrationDecisions = kycResult?.clientResponsePayload?.orchestrationDecisions || [];
+    const clientResponsePayload = kycResult?.clientResponsePayload || {};
+    const decisionElements = clientResponsePayload?.decisionElements || [];
+    const orchestrationDecisions = clientResponsePayload?.orchestrationDecisions || [];
     const subDecisions = overallResponse?.decisionReasons || [];
 
     const matchSummary = {
@@ -302,7 +330,7 @@ Deno.serve(async (req) => {
       verifiedFields.middleName = body.middleName || null;
       verifiedFields.lastName = body.lastName;
       verifiedFields.dateOfBirth = body.dateOfBirth;
-      verifiedFields.address = body.address;
+      verifiedFields.address = body.address || body.street;
       verifiedFields.city = body.city;
       verifiedFields.postcode = body.postcode;
       verifiedFields.country = body.country || "GBR";
@@ -340,6 +368,7 @@ Deno.serve(async (req) => {
         verificationId: savedRecord?.id || null,
         providerReference,
         score,
+        decision: overallDecision,
         matchSummary: {
           decision: overallDecision,
           decisionElementCount: decisionElements.length,
