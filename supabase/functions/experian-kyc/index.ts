@@ -86,32 +86,48 @@ Deno.serve(async (req) => {
     }
 
     const requestTimestamp = new Date().toISOString();
+    const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Step 1: Get OAuth token from Experian
+    // Step 1: Get OAuth token from Experian using password grant
     const authUrl = `${EXPERIAN_BASE_URL}/oauth2/v1/token`;
     const authBody = new URLSearchParams({
-      grant_type: "client_credentials",
+      grant_type: "password",
       username: EXPERIAN_USERNAME,
       password: EXPERIAN_PASSWORD,
+      client_id: EXPERIAN_API_KEY,
     });
+
+    console.log(`Requesting token from: ${authUrl}`);
 
     const authResponse = await fetch(authUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
-        "X-Api-Key": EXPERIAN_API_KEY,
+        Accept: "application/json",
       },
       body: authBody.toString(),
     });
 
     if (!authResponse.ok) {
       const authErrorBody = await authResponse.text();
-      console.error(`Experian auth failed: ${authResponse.status} - ${authErrorBody}`);
-      console.error(`Auth URL used: ${authUrl}`);
+      console.error(`Experian auth failed [${authResponse.status}]: ${authErrorBody}`);
+
+      // Save failed attempt
+      await adminClient.from("kyc_verifications").insert({
+        application_id: body.applicationId || null,
+        applicant_user_id: userId,
+        provider: "experian",
+        verification_status: "FAILED",
+        error_message: `OAuth failed: HTTP ${authResponse.status}`,
+        request_timestamp: requestTimestamp,
+        response_timestamp: new Date().toISOString(),
+      });
+
       return new Response(
         JSON.stringify({
           error: "Unable to complete verification at this time",
           status: "FAILED",
+          debug: `Auth returned ${authResponse.status}`,
         }),
         { status: 502, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
@@ -119,65 +135,80 @@ Deno.serve(async (req) => {
 
     const authResult = await authResponse.json();
     const accessToken = authResult.access_token;
+    console.log("Experian OAuth token obtained successfully");
 
-    // Step 2: Build CrossCore KYC request payload
-    // Parse DOB
-    const [dobYear, dobMonth, dobDay] = body.dateOfBirth.split("-");
-
+    // Step 2: Build CrossCore KYC request payload (matching sandbox spec)
     const kycPayload = {
       header: {
         tenantId: "",
-        requestType: "KycConsumer-Standard01",
+        requestType: "UKCCIS-QA",
         clientReferenceId: body.applicationId || `rfpn-${Date.now()}`,
+        expRequestId: "",
         messageTime: new Date().toISOString(),
+        txnId: "",
+        time: "",
         options: {},
       },
       payload: {
+        control: [
+          { option: "KYC_CLIENTTIERVERSION", value: "version1" },
+        ],
         contacts: [
           {
-            id: "APPLICANT_CONTACT_ID",
+            id: "MAINCONTACT_1",
             person: {
+              personDetails: {
+                dateOfBirth: body.dateOfBirth,
+                typeOfPerson: "APPLICANT",
+              },
               names: [
                 {
+                  id: "MAINPERSONNAME_1",
                   type: "CURRENT",
                   firstName: body.firstName.trim(),
-                  middleNames: body.middleName?.trim() || undefined,
+                  middleNames: body.middleName?.trim() || "",
                   surName: body.lastName.trim(),
                 },
               ],
-              personDetails: {
-                dateOfBirth: `${dobYear}-${dobMonth}-${dobDay}`,
-              },
             },
             addresses: [
               {
-                type: "CURRENT",
-                buildingNumber: "",
+                id: "MAINAPPADDRESS_1",
+                addressIdentifier: "ADDRESS_1",
+                indicator: "RESIDENTIAL",
+                addressType: "CURRENT",
                 street: body.address.trim(),
                 postTown: body.city.trim(),
                 postal: body.postcode.trim().toUpperCase(),
                 countryCode: body.country || "GBR",
               },
             ],
-            emails: body.email
-              ? [{ id: "EMAIL_1", type: "HOME", email: body.email.trim() }]
-              : undefined,
-            telephones: body.phone
-              ? [{ id: "TEL_1", type: "MOBILE", number: body.phone.trim() }]
-              : undefined,
           },
         ],
+        application: {
+          applicants: [
+            {
+              id: "APPLICANT_1",
+              contactId: "MAINCONTACT_1",
+              type: "INDIVIDUAL",
+              applicantType: "APPLICANT",
+              consent: true,
+            },
+          ],
+        },
       },
     };
 
-    // Step 3: Call Experian KYC endpoint
-    const kycUrl = `${EXPERIAN_BASE_URL}/experian/crosscore/v2/identity`;
+    // Step 3: Call Experian KYC endpoint (sandbox path)
+    const kycUrl = `${EXPERIAN_BASE_URL}/da/ccis-devportalapis/v1/KYC`;
+    console.log(`Calling KYC endpoint: ${kycUrl}`);
+
     const kycResponse = await fetch(kycUrl, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
+        Accept: "application/json",
         Authorization: `Bearer ${accessToken}`,
-        "X-Api-Key": EXPERIAN_API_KEY,
       },
       body: JSON.stringify(kycPayload),
     });
@@ -188,14 +219,12 @@ Deno.serve(async (req) => {
       const errorText = await kycResponse.text();
       console.error(`Experian KYC call failed [${kycResponse.status}]: ${errorText}`);
 
-      // Save failed attempt
-      const adminClient = createClient(supabaseUrl, supabaseServiceKey);
       await adminClient.from("kyc_verifications").insert({
         application_id: body.applicationId || null,
         applicant_user_id: userId,
         provider: "experian",
         verification_status: "FAILED",
-        error_message: `Provider returned HTTP ${kycResponse.status}`,
+        error_message: `KYC endpoint returned HTTP ${kycResponse.status}`,
         request_timestamp: requestTimestamp,
         response_timestamp: responseTimestamp,
       });
@@ -210,12 +239,14 @@ Deno.serve(async (req) => {
     }
 
     const kycResult = await kycResponse.json();
+    console.log("Experian KYC response received:", JSON.stringify(kycResult).substring(0, 500));
 
     // Step 4: Normalize Experian response
-    const overallDecision = kycResult?.responseHeader?.overallResponse?.decision || "UNKNOWN";
-    const providerReference =
-      kycResult?.responseHeader?.requestType || kycResult?.responseHeader?.clientReferenceId || null;
-    const score = kycResult?.responseHeader?.overallResponse?.score ?? null;
+    const responseHeader = kycResult?.responseHeader || kycResult?.header || {};
+    const overallResponse = responseHeader?.overallResponse || {};
+    const overallDecision = overallResponse?.decision || "UNKNOWN";
+    const providerReference = responseHeader?.expRequestId || responseHeader?.clientReferenceId || null;
+    const score = overallResponse?.score ?? null;
 
     // Map Experian decisions to RFPN statuses
     let verificationStatus: string;
@@ -233,19 +264,25 @@ Deno.serve(async (req) => {
         break;
       case "DECLINE":
       case "REJECT":
+      case "STOP":
         verificationStatus = "FAILED";
         userMessage = "Verification was not successful";
         break;
       default:
         verificationStatus = "REVIEW_REQUIRED";
-        userMessage = "Verification requires further review";
+        userMessage = `Verification returned decision: ${overallDecision}`;
     }
 
-    // Extract sub-decisions and match summary
-    const subDecisions = kycResult?.responseHeader?.overallResponse?.decisionReasons || [];
+    // Extract sub-decisions
+    const decisionElements = kycResult?.clientResponsePayload?.decisionElements || [];
+    const orchestrationDecisions = kycResult?.clientResponsePayload?.orchestrationDecisions || [];
+    const subDecisions = overallResponse?.decisionReasons || [];
+
     const matchSummary = {
       overallDecision,
       decisionReasons: subDecisions,
+      decisionElements: decisionElements.length,
+      orchestrationDecisions: orchestrationDecisions.length,
       score,
     };
 
@@ -263,7 +300,6 @@ Deno.serve(async (req) => {
     }
 
     // Step 5: Save verification record
-    const adminClient = createClient(supabaseUrl, supabaseServiceKey);
     const { data: savedRecord, error: saveError } = await adminClient
       .from("kyc_verifications")
       .insert({
@@ -275,7 +311,7 @@ Deno.serve(async (req) => {
         match_summary: matchSummary,
         score,
         decision: overallDecision,
-        sub_decisions: subDecisions,
+        sub_decisions: { decisionElements, orchestrationDecisions, subDecisions },
         verified_fields: verifiedFields,
         request_timestamp: requestTimestamp,
         response_timestamp: responseTimestamp,
@@ -287,7 +323,7 @@ Deno.serve(async (req) => {
       console.error("Failed to save KYC record:", saveError.message);
     }
 
-    // Step 6: Return safe response to frontend
+    // Step 6: Return response to frontend
     return new Response(
       JSON.stringify({
         status: verificationStatus,
@@ -297,6 +333,7 @@ Deno.serve(async (req) => {
         score,
         matchSummary: {
           decision: overallDecision,
+          decisionElementCount: decisionElements.length,
           reasonCount: subDecisions.length,
         },
         verifiedFields: verificationStatus === "VERIFIED" ? verifiedFields : null,
@@ -308,7 +345,6 @@ Deno.serve(async (req) => {
     );
   } catch (error) {
     console.error("KYC verification error:", error);
-    const message = error instanceof Error ? error.message : "Unknown error";
     return new Response(
       JSON.stringify({
         status: "FAILED",
