@@ -88,8 +88,13 @@ Deno.serve(async (req) => {
     const requestTimestamp = new Date().toISOString();
     const adminClient = createClient(supabaseUrl, supabaseServiceKey);
 
+    // Extract the host root from EXPERIAN_BASE_URL for OAuth
+    // e.g. "https://sandbox-uk-api.experian.com/da/ccis-devportalapis/" -> "https://sandbox-uk-api.experian.com"
+    const baseUrlObj = new URL(EXPERIAN_BASE_URL);
+    const hostRoot = `${baseUrlObj.protocol}//${baseUrlObj.host}`;
+
     // Step 1: Get OAuth token from Experian using password grant
-    const authUrl = `${EXPERIAN_BASE_URL}/oauth2/v1/token`;
+    const authUrl = `${hostRoot}/oauth2/v1/token`;
     const authBody = new URLSearchParams({
       grant_type: "password",
       username: EXPERIAN_USERNAME,
