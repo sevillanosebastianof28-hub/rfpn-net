@@ -76,8 +76,9 @@ Deno.serve(async (req) => {
     const EXPERIAN_USERNAME = Deno.env.get("EXPERIAN_USERNAME");
     const EXPERIAN_PASSWORD = Deno.env.get("EXPERIAN_PASSWORD");
     const EXPERIAN_API_KEY = Deno.env.get("EXPERIAN_API_KEY");
+    const EXPERIAN_CLIENT_SECRET = Deno.env.get("EXPERIAN_CLIENT_SECRET");
 
-    if (!EXPERIAN_BASE_URL || !EXPERIAN_USERNAME || !EXPERIAN_PASSWORD || !EXPERIAN_API_KEY) {
+    if (!EXPERIAN_BASE_URL || !EXPERIAN_USERNAME || !EXPERIAN_PASSWORD || !EXPERIAN_API_KEY || !EXPERIAN_CLIENT_SECRET) {
       console.error("Missing Experian configuration");
       return new Response(
         JSON.stringify({ error: "Identity verification service is not configured" }),
@@ -100,6 +101,7 @@ Deno.serve(async (req) => {
       username: EXPERIAN_USERNAME,
       password: EXPERIAN_PASSWORD,
       client_id: EXPERIAN_API_KEY,
+      client_secret: EXPERIAN_CLIENT_SECRET,
     });
 
     console.log(`Requesting token from: ${authUrl}`);
