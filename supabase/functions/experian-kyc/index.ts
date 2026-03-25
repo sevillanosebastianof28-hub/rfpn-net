@@ -204,8 +204,10 @@ Deno.serve(async (req) => {
       },
     };
 
-    // Step 3: Call Experian KYC endpoint (sandbox path)
-    const kycUrl = `${EXPERIAN_BASE_URL}/da/ccis-devportalapis/v1/KYC`;
+    // Step 3: Call Experian KYC endpoint
+    // EXPERIAN_BASE_URL may include the sandbox path like /da/ccis-devportalapis/
+    const kycBase = EXPERIAN_BASE_URL.replace(/\/+$/, "");
+    const kycUrl = `${kycBase}/v1/KYC`;
     console.log(`Calling KYC endpoint: ${kycUrl}`);
 
     const kycResponse = await fetch(kycUrl, {
