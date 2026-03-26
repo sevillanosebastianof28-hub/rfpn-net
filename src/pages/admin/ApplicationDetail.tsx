@@ -100,7 +100,7 @@ export default function AdminApplicationDetail() {
     }
     // Send email notification via transactional email system
     try {
-      await supabase.functions.invoke('send-transactional-email', {
+      const { data: emailResult, error: emailError } = await supabase.functions.invoke('send-transactional-email', {
         body: {
           templateName: 'broker-allocation',
           recipientEmail: allocBrokerEmail,
@@ -113,8 +113,15 @@ export default function AdminApplicationDetail() {
           },
         },
       });
-      toast.success(`Application allocated to ${allocBrokerName} — email sent to ${allocBrokerEmail}`);
-    } catch {
+      if (emailError) {
+        console.error('Email function error:', emailError);
+        toast.success(`Application allocated to ${allocBrokerName} (email delivery failed — check logs)`);
+      } else {
+        console.log('Email function response:', emailResult);
+        toast.success(`Application allocated to ${allocBrokerName} — email queued for ${allocBrokerEmail}`);
+      }
+    } catch (err) {
+      console.error('Email invocation error:', err);
       toast.success(`Application allocated to ${allocBrokerName} (email delivery pending)`);
     }
     setApp({ ...app, status: 'allocated' as any });
