@@ -68,7 +68,7 @@ export default function Unsubscribe() {
 
         {status === 'success' && (
           <div className="space-y-3 p-6 rounded-lg border bg-card">
-            <CheckCircle2 className="h-10 w-10 text-green-500 mx-auto" />
+            <CheckCircle2 className="h-10 w-10 text-success mx-auto" />
             <h2 className="text-lg font-semibold">Unsubscribed</h2>
             <p className="text-sm text-muted-foreground">You have been successfully unsubscribed from RFPN emails.</p>
           </div>
