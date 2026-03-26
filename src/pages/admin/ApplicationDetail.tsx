@@ -81,6 +81,47 @@ export default function AdminApplicationDetail() {
     setApp({ ...app, assigned_broker_id: brokerId });
   };
 
+  const allocateToBroker = async () => {
+    if (!app || !allocBrokerName || !allocBrokerEmail) return;
+    setAllocating(true);
+    const pd = formData.personalDetails;
+    const fullName = `${pd.title} ${pd.firstName} ${pd.surname}`.trim() || app.title;
+    const { error } = await supabase.from('applications').update({
+      status: 'allocated' as any,
+      broker_name: allocBrokerName,
+      broker_email: allocBrokerEmail,
+      allocated_at: new Date().toISOString(),
+      allocated_by: user?.id || null,
+    } as any).eq('id', app.id);
+    if (error) {
+      toast.error('Failed to allocate');
+      setAllocating(false);
+      return;
+    }
+    // Send email notification
+    try {
+      await supabase.functions.invoke('send-transactional-email', {
+        body: {
+          templateName: 'broker-allocation',
+          recipientEmail: allocBrokerEmail,
+          idempotencyKey: `broker-alloc-${app.id}-${Date.now()}`,
+          templateData: {
+            applicantName: fullName,
+            projectType: app.type?.replace(/_/g, ' ') || 'Development Funding',
+            loanAmount: app.amount ? `£${Number(app.amount).toLocaleString()}` : 'Not specified',
+            applicationId: app.id,
+          },
+        },
+      });
+      toast.success(`Application allocated to ${allocBrokerName} — email sent to ${allocBrokerEmail}`);
+    } catch {
+      toast.success(`Application allocated to ${allocBrokerName} (email delivery pending)`);
+    }
+    setApp({ ...app, status: 'allocated' as any });
+    setAllocateOpen(false);
+    setAllocating(false);
+  };
+
   const changeStatus = async (status: string) => {
     if (!app) return;
     setStatusUpdating(true);
