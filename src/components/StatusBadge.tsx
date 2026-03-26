@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review';
+type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'allocated' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review';
 
 interface StatusBadgeProps {
   status: StatusType | boolean;
