@@ -33,6 +33,7 @@ export default function BrokerDashboard() {
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
 
   const active = apps.filter(a => !['completed', 'declined'].includes(a.status)).length;
+  const allocated = apps.filter(a => a.status === 'allocated').length;
   const completed = apps.filter(a => a.status === 'completed').length;
 
   return (
