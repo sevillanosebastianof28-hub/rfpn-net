@@ -30,7 +30,7 @@ export default function BrokerApplications() {
 
   const fetchApps = async () => {
     if (!user) return;
-    const { data } = await supabase.from('applications').select('*').eq('assigned_broker_id', user.id).order('updated_at', { ascending: false });
+    const { data } = await supabase.from('applications').select('*').or(`assigned_broker_id.eq.${user.id},broker_email.eq.${user.email}`).order('updated_at', { ascending: false });
     setApps(data || []);
     setLoading(false);
   };
@@ -88,6 +88,7 @@ export default function BrokerApplications() {
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="declined">Declined</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="allocated">Allocated</SelectItem>
               </SelectContent>
             </Select>
             <Textarea placeholder="Add notes for the developer..." value={notes} onChange={e => setNotes(e.target.value)} />

@@ -3,13 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { StatusBadge } from '@/components/StatusBadge';
 import { toast } from 'sonner';
-import { ArrowLeft, Loader2, Download, Plus, FileDown, UserPlus } from 'lucide-react';
+import { ArrowLeft, Loader2, Download, Plus, FileDown, UserPlus, Send } from 'lucide-react';
 import { format } from 'date-fns';
 import { STEP_LABELS, EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, getDefaultFormData, type ApplicationFormData } from '@/types/application-form';
 import { exportApplicationToPDF } from '@/lib/export-pdf';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRow = Database['public']['Tables']['applications']['Row'];
@@ -36,12 +39,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function AdminApplicationDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [app, setApp] = useState<AppRow | null>(null);
   const [formData, setFormData] = useState<ApplicationFormData>(getDefaultFormData());
   const [loading, setLoading] = useState(true);
   const [newNote, setNewNote] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
   const [brokers, setBrokers] = useState<{ user_id: string; first_name: string; last_name: string }[]>([]);
+  const [allocateOpen, setAllocateOpen] = useState(false);
+  const [allocBrokerName, setAllocBrokerName] = useState('JAG Finance');
+  const [allocBrokerEmail, setAllocBrokerEmail] = useState('leanne@jagfs.co.uk');
+  const [allocating, setAllocating] = useState(false);
 
   useEffect(() => {
     if (!id) return;
@@ -71,6 +79,44 @@ export default function AdminApplicationDetail() {
     if (error) { toast.error('Failed to assign broker'); return; }
     toast.success('Broker assigned');
     setApp({ ...app, assigned_broker_id: brokerId });
+  };
+
+  const allocateToBroker = async () => {
+    if (!app || !allocBrokerName || !allocBrokerEmail) return;
+    setAllocating(true);
+    const pd = formData.personalDetails;
+    const fullName = `${pd.title} ${pd.firstName} ${pd.surname}`.trim() || app.title;
+    const { error } = await supabase.from('applications').update({
+      status: 'allocated' as any,
+      broker_name: allocBrokerName,
+      broker_email: allocBrokerEmail,
+      allocated_at: new Date().toISOString(),
+      allocated_by: user?.id || null,
+    } as any).eq('id', app.id);
+    if (error) {
+      toast.error('Failed to allocate');
+      setAllocating(false);
+      return;
+    }
+    // Send email notification via broker-allocation-email edge function
+    try {
+      await supabase.functions.invoke('broker-allocation-email', {
+        body: {
+          recipientEmail: allocBrokerEmail,
+          applicantName: fullName,
+          projectType: app.type?.replace(/_/g, ' ') || 'Development Funding',
+          loanAmount: app.amount ? `£${Number(app.amount).toLocaleString()}` : 'Not specified',
+          applicationId: app.id,
+          siteUrl: window.location.origin,
+        },
+      });
+      toast.success(`Application allocated to ${allocBrokerName} — email sent to ${allocBrokerEmail}`);
+    } catch {
+      toast.success(`Application allocated to ${allocBrokerName} (email delivery pending)`);
+    }
+    setApp({ ...app, status: 'allocated' as any });
+    setAllocateOpen(false);
+    setAllocating(false);
   };
 
   const changeStatus = async (status: string) => {
@@ -137,11 +183,14 @@ export default function AdminApplicationDetail() {
           <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
             <FileDown className="h-4 w-4 mr-1" /> Export PDF
           </Button>
+          <Button variant="default" size="sm" onClick={() => setAllocateOpen(true)}>
+            <Send className="h-4 w-4 mr-1" /> Allocate to Broker
+          </Button>
           <StatusBadge status={app.status as any} />
           <Select value={app.status} onValueChange={changeStatus} disabled={statusUpdating}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {['draft', 'submitted', 'under_review', 'info_requested', 'approved', 'declined', 'completed'].map(s => (
+              {['draft', 'submitted', 'under_review', 'info_requested', 'approved', 'declined', 'completed', 'allocated'].map(s => (
                 <SelectItem key={s} value={s}>{s.replace(/_/g, ' ')}</SelectItem>
               ))}
             </SelectContent>
@@ -350,6 +399,30 @@ export default function AdminApplicationDetail() {
           <Button onClick={addNote} disabled={!newNote.trim()} size="sm"><Plus className="h-4 w-4 mr-1" /> Add</Button>
         </div>
       </Section>
+
+      {/* Allocate to Broker Dialog */}
+      <Dialog open={allocateOpen} onOpenChange={setAllocateOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Allocate to Broker</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Broker Name</label>
+              <Input value={allocBrokerName} onChange={e => setAllocBrokerName(e.target.value)} placeholder="e.g. JAG Finance" />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Broker Email</label>
+              <Input value={allocBrokerEmail} onChange={e => setAllocBrokerEmail(e.target.value)} placeholder="e.g. leanne@jagfs.co.uk" type="email" />
+            </div>
+            <p className="text-xs text-muted-foreground">An email notification will be sent to the broker with a link to view this application.</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAllocateOpen(false)}>Cancel</Button>
+            <Button onClick={allocateToBroker} disabled={allocating || !allocBrokerEmail}>
+              {allocating ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Send className="h-4 w-4 mr-1" /> Allocate & Send Email</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review';
+type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'allocated' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review';
 
 interface StatusBadgeProps {
   status: StatusType | boolean;
@@ -22,6 +22,7 @@ const statusConfig: Record<StatusType, { label: string; className: string }> = {
   info_requested: { label: 'Info Requested', className: 'bg-warning/15 text-warning' },
   declined: { label: 'Declined', className: 'bg-destructive/20 text-destructive' },
   completed: { label: 'Completed', className: 'status-active' },
+  allocated: { label: 'Allocated', className: 'bg-primary/20 text-primary' },
   not_started: { label: 'Not Started', className: 'bg-muted text-muted-foreground' },
   in_progress: { label: 'In Progress', className: 'status-pending' },
   passed: { label: 'Passed', className: 'status-active' },
@@ -49,7 +50,7 @@ export function StatusBadge({ status, type = 'default', className }: StatusBadge
       <span className={cn(
         'mr-1.5 h-1.5 w-1.5 rounded-full',
         ['active', 'verified', 'approved', 'completed', 'passed'].includes(statusKey) ? 'bg-success' :
-        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review'].includes(statusKey) ? 'bg-warning' :
+        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review', 'allocated'].includes(statusKey) ? 'bg-warning' :
         ['rejected', 'declined', 'failed'].includes(statusKey) ? 'bg-destructive' : 'bg-muted-foreground'
       )} />
       {config.label}

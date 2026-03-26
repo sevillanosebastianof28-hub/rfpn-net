@@ -21,7 +21,7 @@ export default function BrokerDashboard() {
   useEffect(() => {
     if (!user) return;
     Promise.all([
-      supabase.from('applications').select('*').eq('assigned_broker_id', user.id).order('updated_at', { ascending: false }).limit(10),
+      supabase.from('applications').select('*').or(`assigned_broker_id.eq.${user.id},broker_email.eq.${user.email}`).order('updated_at', { ascending: false }).limit(10),
       supabase.from('message_thread_participants').select('thread_id').eq('user_id', user.id),
     ]).then(([appsRes, threadsRes]) => {
       setApps(appsRes.data || []);
@@ -33,6 +33,7 @@ export default function BrokerDashboard() {
   if (loading) return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
 
   const active = apps.filter(a => !['completed', 'declined'].includes(a.status)).length;
+  const allocated = apps.filter(a => a.status === 'allocated').length;
   const completed = apps.filter(a => a.status === 'completed').length;
 
   return (
