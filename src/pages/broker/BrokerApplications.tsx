@@ -30,7 +30,7 @@ export default function BrokerApplications() {
 
   const fetchApps = async () => {
     if (!user) return;
-    const { data } = await supabase.from('applications').select('*').eq('assigned_broker_id', user.id).order('updated_at', { ascending: false });
+    const { data } = await supabase.from('applications').select('*').or(`assigned_broker_id.eq.${user.id},broker_email.eq.${user.email}`).order('updated_at', { ascending: false });
     setApps(data || []);
     setLoading(false);
   };

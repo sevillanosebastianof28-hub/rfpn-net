@@ -21,7 +21,7 @@ export default function BrokerDashboard() {
   useEffect(() => {
     if (!user) return;
     Promise.all([
-      supabase.from('applications').select('*').eq('assigned_broker_id', user.id).order('updated_at', { ascending: false }).limit(10),
+      supabase.from('applications').select('*').or(`assigned_broker_id.eq.${user.id},broker_email.eq.${user.email}`).order('updated_at', { ascending: false }).limit(10),
       supabase.from('message_thread_participants').select('thread_id').eq('user_id', user.id),
     ]).then(([appsRes, threadsRes]) => {
       setApps(appsRes.data || []);
