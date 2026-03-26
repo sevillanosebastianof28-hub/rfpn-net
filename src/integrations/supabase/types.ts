@@ -16,8 +16,12 @@ export type Database = {
     Tables: {
       applications: {
         Row: {
+          allocated_at: string | null
+          allocated_by: string | null
           amount: number | null
           assigned_broker_id: string | null
+          broker_email: string | null
+          broker_name: string | null
           completed_at: string | null
           created_at: string
           developer_id: string
@@ -37,8 +41,12 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          allocated_at?: string | null
+          allocated_by?: string | null
           amount?: number | null
           assigned_broker_id?: string | null
+          broker_email?: string | null
+          broker_name?: string | null
           completed_at?: string | null
           created_at?: string
           developer_id: string
@@ -58,8 +66,12 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          allocated_at?: string | null
+          allocated_by?: string | null
           amount?: number | null
           assigned_broker_id?: string | null
+          broker_email?: string | null
+          broker_name?: string | null
           completed_at?: string | null
           created_at?: string
           developer_id?: string
@@ -669,6 +681,7 @@ export type Database = {
         | "approved"
         | "declined"
         | "completed"
+        | "allocated"
       integration_status: "queued" | "sent" | "failed" | "resent"
       verification_status:
         | "not_started"
@@ -812,6 +825,7 @@ export const Constants = {
         "approved",
         "declined",
         "completed",
+        "allocated",
       ],
       integration_status: ["queued", "sent", "failed", "resent"],
       verification_status: [
