@@ -58,6 +58,7 @@ const App = () => (
             <Route path="/faq" element={<FAQ />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
+            <Route path="/unsubscribe" element={<Unsubscribe />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
