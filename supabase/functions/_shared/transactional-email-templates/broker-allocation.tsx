@@ -72,10 +72,6 @@ const BrokerAllocationEmail = ({
               </Button>
             </Section>
 
-            <Text style={linkFallback}>
-              If the button doesn't work, copy and paste this link:{' '}
-              <span style={linkText}>{secureLink}</span>
-            </Text>
           </Section>
 
           <Hr style={divider} />
