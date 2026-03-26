@@ -186,11 +186,14 @@ export default function AdminApplicationDetail() {
           <Button variant="outline" size="sm" onClick={() => exportApplicationToPDF(formData, app.title)}>
             <FileDown className="h-4 w-4 mr-1" /> Export PDF
           </Button>
+          <Button variant="default" size="sm" onClick={() => setAllocateOpen(true)}>
+            <Send className="h-4 w-4 mr-1" /> Allocate to Broker
+          </Button>
           <StatusBadge status={app.status as any} />
           <Select value={app.status} onValueChange={changeStatus} disabled={statusUpdating}>
             <SelectTrigger className="w-[160px]"><SelectValue /></SelectTrigger>
             <SelectContent>
-              {['draft', 'submitted', 'under_review', 'info_requested', 'approved', 'declined', 'completed'].map(s => (
+              {['draft', 'submitted', 'under_review', 'info_requested', 'approved', 'declined', 'completed', 'allocated'].map(s => (
                 <SelectItem key={s} value={s}>{s.replace(/_/g, ' ')}</SelectItem>
               ))}
             </SelectContent>
