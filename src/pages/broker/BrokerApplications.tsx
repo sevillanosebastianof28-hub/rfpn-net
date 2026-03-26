@@ -88,6 +88,7 @@ export default function BrokerApplications() {
                 <SelectItem value="approved">Approved</SelectItem>
                 <SelectItem value="declined">Declined</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
+                <SelectItem value="allocated">Allocated</SelectItem>
               </SelectContent>
             </Select>
             <Textarea placeholder="Add notes for the developer..." value={notes} onChange={e => setNotes(e.target.value)} />
