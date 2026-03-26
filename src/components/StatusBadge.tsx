@@ -22,6 +22,7 @@ const statusConfig: Record<StatusType, { label: string; className: string }> = {
   info_requested: { label: 'Info Requested', className: 'bg-warning/15 text-warning' },
   declined: { label: 'Declined', className: 'bg-destructive/20 text-destructive' },
   completed: { label: 'Completed', className: 'status-active' },
+  allocated: { label: 'Allocated', className: 'bg-primary/20 text-primary' },
   not_started: { label: 'Not Started', className: 'bg-muted text-muted-foreground' },
   in_progress: { label: 'In Progress', className: 'status-pending' },
   passed: { label: 'Passed', className: 'status-active' },
