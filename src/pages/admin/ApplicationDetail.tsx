@@ -98,19 +98,16 @@ export default function AdminApplicationDetail() {
       setAllocating(false);
       return;
     }
-    // Send email notification
+    // Send email notification via broker-allocation-email edge function
     try {
-      await supabase.functions.invoke('send-transactional-email', {
+      await supabase.functions.invoke('broker-allocation-email', {
         body: {
-          templateName: 'broker-allocation',
           recipientEmail: allocBrokerEmail,
-          idempotencyKey: `broker-alloc-${app.id}-${Date.now()}`,
-          templateData: {
-            applicantName: fullName,
-            projectType: app.type?.replace(/_/g, ' ') || 'Development Funding',
-            loanAmount: app.amount ? `£${Number(app.amount).toLocaleString()}` : 'Not specified',
-            applicationId: app.id,
-          },
+          applicantName: fullName,
+          projectType: app.type?.replace(/_/g, ' ') || 'Development Funding',
+          loanAmount: app.amount ? `£${Number(app.amount).toLocaleString()}` : 'Not specified',
+          applicationId: app.id,
+          siteUrl: window.location.origin,
         },
       });
       toast.success(`Application allocated to ${allocBrokerName} — email sent to ${allocBrokerEmail}`);
