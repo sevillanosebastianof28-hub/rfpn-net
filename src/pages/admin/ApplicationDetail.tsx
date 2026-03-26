@@ -39,12 +39,17 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 export default function AdminApplicationDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { user } = useAuth();
   const [app, setApp] = useState<AppRow | null>(null);
   const [formData, setFormData] = useState<ApplicationFormData>(getDefaultFormData());
   const [loading, setLoading] = useState(true);
   const [newNote, setNewNote] = useState('');
   const [statusUpdating, setStatusUpdating] = useState(false);
   const [brokers, setBrokers] = useState<{ user_id: string; first_name: string; last_name: string }[]>([]);
+  const [allocateOpen, setAllocateOpen] = useState(false);
+  const [allocBrokerName, setAllocBrokerName] = useState('JAG Finance');
+  const [allocBrokerEmail, setAllocBrokerEmail] = useState('leanne@jagfs.co.uk');
+  const [allocating, setAllocating] = useState(false);
 
   useEffect(() => {
     if (!id) return;
