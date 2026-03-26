@@ -3,13 +3,16 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from '@/components/ui/dialog';
 import { StatusBadge } from '@/components/StatusBadge';
 import { toast } from 'sonner';
-import { ArrowLeft, Loader2, Download, Plus, FileDown, UserPlus } from 'lucide-react';
+import { ArrowLeft, Loader2, Download, Plus, FileDown, UserPlus, Send } from 'lucide-react';
 import { format } from 'date-fns';
 import { STEP_LABELS, EXPENDITURE_CATEGORIES, CREDIT_HISTORY_QUESTIONS, DOCUMENT_TYPES, getDefaultFormData, type ApplicationFormData } from '@/types/application-form';
 import { exportApplicationToPDF } from '@/lib/export-pdf';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRow = Database['public']['Tables']['applications']['Row'];
