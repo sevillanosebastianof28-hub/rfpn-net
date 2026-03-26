@@ -54,7 +54,7 @@ export default function Unsubscribe() {
 
         {status === 'valid' && (
           <div className="space-y-4 p-6 rounded-lg border bg-card">
-            <AlertTriangle className="h-10 w-10 text-amber-500 mx-auto" />
+            <AlertTriangle className="h-10 w-10 text-warning mx-auto" />
             <h2 className="text-lg font-semibold">Unsubscribe from emails?</h2>
             <p className="text-sm text-muted-foreground">
               You will no longer receive notification emails from RFPN. This action can't be undone.
