@@ -50,7 +50,7 @@ export function StatusBadge({ status, type = 'default', className }: StatusBadge
       <span className={cn(
         'mr-1.5 h-1.5 w-1.5 rounded-full',
         ['active', 'verified', 'approved', 'completed', 'passed'].includes(statusKey) ? 'bg-success' :
-        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review'].includes(statusKey) ? 'bg-warning' :
+        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review', 'allocated'].includes(statusKey) ? 'bg-warning' :
         ['rejected', 'declined', 'failed'].includes(statusKey) ? 'bg-destructive' : 'bg-muted-foreground'
       )} />
       {config.label}
