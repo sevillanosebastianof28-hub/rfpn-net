@@ -11,6 +11,7 @@ import FAQ from "./pages/FAQ";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
+import Unsubscribe from "./pages/Unsubscribe";
 
 // Admin Layout & Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
