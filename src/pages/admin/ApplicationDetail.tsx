@@ -402,6 +402,30 @@ export default function AdminApplicationDetail() {
           <Button onClick={addNote} disabled={!newNote.trim()} size="sm"><Plus className="h-4 w-4 mr-1" /> Add</Button>
         </div>
       </Section>
+
+      {/* Allocate to Broker Dialog */}
+      <Dialog open={allocateOpen} onOpenChange={setAllocateOpen}>
+        <DialogContent>
+          <DialogHeader><DialogTitle>Allocate to Broker</DialogTitle></DialogHeader>
+          <div className="space-y-4 py-4">
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Broker Name</label>
+              <Input value={allocBrokerName} onChange={e => setAllocBrokerName(e.target.value)} placeholder="e.g. JAG Finance" />
+            </div>
+            <div>
+              <label className="text-sm font-medium mb-1.5 block">Broker Email</label>
+              <Input value={allocBrokerEmail} onChange={e => setAllocBrokerEmail(e.target.value)} placeholder="e.g. leanne@jagfs.co.uk" type="email" />
+            </div>
+            <p className="text-xs text-muted-foreground">An email notification will be sent to the broker with a link to view this application.</p>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setAllocateOpen(false)}>Cancel</Button>
+            <Button onClick={allocateToBroker} disabled={allocating || !allocBrokerEmail}>
+              {allocating ? <Loader2 className="h-4 w-4 animate-spin" /> : <><Send className="h-4 w-4 mr-1" /> Allocate & Send Email</>}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
