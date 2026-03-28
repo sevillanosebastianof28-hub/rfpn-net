@@ -62,6 +62,8 @@ export interface SecuredLoan {
 export interface OwnedProperty {
   address: string;
   currentValue: number | null;
+  purchasePrice: number | null;
+  purchaseDate: string;
   heldIn: string; // 'personal' | 'company'
   ownershipStatus: string; // 'sole_owner' | 'joint_owner' | 'joint_mortgage'
   mortgageLender: string;
@@ -71,6 +73,7 @@ export interface OwnedProperty {
   repaymentMethod: string;
   mortgageTermRemaining: string;
   earlyRepaymentCharges: number | null;
+  monthlyRentalIncome: number | null;
 }
 
 export interface AssetsLiabilities {
