@@ -6,7 +6,7 @@ import { Plus, Trash2 } from 'lucide-react';
 interface IncomeData {
   employmentIncome: {
     occupation: string; employerName: string; employerAddress: string; employerPhone: string;
-    startDate: string; salaryBeforeTax: number | null; overtimeIncome: number | null;
+    employerEmail: string; startDate: string; salaryBeforeTax: number | null; overtimeIncome: number | null;
     bonusIncome: number | null; allowances: number | null;
   };
   otherIncome: Array<{ source: string; amount: number | null }>;
@@ -48,6 +48,9 @@ export function Step7Income({ data, onChange }: Props) {
         <div className="space-y-2"><Label>Employer Address</Label><Input value={data.employmentIncome.employerAddress} onChange={e => updateEmployment('employerAddress', e.target.value)} /></div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2"><Label>Employer Phone</Label><Input value={data.employmentIncome.employerPhone} onChange={e => updateEmployment('employerPhone', e.target.value)} /></div>
+          <div className="space-y-2"><Label>Employer Email</Label><Input type="email" value={data.employmentIncome.employerEmail ?? ''} onChange={e => updateEmployment('employerEmail', e.target.value)} /></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2"><Label>Employment Start Date</Label><Input type="date" value={data.employmentIncome.startDate} onChange={e => updateEmployment('startDate', e.target.value)} /></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

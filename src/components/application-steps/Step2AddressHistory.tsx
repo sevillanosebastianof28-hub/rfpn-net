@@ -37,6 +37,9 @@ export function Step2AddressHistory({ data, onChange }: Props) {
 
   return (
     <div className="space-y-8">
+      <div className="rounded-lg border border-accent bg-accent/10 p-3">
+        <p className="text-sm text-accent-foreground font-medium">⚠️ Lenders require a minimum of 3 years of address history. Please add previous addresses to cover this period.</p>
+      </div>
       <div className="space-y-4">
         <h3 className="text-lg font-semibold">Current Address</h3>
         <div className="space-y-2">

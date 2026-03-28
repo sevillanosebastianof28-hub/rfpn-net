@@ -99,14 +99,29 @@ export function Step5AssetsLiabilities({ data, onChange }: Props) {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="space-y-2">
+                  <Label>Purchase Price (£)</Label>
+                  <Input type="number" value={prop.purchasePrice ?? ''} onChange={e => updateProperty(idx, 'purchasePrice', e.target.value ? parseFloat(e.target.value) : null)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Purchase Date</Label>
+                  <Input type="date" value={prop.purchaseDate ?? ''} onChange={e => updateProperty(idx, 'purchaseDate', e.target.value)} />
+                </div>
                 <div className="space-y-2">
                   <Label>Current Value (£)</Label>
                   <Input type="number" value={prop.currentValue ?? ''} onChange={e => updateProperty(idx, 'currentValue', e.target.value ? parseFloat(e.target.value) : null)} />
                 </div>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label>Mortgage Lender</Label>
                   <Input value={prop.mortgageLender} onChange={e => updateProperty(idx, 'mortgageLender', e.target.value)} />
+                </div>
+                <div className="space-y-2">
+                  <Label>Monthly Rental Income (£)</Label>
+                  <Input type="number" value={prop.monthlyRentalIncome ?? ''} onChange={e => updateProperty(idx, 'monthlyRentalIncome', e.target.value ? parseFloat(e.target.value) : null)} />
                 </div>
               </div>
 

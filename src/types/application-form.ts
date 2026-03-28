@@ -62,6 +62,8 @@ export interface SecuredLoan {
 export interface OwnedProperty {
   address: string;
   currentValue: number | null;
+  purchasePrice: number | null;
+  purchaseDate: string;
   heldIn: string; // 'personal' | 'company'
   ownershipStatus: string; // 'sole_owner' | 'joint_owner' | 'joint_mortgage'
   mortgageLender: string;
@@ -71,6 +73,7 @@ export interface OwnedProperty {
   repaymentMethod: string;
   mortgageTermRemaining: string;
   earlyRepaymentCharges: number | null;
+  monthlyRentalIncome: number | null;
 }
 
 export interface AssetsLiabilities {
@@ -107,6 +110,7 @@ export interface EmploymentIncome {
   employerName: string;
   employerAddress: string;
   employerPhone: string;
+  employerEmail: string;
   startDate: string;
   salaryBeforeTax: number | null;
   overtimeIncome: number | null;
@@ -153,6 +157,8 @@ export interface LoanDetailEntry {
   rentalIncomeExpected: number | null;
   plannedUse: string;
   repaymentPlan: string;
+  refurbishmentCosts: number | null;
+  gdv: number | null;
 }
 
 // Keep backward compat alias
@@ -260,14 +266,16 @@ export function getEmptyLoanDetail(): LoanDetailEntry {
     applicationType: '', loanType: '', loanPercentage: null, loanTerm: '',
     repaymentMethod: '', purchasePrice: null, propertyValue: null, propertyAddress: '',
     propertyDescription: '', rentalIncomeExpected: null, plannedUse: '', repaymentPlan: '',
+    refurbishmentCosts: null, gdv: null,
   };
 }
 
 export function getEmptyOwnedProperty(): OwnedProperty {
   return {
-    address: '', currentValue: null, heldIn: '', ownershipStatus: '',
+    address: '', currentValue: null, purchasePrice: null, purchaseDate: '', heldIn: '', ownershipStatus: '',
     mortgageLender: '', outstandingMortgageBalance: null, monthlyMortgagePayment: null,
     interestRate: null, repaymentMethod: '', mortgageTermRemaining: '', earlyRepaymentCharges: null,
+    monthlyRentalIncome: null,
   };
 }
 
@@ -302,7 +310,7 @@ export function getDefaultFormData(): ApplicationFormData {
     creditHistory,
     income: {
       employmentIncome: {
-        occupation: '', employerName: '', employerAddress: '', employerPhone: '',
+        occupation: '', employerName: '', employerAddress: '', employerPhone: '', employerEmail: '',
         startDate: '', salaryBeforeTax: null, overtimeIncome: null, bonusIncome: null, allowances: null,
       },
       otherIncome: [],
