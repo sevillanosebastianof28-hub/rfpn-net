@@ -6,7 +6,7 @@ import { Plus, Trash2 } from 'lucide-react';
 interface IncomeData {
   employmentIncome: {
     occupation: string; employerName: string; employerAddress: string; employerPhone: string;
-    startDate: string; salaryBeforeTax: number | null; overtimeIncome: number | null;
+    employerEmail: string; startDate: string; salaryBeforeTax: number | null; overtimeIncome: number | null;
     bonusIncome: number | null; allowances: number | null;
   };
   otherIncome: Array<{ source: string; amount: number | null }>;
