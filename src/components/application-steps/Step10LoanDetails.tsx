@@ -47,6 +47,9 @@ function LoanForm({ data, onChange, label, onRemove }: { data: LoanDetailEntry; 
               <SelectItem value="commercial">Commercial</SelectItem>
               <SelectItem value="bridge">Bridge</SelectItem>
               <SelectItem value="development">Development Finance</SelectItem>
+              <SelectItem value="btl">Buy-to-Let (BTL)</SelectItem>
+              <SelectItem value="hmo">HMO</SelectItem>
+              <SelectItem value="mufb">Multi-Unit Freehold Block</SelectItem>
             </SelectContent>
           </Select>
         </div>
