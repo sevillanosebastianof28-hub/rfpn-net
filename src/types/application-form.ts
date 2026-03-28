@@ -107,6 +107,7 @@ export interface EmploymentIncome {
   employerName: string;
   employerAddress: string;
   employerPhone: string;
+  employerEmail: string;
   startDate: string;
   salaryBeforeTax: number | null;
   overtimeIncome: number | null;
