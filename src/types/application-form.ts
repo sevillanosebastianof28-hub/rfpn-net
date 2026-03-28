@@ -310,7 +310,7 @@ export function getDefaultFormData(): ApplicationFormData {
     creditHistory,
     income: {
       employmentIncome: {
-        occupation: '', employerName: '', employerAddress: '', employerPhone: '',
+        occupation: '', employerName: '', employerAddress: '', employerPhone: '', employerEmail: '',
         startDate: '', salaryBeforeTax: null, overtimeIncome: null, bonusIncome: null, allowances: null,
       },
       otherIncome: [],
