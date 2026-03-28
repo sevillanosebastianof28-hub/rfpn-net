@@ -85,6 +85,11 @@ function LoanForm({ data, onChange, label, onRemove }: { data: LoanDetailEntry; 
         <div className="space-y-2"><Label>Planned Use of Property</Label><Input value={data.plannedUse} onChange={e => update('plannedUse', e.target.value)} placeholder="e.g. Buy-to-let, Development, Flip" /></div>
       </div>
 
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="space-y-2"><Label>Refurbishment / Works Costs (£)</Label><Input type="number" value={data.refurbishmentCosts ?? ''} onChange={e => update('refurbishmentCosts', e.target.value ? parseFloat(e.target.value) : null)} /></div>
+        <div className="space-y-2"><Label>Gross Development Value / GDV (£)</Label><Input type="number" value={data.gdv ?? ''} onChange={e => update('gdv', e.target.value ? parseFloat(e.target.value) : null)} /></div>
+      </div>
+
       <div className="space-y-2"><Label>Loan Repayment Plan</Label><Textarea value={data.repaymentPlan} onChange={e => update('repaymentPlan', e.target.value)} rows={3} placeholder="How do you plan to repay the loan?" /></div>
     </div>
   );
