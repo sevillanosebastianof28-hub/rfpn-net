@@ -157,6 +157,8 @@ export interface LoanDetailEntry {
   rentalIncomeExpected: number | null;
   plannedUse: string;
   repaymentPlan: string;
+  refurbishmentCosts: number | null;
+  gdv: number | null;
 }
 
 // Keep backward compat alias
