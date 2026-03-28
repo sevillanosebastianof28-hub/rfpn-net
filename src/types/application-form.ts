@@ -272,9 +272,10 @@ export function getEmptyLoanDetail(): LoanDetailEntry {
 
 export function getEmptyOwnedProperty(): OwnedProperty {
   return {
-    address: '', currentValue: null, heldIn: '', ownershipStatus: '',
+    address: '', currentValue: null, purchasePrice: null, purchaseDate: '', heldIn: '', ownershipStatus: '',
     mortgageLender: '', outstandingMortgageBalance: null, monthlyMortgagePayment: null,
     interestRate: null, repaymentMethod: '', mortgageTermRemaining: '', earlyRepaymentCharges: null,
+    monthlyRentalIncome: null,
   };
 }
 
