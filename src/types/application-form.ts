@@ -266,6 +266,7 @@ export function getEmptyLoanDetail(): LoanDetailEntry {
     applicationType: '', loanType: '', loanPercentage: null, loanTerm: '',
     repaymentMethod: '', purchasePrice: null, propertyValue: null, propertyAddress: '',
     propertyDescription: '', rentalIncomeExpected: null, plannedUse: '', repaymentPlan: '',
+    refurbishmentCosts: null, gdv: null,
   };
 }
 
