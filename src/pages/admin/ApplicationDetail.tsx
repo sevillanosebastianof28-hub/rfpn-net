@@ -177,11 +177,30 @@ export default function AdminApplicationDetail() {
   const inc = formData.income;
   const ld = formData.loanDetails;
 
+  // Count filled fields for debug
+  const countFields = (obj: any, depth = 0): number => {
+    if (depth > 5) return 0;
+    if (obj === null || obj === undefined || obj === '') return 0;
+    if (Array.isArray(obj)) return obj.reduce((s, v) => s + (v ? 1 : 0), 0);
+    if (typeof obj === 'object') return Object.values(obj).reduce((s: number, v) => s + countFields(v, depth + 1), 0);
+    return 1;
+  };
+  const fieldCount = countFields(formData);
+
   return (
     <div className="animate-fade-in max-w-4xl mx-auto space-y-6">
       <button onClick={() => navigate('/admin/applications')} className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1">
         <ArrowLeft className="h-3 w-3" /> Back to Applications
       </button>
+
+      {/* Debug Metadata */}
+      <div className="p-3 rounded-lg border border-dashed bg-muted/20 text-xs text-muted-foreground space-y-1">
+        <p><strong>Application ID:</strong> {app.id}</p>
+        <p><strong>Last Updated:</strong> {format(new Date(app.updated_at), 'PPp')}</p>
+        <p><strong>Submitted At:</strong> {app.submitted_at ? format(new Date(app.submitted_at), 'PPp') : '—'}</p>
+        <p><strong>Fields Saved:</strong> {fieldCount}</p>
+        <p><strong>Status:</strong> {app.status}</p>
+      </div>
 
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
