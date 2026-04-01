@@ -181,8 +181,8 @@ export default function AdminApplicationDetail() {
   const countFields = (obj: any, depth = 0): number => {
     if (depth > 5) return 0;
     if (obj === null || obj === undefined || obj === '') return 0;
-    if (Array.isArray(obj)) return obj.reduce((s, v) => s + (v ? 1 : 0), 0);
-    if (typeof obj === 'object') return Object.values(obj).reduce((s: number, v) => s + countFields(v, depth + 1), 0);
+    if (Array.isArray(obj)) return obj.reduce((s: number, v: any) => s + (v ? 1 : 0), 0);
+    if (typeof obj === 'object') return Object.values(obj).reduce((s: number, v: any) => s + countFields(v, depth + 1), 0 as number);
     return 1;
   };
   const fieldCount = countFields(formData);
