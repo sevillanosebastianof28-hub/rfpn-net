@@ -413,6 +413,8 @@ export default function AdminApplicationDetail() {
         <Field label="Expected Rental" value={ld.rentalIncomeExpected ? `£${ld.rentalIncomeExpected}/mo` : '—'} />
         <Field label="Planned Use" value={ld.plannedUse} />
         <Field label="Repayment Plan" value={ld.repaymentPlan} />
+        <Field label="Refurbishment Costs" value={ld.refurbishmentCosts ? `£${ld.refurbishmentCosts.toLocaleString()}` : '—'} />
+        <Field label="GDV" value={ld.gdv ? `£${ld.gdv.toLocaleString()}` : '—'} />
         {(formData.additionalLoans || []).map((loan: any, i: number) => (
           <div key={i} className="mt-3 pt-3 border-t">
             <p className="font-medium text-sm mb-1">Loan Application {i + 2}</p>
@@ -422,6 +424,8 @@ export default function AdminApplicationDetail() {
             <Field label="Purchase Price" value={loan.purchasePrice ? `£${loan.purchasePrice.toLocaleString()}` : '—'} />
             <Field label="Property Address" value={loan.propertyAddress} />
             <Field label="Planned Use" value={loan.plannedUse} />
+            <Field label="Refurbishment Costs" value={loan.refurbishmentCosts ? `£${loan.refurbishmentCosts.toLocaleString()}` : '—'} />
+            <Field label="GDV" value={loan.gdv ? `£${loan.gdv.toLocaleString()}` : '—'} />
           </div>
         ))}
       </Section>
