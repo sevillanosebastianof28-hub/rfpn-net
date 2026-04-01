@@ -177,11 +177,30 @@ export default function AdminApplicationDetail() {
   const inc = formData.income;
   const ld = formData.loanDetails;
 
+  // Count filled fields for debug
+  const countFields = (obj: any, depth = 0): number => {
+    if (depth > 5) return 0;
+    if (obj === null || obj === undefined || obj === '') return 0;
+    if (Array.isArray(obj)) return obj.reduce((s: number, v: any) => s + (v ? 1 : 0), 0);
+    if (typeof obj === 'object') { const vals = Object.values(obj); let sum = 0; for (const v of vals) { sum += countFields(v, depth + 1); } return sum; }
+    return 1;
+  };
+  const fieldCount = countFields(formData);
+
   return (
     <div className="animate-fade-in max-w-4xl mx-auto space-y-6">
       <button onClick={() => navigate('/admin/applications')} className="text-sm text-muted-foreground hover:text-primary flex items-center gap-1">
         <ArrowLeft className="h-3 w-3" /> Back to Applications
       </button>
+
+      {/* Debug Metadata */}
+      <div className="p-3 rounded-lg border border-dashed bg-muted/20 text-xs text-muted-foreground space-y-1">
+        <p><strong>Application ID:</strong> {app.id}</p>
+        <p><strong>Last Updated:</strong> {format(new Date(app.updated_at), 'PPp')}</p>
+        <p><strong>Submitted At:</strong> {app.submitted_at ? format(new Date(app.submitted_at), 'PPp') : '—'}</p>
+        <p><strong>Fields Saved:</strong> {fieldCount}</p>
+        <p><strong>Status:</strong> {app.status}</p>
+      </div>
 
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4">
@@ -285,11 +304,14 @@ export default function AdminApplicationDetail() {
               <Field label={`Property ${i + 1}`} value={p.address} />
               <Field label="Held In" value={p.heldIn === 'personal' ? 'Personal Name' : p.heldIn === 'company' ? 'Company Name' : '—'} />
               <Field label="Ownership" value={p.ownershipStatus?.replace(/_/g, ' ') || '—'} />
-              <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Current Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Purchase Price" value={p.purchasePrice ? `£${p.purchasePrice.toLocaleString()}` : '—'} />
+              <Field label="Purchase Date" value={p.purchaseDate || '—'} />
               <Field label="Mortgage Lender" value={p.mortgageLender} />
               <Field label="Outstanding" value={p.outstandingMortgageBalance ? `£${p.outstandingMortgageBalance.toLocaleString()}` : '—'} />
               <Field label="Monthly Payment" value={p.monthlyMortgagePayment ? `£${p.monthlyMortgagePayment}` : '—'} />
               <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+              <Field label="Monthly Rental Income" value={p.monthlyRentalIncome ? `£${p.monthlyRentalIncome}` : '—'} />
             </div>
           ))
         ) : (
@@ -334,10 +356,23 @@ export default function AdminApplicationDetail() {
       <Section title="7. Income">
         <Field label="Occupation" value={inc.employmentIncome.occupation} />
         <Field label="Employer" value={inc.employmentIncome.employerName} />
+        <Field label="Employer Address" value={inc.employmentIncome.employerAddress} />
+        <Field label="Employer Phone" value={inc.employmentIncome.employerPhone} />
+        <Field label="Employer Email" value={inc.employmentIncome.employerEmail} />
+        <Field label="Start Date" value={inc.employmentIncome.startDate} />
         <Field label="Salary" value={inc.employmentIncome.salaryBeforeTax ? `£${inc.employmentIncome.salaryBeforeTax.toLocaleString()}` : '—'} />
         <Field label="Overtime" value={inc.employmentIncome.overtimeIncome ? `£${inc.employmentIncome.overtimeIncome.toLocaleString()}` : '—'} />
         <Field label="Bonus" value={inc.employmentIncome.bonusIncome ? `£${inc.employmentIncome.bonusIncome.toLocaleString()}` : '—'} />
+        <Field label="Allowances" value={inc.employmentIncome.allowances ? `£${inc.employmentIncome.allowances.toLocaleString()}` : '—'} />
         <Field label="Rental Income" value={inc.rentalIncome ? `£${inc.rentalIncome}/mo` : '—'} />
+        {inc.otherIncome?.length > 0 && (
+          <>
+            <p className="font-medium text-sm mt-3">Other Income</p>
+            {inc.otherIncome.map((o: any, i: number) => (
+              <Field key={i} label={o.source || `Source ${i+1}`} value={o.amount ? `£${o.amount.toLocaleString()}/yr` : '—'} />
+            ))}
+          </>
+        )}
       </Section>
 
       <Section title="8. Business Ownership">
@@ -357,8 +392,13 @@ export default function AdminApplicationDetail() {
         {formData.properties.map((p, i) => (
           <div key={i} className={i > 0 ? 'mt-2 pt-2 border-t' : ''}>
             <Field label="Address" value={p.address} />
-            <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+            <Field label="Ownership Type" value={p.ownershipType} />
+            <Field label="Current Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+            <Field label="Purchase Date" value={p.purchaseDate || '—'} />
+            <Field label="Mortgage Lender" value={p.mortgageLender} />
             <Field label="Outstanding Mortgage" value={p.outstandingMortgage ? `£${p.outstandingMortgage.toLocaleString()}` : '—'} />
+            <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+            <Field label="Monthly Payment" value={p.monthlyPayment ? `£${p.monthlyPayment}` : '—'} />
             <Field label="Rental Income" value={p.rentalIncome ? `£${p.rentalIncome}/mo` : '—'} />
           </div>
         ))}
@@ -378,6 +418,8 @@ export default function AdminApplicationDetail() {
         <Field label="Expected Rental" value={ld.rentalIncomeExpected ? `£${ld.rentalIncomeExpected}/mo` : '—'} />
         <Field label="Planned Use" value={ld.plannedUse} />
         <Field label="Repayment Plan" value={ld.repaymentPlan} />
+        <Field label="Refurbishment Costs" value={ld.refurbishmentCosts ? `£${ld.refurbishmentCosts.toLocaleString()}` : '—'} />
+        <Field label="GDV" value={ld.gdv ? `£${ld.gdv.toLocaleString()}` : '—'} />
         {(formData.additionalLoans || []).map((loan: any, i: number) => (
           <div key={i} className="mt-3 pt-3 border-t">
             <p className="font-medium text-sm mb-1">Loan Application {i + 2}</p>
@@ -387,6 +429,8 @@ export default function AdminApplicationDetail() {
             <Field label="Purchase Price" value={loan.purchasePrice ? `£${loan.purchasePrice.toLocaleString()}` : '—'} />
             <Field label="Property Address" value={loan.propertyAddress} />
             <Field label="Planned Use" value={loan.plannedUse} />
+            <Field label="Refurbishment Costs" value={loan.refurbishmentCosts ? `£${loan.refurbishmentCosts.toLocaleString()}` : '—'} />
+            <Field label="GDV" value={loan.gdv ? `£${loan.gdv.toLocaleString()}` : '—'} />
           </div>
         ))}
       </Section>

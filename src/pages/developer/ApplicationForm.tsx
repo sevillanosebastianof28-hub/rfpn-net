@@ -4,7 +4,7 @@ import { useAuth } from '@/contexts/AuthContext';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { Button } from '@/components/ui/button';
-import { Save, ArrowLeft, ArrowRight, Send, Loader2 } from 'lucide-react';
+import { Save, ArrowLeft, ArrowRight, Send, Loader2, CheckCircle2 } from 'lucide-react';
 import { ESignatureDialog } from '@/components/application-steps/ESignatureDialog';
 import { KycVerification } from '@/components/application-steps/KycVerification';
 import { StepIndicator } from '@/components/application-steps/StepIndicator';
@@ -21,6 +21,27 @@ import { Step10LoanDetails } from '@/components/application-steps/Step10LoanDeta
 import { Step11Documents } from '@/components/application-steps/Step11Documents';
 import { Step12Review } from '@/components/application-steps/Step12Review';
 import { STEP_LABELS, getDefaultFormData, type ApplicationFormData, type ESignature } from '@/types/application-form';
+import { logAudit } from '@/lib/audit';
+
+/** Count non-empty fields in form data for debug/validation */
+function countFilledFields(data: ApplicationFormData): number {
+  let count = 0;
+  const pd = data.personalDetails;
+  Object.values(pd).forEach(v => { if (v && v !== '' && !(Array.isArray(v) && v.length === 0)) count++; });
+  if (data.addressHistory.currentAddress.address) count++;
+  data.addressHistory.previousAddresses.forEach(() => count++);
+  Object.values(data.expenditure).forEach(v => { if (v.current) count++; });
+  count += data.bankAccounts.length;
+  if (data.assetsLiabilities.propertyOwner !== null) count++;
+  count += (data.assetsLiabilities.ownedProperties || []).length;
+  count += data.debts.length;
+  count += data.businesses.length;
+  count += data.properties.length;
+  if (data.loanDetails.loanType) count++;
+  count += (data.additionalLoans || []).length;
+  count += data.documents.length;
+  return count;
+}
 
 export default function ApplicationForm() {
   const { id } = useParams<{ id: string }>();
@@ -35,12 +56,12 @@ export default function ApplicationForm() {
   const [showSignature, setShowSignature] = useState(false);
   const autosaveTimer = useRef<ReturnType<typeof setTimeout>>();
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'saved' | 'error'>('idle');
 
   // Load existing application or pre-fill from profile for new ones
   useEffect(() => {
     const load = async () => {
       if (id && id !== 'new') {
-        // Load existing application
         const { data } = await supabase.from('applications').select('*').eq('id', id).single();
         if (data) {
           const pd = (data.project_details as any) || {};
@@ -50,45 +71,32 @@ export default function ApplicationForm() {
           setAppId(data.id);
         }
       } else if (user) {
-        // NEW application — pre-fill from profile + developer_profiles to avoid repeat data entry
         const defaultData = getDefaultFormData();
         const [profileRes, devProfileRes] = await Promise.all([
           supabase.from('profiles').select('*').eq('user_id', user.id).maybeSingle(),
           supabase.from('developer_profiles').select('*').eq('user_id', user.id).maybeSingle(),
         ]);
-
         const profile = profileRes.data;
         const devProfile = devProfileRes.data;
-
         if (profile) {
           defaultData.personalDetails.firstName = profile.first_name || '';
           defaultData.personalDetails.surname = profile.last_name || '';
           defaultData.personalDetails.email = profile.email || '';
           defaultData.personalDetails.mobilePhone = profile.phone || '';
         }
-
-        // Pre-fill company details from developer_profiles into businesses
         if (devProfile?.company_name) {
           defaultData.businesses = [{
             businessName: devProfile.company_name || '',
-            businessType: '',
-            startDate: '',
-            ownershipPercentage: null,
+            businessType: '', startDate: '', ownershipPercentage: null,
             businessAddress: devProfile.company_address || '',
             companyStatus: '',
             yearlyNetProfit: [{ year: new Date().getFullYear().toString(), profit: null }],
-            payeIncome: null,
-            dividendIncome: null,
+            payeIncome: null, dividendIncome: null,
           }];
         }
-
-        // If KYC/Credas data is available (verification passed), we can trust the profile data
-        // This is where future Credas API pre-fill will slot in
         if (devProfile?.verification_status === 'passed') {
-          // Mark that data has been KYC-verified (informational only for now)
           (defaultData as any)._kycVerified = true;
         }
-
         setFormData(defaultData);
       }
       setLoading(false);
@@ -107,8 +115,20 @@ export default function ApplicationForm() {
 
   const saveProgress = useCallback(async (silent = false) => {
     if (!user) return;
-    setSaving(true);
+    
     const projectDetails = { ...formData, currentStep };
+    const fieldCount = countFilledFields(formData);
+    
+    // SAFEGUARD: Don't overwrite existing data with empty payload
+    if (appId && fieldCount === 0) {
+      console.warn(`[SAVE BLOCKED] Attempted to save empty payload for app ${appId}`);
+      if (!silent) toast.error('Cannot save empty form data');
+      return;
+    }
+
+    setSaving(true);
+    setSaveStatus('saving');
+    console.log(`[SAVE] app=${appId || 'NEW'} fields=${fieldCount} step=${currentStep}`);
 
     try {
       if (appId) {
@@ -134,12 +154,17 @@ export default function ApplicationForm() {
         }).select('id').single();
         if (error) throw error;
         setAppId(newApp.id);
-        // Update URL without re-render
         window.history.replaceState(null, '', `/developer/applications/${newApp.id}`);
+        console.log(`[SAVE] Created new application ${newApp.id}`);
       }
       setLastSaved(new Date());
+      setSaveStatus('saved');
       if (!silent) toast.success('Progress saved');
+      // Reset saved indicator after 3s
+      setTimeout(() => setSaveStatus('idle'), 3000);
     } catch (err: any) {
+      setSaveStatus('error');
+      console.error(`[SAVE ERROR] app=${appId}`, err);
       if (!silent) toast.error(err.message || 'Failed to save');
     } finally {
       setSaving(false);
@@ -167,24 +192,62 @@ export default function ApplicationForm() {
   };
 
   const handleSignAndSubmit = async (sig: ESignature) => {
+    if (!appId) {
+      toast.error('Please save the application before submitting');
+      return;
+    }
+
     setSubmitting(true);
     const updatedForm = { ...formData, eSignature: sig };
     setFormData(updatedForm);
     
-    // Save with signature data
     const projectDetails = { ...updatedForm, currentStep };
-    await supabase.from('applications').update({
-      project_details: projectDetails as any,
-      status: 'submitted' as any,
-      submitted_at: new Date().toISOString(),
-      signature_data: sig.signatureData,
-      signed_at: sig.signedAt,
-    }).eq('id', appId!);
+    const fieldCount = countFilledFields(updatedForm);
+    console.log(`[SUBMIT] app=${appId} fields=${fieldCount}`);
 
-    toast.success('Application signed and submitted successfully!');
-    setShowSignature(false);
-    navigate('/developer/applications');
-    setSubmitting(false);
+    // SAFEGUARD: Block empty submissions
+    if (fieldCount < 3) {
+      toast.error('Please fill in more fields before submitting');
+      setSubmitting(false);
+      return;
+    }
+
+    try {
+      // Save all data + update status atomically
+      const { error } = await supabase.from('applications').update({
+        project_details: projectDetails as any,
+        title: formData.personalDetails.firstName && formData.personalDetails.surname
+          ? `${formData.personalDetails.firstName} ${formData.personalDetails.surname} - Application`
+          : 'Untitled Application',
+        amount: formData.loanDetails.purchasePrice,
+        type: formData.loanDetails.loanType || 'development_funding',
+        status: 'submitted' as any,
+        submitted_at: new Date().toISOString(),
+        signature_data: sig.signatureData,
+        signed_at: sig.signedAt,
+      }).eq('id', appId);
+
+      if (error) throw error;
+
+      // DB triggers handle notifications + audit automatically
+      // But also log from client for redundancy
+      await logAudit({
+        action: 'application_submitted',
+        resourceType: 'application',
+        resourceId: appId,
+        details: `Submitted with ${fieldCount} fields filled`,
+      });
+
+      console.log(`[SUBMIT SUCCESS] app=${appId}`);
+      toast.success('Application signed and submitted successfully!');
+      setShowSignature(false);
+      navigate('/developer/applications');
+    } catch (err: any) {
+      console.error(`[SUBMIT ERROR] app=${appId}`, err);
+      toast.error(err.message || 'Submission failed — please try again');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const updateSection = <K extends keyof ApplicationFormData>(key: K, value: ApplicationFormData[K]) => {
@@ -208,7 +271,22 @@ export default function ApplicationForm() {
             <ArrowLeft className="h-3 w-3" /> Back to Applications
           </button>
           <h1 className="text-2xl font-bold">Funding Application</h1>
-          {lastSaved && <p className="text-xs text-muted-foreground mt-1">Last saved: {lastSaved.toLocaleTimeString()}</p>}
+          <div className="flex items-center gap-2 mt-1">
+            {lastSaved && <p className="text-xs text-muted-foreground">Last saved: {lastSaved.toLocaleTimeString()}</p>}
+            {saveStatus === 'saved' && (
+              <span className="flex items-center gap-1 text-xs text-green-600">
+                <CheckCircle2 className="h-3 w-3" /> Saved
+              </span>
+            )}
+            {saveStatus === 'saving' && (
+              <span className="flex items-center gap-1 text-xs text-muted-foreground">
+                <Loader2 className="h-3 w-3 animate-spin" /> Saving...
+              </span>
+            )}
+            {saveStatus === 'error' && (
+              <span className="text-xs text-destructive">Save failed</span>
+            )}
+          </div>
         </div>
         <Button variant="outline" onClick={() => saveProgress(false)} disabled={saving}>
           {saving ? <Loader2 className="h-4 w-4 animate-spin mr-1" /> : <Save className="h-4 w-4 mr-1" />}
@@ -237,8 +315,6 @@ export default function ApplicationForm() {
               </div>
             )}
             <Step1PersonalDetails data={formData.personalDetails} onChange={d => updateSection('personalDetails', d)} />
-            
-            {/* KYC Verification - shown after personal details are filled */}
             {user && (formData.personalDetails.firstName && formData.personalDetails.surname && formData.personalDetails.dateOfBirth && formData.addressHistory.currentAddress.postcode) && (
               <div className="mt-6">
                 <KycVerification
@@ -247,7 +323,6 @@ export default function ApplicationForm() {
                   applicationId={appId}
                   userId={user.id}
                   onVerified={(verifiedFields) => {
-                    // Mark verified fields in form data
                     const updated = { ...formData };
                     if (verifiedFields.firstName) updated.personalDetails.firstName = verifiedFields.firstName as string;
                     if (verifiedFields.lastName) updated.personalDetails.surname = verifiedFields.lastName as string;

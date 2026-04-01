@@ -4,6 +4,7 @@ import { AdminSidebar } from './AdminSidebar';
 import { useAuth } from '@/contexts/AuthContext';
 import { cn } from '@/lib/utils';
 import { Loader2 } from 'lucide-react';
+import { NotificationBell } from '@/components/NotificationBell';
 
 export function AdminLayout() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -24,7 +25,10 @@ export function AdminLayout() {
     <div className="min-h-screen bg-background">
       <AdminSidebar collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} />
       <main className={cn('min-h-screen transition-all duration-300', sidebarCollapsed ? 'ml-[72px]' : 'ml-64')}>
-        <div className="p-6 lg:p-8"><Outlet /></div>
+        <div className="flex justify-end px-6 pt-4">
+          <NotificationBell />
+        </div>
+        <div className="p-6 lg:p-8 pt-2"><Outlet /></div>
       </main>
     </div>
   );
