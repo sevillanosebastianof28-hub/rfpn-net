@@ -6,6 +6,7 @@ import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import { LayoutDashboard, FileText, MessageSquare, User, Rss, LogOut, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
+import { NotificationBell } from '@/components/NotificationBell';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/broker', end: true },
