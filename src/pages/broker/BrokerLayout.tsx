@@ -61,7 +61,10 @@ export default function BrokerLayout() {
         {collapsed && <Button variant="ghost" size="icon" onClick={() => setCollapsed(false)} className="absolute -right-3 top-20 h-6 w-6 rounded-full border border-sidebar-border bg-sidebar text-muted-foreground"><ChevronRight className="h-3 w-3" /></Button>}
       </aside>
       <main className={cn('min-h-screen transition-all duration-300', collapsed ? 'ml-[72px]' : 'ml-64')}>
-        <div className="p-6 lg:p-8"><Outlet /></div>
+        <div className="flex justify-end px-6 pt-4">
+          <NotificationBell />
+        </div>
+        <div className="p-6 lg:p-8 pt-2"><Outlet /></div>
       </main>
     </div>
   );
