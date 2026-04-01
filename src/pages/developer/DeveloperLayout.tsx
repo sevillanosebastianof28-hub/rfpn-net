@@ -9,6 +9,7 @@ import {
   LayoutDashboard, User, FileText, MessageSquare, Rss, LogOut,
   ChevronLeft, ChevronRight, Loader2, ShieldAlert
 } from 'lucide-react';
+import { NotificationBell } from '@/components/NotificationBell';
 
 const navItems = [
   { icon: LayoutDashboard, label: 'Dashboard', path: '/developer', end: true },
