@@ -78,7 +78,10 @@ export default function DeveloperLayout() {
       </aside>
 
       <main className={cn('min-h-screen transition-all duration-300', collapsed ? 'ml-[72px]' : 'ml-64')}>
-        <div className="p-6 lg:p-8"><Outlet /></div>
+        <div className="flex justify-end px-6 pt-4">
+          <NotificationBell />
+        </div>
+        <div className="p-6 lg:p-8 pt-2"><Outlet /></div>
       </main>
     </div>
   );
