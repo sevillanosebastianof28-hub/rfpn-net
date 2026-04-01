@@ -304,11 +304,14 @@ export default function AdminApplicationDetail() {
               <Field label={`Property ${i + 1}`} value={p.address} />
               <Field label="Held In" value={p.heldIn === 'personal' ? 'Personal Name' : p.heldIn === 'company' ? 'Company Name' : '—'} />
               <Field label="Ownership" value={p.ownershipStatus?.replace(/_/g, ' ') || '—'} />
-              <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Current Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+              <Field label="Purchase Price" value={p.purchasePrice ? `£${p.purchasePrice.toLocaleString()}` : '—'} />
+              <Field label="Purchase Date" value={p.purchaseDate || '—'} />
               <Field label="Mortgage Lender" value={p.mortgageLender} />
               <Field label="Outstanding" value={p.outstandingMortgageBalance ? `£${p.outstandingMortgageBalance.toLocaleString()}` : '—'} />
               <Field label="Monthly Payment" value={p.monthlyMortgagePayment ? `£${p.monthlyMortgagePayment}` : '—'} />
               <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+              <Field label="Monthly Rental Income" value={p.monthlyRentalIncome ? `£${p.monthlyRentalIncome}` : '—'} />
             </div>
           ))
         ) : (
