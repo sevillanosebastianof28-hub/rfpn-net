@@ -182,7 +182,7 @@ export default function AdminApplicationDetail() {
     if (depth > 5) return 0;
     if (obj === null || obj === undefined || obj === '') return 0;
     if (Array.isArray(obj)) return obj.reduce((s: number, v: any) => s + (v ? 1 : 0), 0);
-    if (typeof obj === 'object') return Object.values(obj).reduce((s: number, v: any) => s + countFields(v, depth + 1), 0 as number);
+    if (typeof obj === 'object') { const vals = Object.values(obj); let sum = 0; for (const v of vals) { sum += countFields(v, depth + 1); } return sum; }
     return 1;
   };
   const fieldCount = countFields(formData);
