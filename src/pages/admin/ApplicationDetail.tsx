@@ -392,8 +392,13 @@ export default function AdminApplicationDetail() {
         {formData.properties.map((p, i) => (
           <div key={i} className={i > 0 ? 'mt-2 pt-2 border-t' : ''}>
             <Field label="Address" value={p.address} />
-            <Field label="Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+            <Field label="Ownership Type" value={p.ownershipType} />
+            <Field label="Current Value" value={p.currentValue ? `£${p.currentValue.toLocaleString()}` : '—'} />
+            <Field label="Purchase Date" value={p.purchaseDate || '—'} />
+            <Field label="Mortgage Lender" value={p.mortgageLender} />
             <Field label="Outstanding Mortgage" value={p.outstandingMortgage ? `£${p.outstandingMortgage.toLocaleString()}` : '—'} />
+            <Field label="Interest Rate" value={p.interestRate ? `${p.interestRate}%` : '—'} />
+            <Field label="Monthly Payment" value={p.monthlyPayment ? `£${p.monthlyPayment}` : '—'} />
             <Field label="Rental Income" value={p.rentalIncome ? `£${p.rentalIncome}/mo` : '—'} />
           </div>
         ))}
