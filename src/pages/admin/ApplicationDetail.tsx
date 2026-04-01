@@ -353,10 +353,23 @@ export default function AdminApplicationDetail() {
       <Section title="7. Income">
         <Field label="Occupation" value={inc.employmentIncome.occupation} />
         <Field label="Employer" value={inc.employmentIncome.employerName} />
+        <Field label="Employer Address" value={inc.employmentIncome.employerAddress} />
+        <Field label="Employer Phone" value={inc.employmentIncome.employerPhone} />
+        <Field label="Employer Email" value={inc.employmentIncome.employerEmail} />
+        <Field label="Start Date" value={inc.employmentIncome.startDate} />
         <Field label="Salary" value={inc.employmentIncome.salaryBeforeTax ? `£${inc.employmentIncome.salaryBeforeTax.toLocaleString()}` : '—'} />
         <Field label="Overtime" value={inc.employmentIncome.overtimeIncome ? `£${inc.employmentIncome.overtimeIncome.toLocaleString()}` : '—'} />
         <Field label="Bonus" value={inc.employmentIncome.bonusIncome ? `£${inc.employmentIncome.bonusIncome.toLocaleString()}` : '—'} />
+        <Field label="Allowances" value={inc.employmentIncome.allowances ? `£${inc.employmentIncome.allowances.toLocaleString()}` : '—'} />
         <Field label="Rental Income" value={inc.rentalIncome ? `£${inc.rentalIncome}/mo` : '—'} />
+        {inc.otherIncome?.length > 0 && (
+          <>
+            <p className="font-medium text-sm mt-3">Other Income</p>
+            {inc.otherIncome.map((o: any, i: number) => (
+              <Field key={i} label={o.source || `Source ${i+1}`} value={o.amount ? `£${o.amount.toLocaleString()}/yr` : '—'} />
+            ))}
+          </>
+        )}
       </Section>
 
       <Section title="8. Business Ownership">
