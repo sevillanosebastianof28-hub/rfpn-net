@@ -124,16 +124,16 @@ export default function Landing() {
             <div className="hidden lg:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Features
-              </Link>
+              </a>
               <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 How It Works
-              </Link>
+              </a>
               <Link to="/faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 FAQ
               </Link>
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
-              </Link>
+              </a>
             </div>
 
             <div className="hidden sm:flex items-center gap-3">
