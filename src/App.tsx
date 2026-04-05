@@ -48,6 +48,7 @@ import BrokerFeed from "./pages/broker/BrokerFeed";
 
 // Components
 import { ChatBot } from "./components/ChatBot";
+import { TrackingScriptInjector } from "./components/TrackingScriptInjector";
 
 const queryClient = new QueryClient();
 
