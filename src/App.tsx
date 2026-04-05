@@ -79,6 +79,7 @@ const App = () => (
               <Route path="applications/:id" element={<AdminApplicationDetail />} />
               <Route path="audit-logs" element={<AuditLogs />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="tracking" element={<TrackingCodes />} />
             </Route>
 
             {/* Developer Routes */}
