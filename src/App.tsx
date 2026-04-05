@@ -12,6 +12,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Unsubscribe from "./pages/Unsubscribe";
+import ThankYou from "./pages/ThankYou";
+import BookAppointment from "./pages/BookAppointment";
+import DevelopmentFunding from "./pages/DevelopmentFunding";
+import BridgingFinance from "./pages/BridgingFinance";
 
 // Admin Layout & Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
@@ -22,6 +26,7 @@ import Applications from "./pages/admin/Applications";
 import AdminApplicationDetail from "./pages/admin/ApplicationDetail";
 import AuditLogs from "./pages/admin/AuditLogs";
 import Settings from "./pages/admin/Settings";
+import TrackingCodes from "./pages/admin/TrackingCodes";
 
 // Developer Portal
 import DeveloperLayout from "./pages/developer/DeveloperLayout";
