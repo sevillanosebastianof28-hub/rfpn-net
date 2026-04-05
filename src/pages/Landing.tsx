@@ -140,12 +140,12 @@ export default function Landing() {
               <Link to="/login">
                 <Button variant="ghost" size="sm">Sign In</Button>
               </Link>
-              <a href="https://customers.rfpn.net/waitlist-sign-up">
+              <Link to="/register">
                 <Button variant="gradient" size="sm" className="group">
                   Get Started
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -170,9 +170,9 @@ export default function Landing() {
                 <Link to="/login" className="block">
                   <Button variant="outline" className="w-full">Sign In</Button>
                 </Link>
-                <a href="https://customers.rfpn.net/waitlist-sign-up" className="block">
+                <Link to="/register" className="block">
                   <Button variant="gradient" className="w-full">Get Started</Button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -229,12 +229,12 @@ export default function Landing() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up stagger-2">
-              <a href="https://customers.rfpn.net/waitlist-sign-up">
+              <Link to="/register">
                 <Button variant="gradient" size="xl" className="btn-glow group text-base px-8 w-full sm:w-auto">
                   Get Started Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Social Proof Mini */}
@@ -462,12 +462,12 @@ export default function Landing() {
 
           {/* CTA under How It Works */}
           <div className="text-center mt-16">
-            <a href="https://customers.rfpn.net/waitlist-sign-up">
+            <Link to="/register">
               <Button variant="gradient" size="lg" className="btn-glow group">
                 Get Started Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -517,7 +517,7 @@ export default function Landing() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <a href="https://customers.rfpn.net/waitlist-sign-up">
+                <Link to="/register">
                   <Button 
                     size="xl" 
                     className="bg-white text-primary hover:bg-white/90 shadow-2xl shadow-black/20 group w-full sm:w-auto text-base px-10 h-14"
@@ -525,7 +525,7 @@ export default function Landing() {
                     Get Started Now
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
@@ -571,17 +571,17 @@ export default function Landing() {
               <ul className="space-y-3 text-sm text-muted-foreground">
                 <li><a href="#features" className="hover:text-foreground transition-colors">Features</a></li>
                 <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Changelog</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Roadmap</a></li>
+                <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
+                <li><a href="#contact" className="hover:text-foreground transition-colors">Pricing</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">About Us</a></li>
                 <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
                 <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</a></li>
               </ul>
             </div>
@@ -589,9 +589,9 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Privacy Policy</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Terms of Service</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Cookie Policy</a></li>
               </ul>
             </div>
           </div>
