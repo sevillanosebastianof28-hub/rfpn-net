@@ -787,6 +787,45 @@ export type Database = {
         }
         Relationships: []
       }
+      tracking_codes: {
+        Row: {
+          code_snippet: string | null
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          placement: string
+          provider_type: string
+          target_page: string
+          tracking_id: string | null
+          updated_at: string
+        }
+        Insert: {
+          code_snippet?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          placement?: string
+          provider_type: string
+          target_page?: string
+          tracking_id?: string | null
+          updated_at?: string
+        }
+        Update: {
+          code_snippet?: string | null
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          placement?: string
+          provider_type?: string
+          target_page?: string
+          tracking_id?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string

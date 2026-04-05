@@ -30,6 +30,7 @@ const mainNavItems = [
   { icon: Users, label: 'Users', path: '/admin/users' },
   { icon: FileText, label: 'Applications', path: '/admin/applications' },
   { icon: ScrollText, label: 'Audit Logs', path: '/admin/audit-logs' },
+  { icon: Code2, label: 'Tracking Codes', path: '/admin/tracking' },
 ];
 
 const portalNavItems = [

@@ -12,6 +12,10 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import NotFound from "./pages/NotFound";
 import Unsubscribe from "./pages/Unsubscribe";
+import ThankYou from "./pages/ThankYou";
+import BookAppointment from "./pages/BookAppointment";
+import DevelopmentFunding from "./pages/DevelopmentFunding";
+import BridgingFinance from "./pages/BridgingFinance";
 
 // Admin Layout & Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
@@ -22,6 +26,7 @@ import Applications from "./pages/admin/Applications";
 import AdminApplicationDetail from "./pages/admin/ApplicationDetail";
 import AuditLogs from "./pages/admin/AuditLogs";
 import Settings from "./pages/admin/Settings";
+import TrackingCodes from "./pages/admin/TrackingCodes";
 
 // Developer Portal
 import DeveloperLayout from "./pages/developer/DeveloperLayout";
@@ -43,6 +48,7 @@ import BrokerFeed from "./pages/broker/BrokerFeed";
 
 // Components
 import { ChatBot } from "./components/ChatBot";
+import { TrackingScriptInjector } from "./components/TrackingScriptInjector";
 
 const queryClient = new QueryClient();
 
@@ -59,6 +65,10 @@ const App = () => (
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/unsubscribe" element={<Unsubscribe />} />
+            <Route path="/thank-you" element={<ThankYou />} />
+            <Route path="/book-appointment" element={<BookAppointment />} />
+            <Route path="/development-funding" element={<DevelopmentFunding />} />
+            <Route path="/bridging-finance" element={<BridgingFinance />} />
             
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
@@ -69,6 +79,7 @@ const App = () => (
               <Route path="applications/:id" element={<AdminApplicationDetail />} />
               <Route path="audit-logs" element={<AuditLogs />} />
               <Route path="settings" element={<Settings />} />
+              <Route path="tracking" element={<TrackingCodes />} />
             </Route>
 
             {/* Developer Routes */}
@@ -95,6 +106,7 @@ const App = () => (
             {/* Catch-all */}
             <Route path="*" element={<NotFound />} />
           </Routes>
+          <TrackingScriptInjector />
           <ChatBot />
         </BrowserRouter>
       </TooltipProvider>
