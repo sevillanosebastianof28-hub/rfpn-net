@@ -124,28 +124,28 @@ export default function Landing() {
             <div className="hidden lg:flex items-center gap-8">
               <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Features
-              </a>
+              </Link>
               <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 How It Works
-              </a>
+              </Link>
               <Link to="/faq" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 FAQ
               </Link>
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
-              </a>
+              </Link>
             </div>
 
             <div className="hidden sm:flex items-center gap-3">
               <Link to="/login">
                 <Button variant="ghost" size="sm">Sign In</Button>
               </Link>
-              <a href="https://customers.rfpn.net/waitlist-sign-up">
+              <Link to="/register">
                 <Button variant="gradient" size="sm" className="group">
                   Get Started
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Mobile Menu Button */}
@@ -162,17 +162,17 @@ export default function Landing() {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-background border-b border-border/50 animate-slide-up">
             <div className="container mx-auto px-4 py-4 space-y-4">
-              <a href="#features" className="block py-2 text-foreground">Features</a>
-              <a href="#how-it-works" className="block py-2 text-foreground">How It Works</a>
+              <a href="#features" className="block py-2 text-foreground">Features</Link>
+              <a href="#how-it-works" className="block py-2 text-foreground">How It Works</Link>
               <Link to="/faq" className="block py-2 text-foreground">FAQ</Link>
-              <a href="#contact" className="block py-2 text-foreground">Contact</a>
+              <a href="#contact" className="block py-2 text-foreground">Contact</Link>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
                   <Button variant="outline" className="w-full">Sign In</Button>
                 </Link>
-                <a href="https://customers.rfpn.net/waitlist-sign-up" className="block">
+                <Link to="/register" className="block">
                   <Button variant="gradient" className="w-full">Get Started</Button>
-                </a>
+                </Link>
               </div>
             </div>
           </div>
@@ -229,12 +229,12 @@ export default function Landing() {
 
             {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-10 animate-slide-up stagger-2">
-              <a href="https://customers.rfpn.net/waitlist-sign-up">
+              <Link to="/register">
                 <Button variant="gradient" size="xl" className="btn-glow group text-base px-8 w-full sm:w-auto">
                   Get Started Now
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-              </a>
+              </Link>
             </div>
 
             {/* Social Proof Mini */}
@@ -462,12 +462,12 @@ export default function Landing() {
 
           {/* CTA under How It Works */}
           <div className="text-center mt-16">
-            <a href="https://customers.rfpn.net/waitlist-sign-up">
+            <Link to="/register">
               <Button variant="gradient" size="lg" className="btn-glow group">
                 Get Started Now
                 <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-            </a>
+            </Link>
           </div>
         </div>
       </section>
@@ -517,7 +517,7 @@ export default function Landing() {
               </p>
 
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-                <a href="https://customers.rfpn.net/waitlist-sign-up">
+                <Link to="/register">
                   <Button 
                     size="xl" 
                     className="bg-white text-primary hover:bg-white/90 shadow-2xl shadow-black/20 group w-full sm:w-auto text-base px-10 h-14"
@@ -525,7 +525,7 @@ export default function Landing() {
                     Get Started Now
                     <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                   </Button>
-                </a>
+                </Link>
               </div>
 
               <div className="flex flex-wrap items-center justify-center gap-6 text-sm text-white/50">
@@ -559,39 +559,39 @@ export default function Landing() {
               <div className="flex items-center gap-4 mt-6">
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" /></svg>
-                </a>
+                </Link>
                 <a href="#" className="w-9 h-9 rounded-lg bg-muted/50 flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-muted transition-colors">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" /></svg>
-                </a>
+                </Link>
               </div>
             </div>
             
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#features" className="hover:text-foreground transition-colors">Features</a></li>
-                <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Changelog</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Roadmap</a></li>
+                <li><a href="#features" className="hover:text-foreground transition-colors">Features</Link></li>
+                <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Changelog</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Roadmap</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Careers</a></li>
-                <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">About</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Blog</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Careers</Link></li>
+                <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</Link></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms</a></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Security</a></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Privacy</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Terms</Link></li>
+                <li><a href="#" className="hover:text-foreground transition-colors">Security</Link></li>
               </ul>
             </div>
           </div>
