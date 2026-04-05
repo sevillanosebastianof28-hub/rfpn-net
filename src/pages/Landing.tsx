@@ -162,10 +162,10 @@ export default function Landing() {
         {mobileMenuOpen && (
           <div className="lg:hidden bg-background border-b border-border/50 animate-slide-up">
             <div className="container mx-auto px-4 py-4 space-y-4">
-              <a href="#features" className="block py-2 text-foreground">Features</Link>
-              <a href="#how-it-works" className="block py-2 text-foreground">How It Works</Link>
+              <a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">features</a>
+              <a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">how-it-works</a>
               <Link to="/faq" className="block py-2 text-foreground">FAQ</Link>
-              <a href="#contact" className="block py-2 text-foreground">Contact</Link>
+              <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">contact</a>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
                   <Button variant="outline" className="w-full">Sign In</Button>
@@ -569,29 +569,29 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#features" className="hover:text-foreground transition-colors">Features</Link></li>
-                <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Changelog</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Roadmap</Link></li>
+                <li><a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">features</a></li>
+                <li><a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">how-it-works</a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Company</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">About</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Blog</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Careers</Link></li>
-                <li><a href="#contact" className="hover:text-foreground transition-colors">Contact</Link></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">contact</a></li>
               </ul>
             </div>
 
             <div>
               <h4 className="font-semibold mb-4">Legal</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#" className="hover:text-foreground transition-colors">Privacy</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Terms</Link></li>
-                <li><a href="#" className="hover:text-foreground transition-colors">Security</Link></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
               </ul>
             </div>
           </div>
