@@ -154,7 +154,7 @@ export default function TrackingCodes() {
 
   const isGTM = form.provider_type === 'google_tag_manager';
 
-  const publishedBase = 'https://rfpn-net.lovable.app';
+  const publishedBase = 'https://www.rfpn.net';
   const campaignUrls = [
     { label: 'Book Appointment', url: `${publishedBase}/book-appointment` },
     { label: 'Development Funding', url: `${publishedBase}/development-funding` },
