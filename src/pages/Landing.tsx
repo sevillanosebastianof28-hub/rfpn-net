@@ -569,10 +569,10 @@ export default function Landing() {
             <div>
               <h4 className="font-semibold mb-4">Product</h4>
               <ul className="space-y-3 text-sm text-muted-foreground">
-                <li><a href="#features" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">features</a></li>
-                <li><a href="#how-it-works" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">how-it-works</a></li>
-                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
-                <li><a href="#" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"></a></li>
+                <li><a href="#features" className="hover:text-foreground transition-colors">Features</a></li>
+                <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a></li>
+                <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
+                <li><a href="#contact" className="hover:text-foreground transition-colors">Pricing</a></li>
               </ul>
             </div>
 
