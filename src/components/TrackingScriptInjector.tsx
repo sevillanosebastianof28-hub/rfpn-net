@@ -21,17 +21,14 @@ export function TrackingScriptInjector() {
         .select('*')
         .eq('is_active', true);
 
-      if (!codes) { console.warn('[TrackingInjector] No codes returned'); return; }
+      if (!codes) return;
 
       // Filter codes relevant to this page
       const relevant = codes.filter(
         c => c.target_page === 'all' || c.target_page === pageKey
       );
 
-      console.log('[TrackingInjector] Page:', pageKey, 'Codes:', codes.length, 'Relevant:', relevant.length);
-
       for (const code of relevant) {
-        console.log('[TrackingInjector] Injecting:', code.name, code.provider_type, code.tracking_id);
         if (code.provider_type === 'google_tag_manager' && code.tracking_id) {
           injectGTM(code.tracking_id);
         } else if (code.code_snippet) {
