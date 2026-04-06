@@ -11,11 +11,8 @@ function getPageKey(pathname: string): string {
 
 export function TrackingScriptInjector() {
   const location = useLocation();
-  const injectedIds = useRef<Set<string>>(new Set());
 
   useEffect(() => {
-    let cancelled = false;
-
     const inject = async () => {
       const pageKey = getPageKey(location.pathname);
 
@@ -24,7 +21,7 @@ export function TrackingScriptInjector() {
         .select('*')
         .eq('is_active', true);
 
-      if (cancelled || !codes) return;
+      if (!codes) return;
 
       // Filter codes relevant to this page
       const relevant = codes.filter(
@@ -32,9 +29,6 @@ export function TrackingScriptInjector() {
       );
 
       for (const code of relevant) {
-        if (injectedIds.current.has(code.id)) continue;
-        injectedIds.current.add(code.id);
-
         if (code.provider_type === 'google_tag_manager' && code.tracking_id) {
           injectGTM(code.tracking_id);
         } else if (code.code_snippet) {
@@ -48,7 +42,6 @@ export function TrackingScriptInjector() {
     };
 
     inject();
-    return () => { cancelled = true; };
   }, [location.pathname]);
 
   return null;
