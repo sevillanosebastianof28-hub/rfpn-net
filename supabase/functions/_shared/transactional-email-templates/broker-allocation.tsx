@@ -21,8 +21,8 @@ const BrokerAllocationEmail = ({
   applicationId = '',
 }: BrokerAllocationProps) => {
   const secureLink = applicationId
-    ? `https://rfpn-net.lovable.app/broker/applications/${applicationId}`
-    : 'https://rfpn-net.lovable.app/broker'
+    ? `https://www.rfpn.net/broker/applications/${applicationId}`
+    : 'https://www.rfpn.net/broker'
 
   return (
     <Html lang="en" dir="ltr">

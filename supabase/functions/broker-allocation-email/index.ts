@@ -32,7 +32,7 @@ Deno.serve(async (req) => {
       })
     }
 
-    const secureLink = `${siteUrl || 'https://rfpn-net.lovable.app'}/broker/applications/${applicationId}`
+    const secureLink = `${siteUrl || 'https://www.rfpn.net'}/broker/applications/${applicationId}`
 
     const htmlBody = `
 <!DOCTYPE html>
