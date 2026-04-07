@@ -2,7 +2,6 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 
-// Map routes to target_page identifiers
 function getPageKey(pathname: string): string {
   if (pathname === '/') return 'homepage';
   const slug = pathname.replace(/^\//, '').split('/')[0];
@@ -23,15 +22,15 @@ export function TrackingScriptInjector() {
 
       if (!codes) return;
 
-      // Filter codes relevant to this page
       const relevant = codes.filter(
         c => c.target_page === 'all' || c.target_page === pageKey
       );
 
       for (const code of relevant) {
-        if (code.provider_type === 'google_tag_manager' && code.tracking_id) {
-          injectGTM(code.tracking_id);
-        } else if (code.code_snippet) {
+        // Skip GTM — it's installed statically in index.html
+        if (code.provider_type === 'google_tag_manager') continue;
+
+        if (code.code_snippet) {
           injectSnippet(code.code_snippet, code.placement);
         } else if (code.tracking_id && code.provider_type === 'google_ads') {
           injectGoogleAds(code.tracking_id, code.placement);
@@ -47,24 +46,6 @@ export function TrackingScriptInjector() {
   return null;
 }
 
-function injectGTM(containerId: string) {
-  // Head script
-  if (!document.querySelector(`script[data-gtm-id="${containerId}"]`)) {
-    const script = document.createElement('script');
-    script.setAttribute('data-gtm-id', containerId);
-    script.textContent = `(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','${containerId}');`;
-    document.head.appendChild(script);
-  }
-
-  // Body noscript
-  if (!document.querySelector(`noscript[data-gtm-ns="${containerId}"]`)) {
-    const ns = document.createElement('noscript');
-    ns.setAttribute('data-gtm-ns', containerId);
-    ns.innerHTML = `<iframe src="https://www.googletagmanager.com/ns.html?id=${containerId}" height="0" width="0" style="display:none;visibility:hidden"></iframe>`;
-    document.body.insertBefore(ns, document.body.firstChild);
-  }
-}
-
 function injectSnippet(snippet: string, placement: string) {
   const container = document.createElement('div');
   container.innerHTML = snippet;
@@ -73,7 +54,6 @@ function injectSnippet(snippet: string, placement: string) {
     : placement === 'body_start' ? document.body
     : document.body;
 
-  // Extract and re-create script elements so they execute
   const nodes = Array.from(container.childNodes);
   for (const node of nodes) {
     if (node instanceof HTMLScriptElement) {
