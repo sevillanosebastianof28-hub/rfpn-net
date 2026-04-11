@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils';
 
-type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'allocated' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review';
+type StatusType = 'active' | 'inactive' | 'pending' | 'verified' | 'unverified' | 'approved' | 'rejected' | 'under_review' | 'draft' | 'submitted' | 'info_requested' | 'declined' | 'completed' | 'allocated' | 'not_started' | 'in_progress' | 'passed' | 'failed' | 'manual_review' | 'paid' | 'flagged' | 'banned';
 
 interface StatusBadgeProps {
   status: StatusType | boolean;
@@ -28,6 +28,9 @@ const statusConfig: Record<StatusType, { label: string; className: string }> = {
   passed: { label: 'Passed', className: 'status-active' },
   failed: { label: 'Failed', className: 'bg-destructive/20 text-destructive' },
   manual_review: { label: 'Manual Review', className: 'bg-warning/15 text-warning' },
+  paid: { label: 'Paid', className: 'status-active' },
+  flagged: { label: 'Flagged', className: 'bg-warning/15 text-warning' },
+  banned: { label: 'Banned', className: 'bg-destructive/20 text-destructive' },
 };
 
 export function StatusBadge({ status, type = 'default', className }: StatusBadgeProps) {
@@ -49,9 +52,9 @@ export function StatusBadge({ status, type = 'default', className }: StatusBadge
     <span className={cn('status-badge', config.className, className)}>
       <span className={cn(
         'mr-1.5 h-1.5 w-1.5 rounded-full',
-        ['active', 'verified', 'approved', 'completed', 'passed'].includes(statusKey) ? 'bg-success' :
-        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review', 'allocated'].includes(statusKey) ? 'bg-warning' :
-        ['rejected', 'declined', 'failed'].includes(statusKey) ? 'bg-destructive' : 'bg-muted-foreground'
+        ['active', 'verified', 'approved', 'completed', 'passed', 'paid'].includes(statusKey) ? 'bg-success' :
+        ['pending', 'unverified', 'under_review', 'submitted', 'info_requested', 'in_progress', 'manual_review', 'allocated', 'flagged'].includes(statusKey) ? 'bg-warning' :
+        ['rejected', 'declined', 'failed', 'banned'].includes(statusKey) ? 'bg-destructive' : 'bg-muted-foreground'
       )} />
       {config.label}
     </span>

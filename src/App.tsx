@@ -16,6 +16,13 @@ import ThankYou from "./pages/ThankYou";
 import BookAppointment from "./pages/BookAppointment";
 import DevelopmentFunding from "./pages/DevelopmentFunding";
 import BridgingFinance from "./pages/BridgingFinance";
+import AffiliateSignup from "./pages/affiliate/AffiliateSignup";
+import AffiliateDashboard from "./pages/affiliate/AffiliateDashboard";
+
+// Admin Affiliate Pages
+import Affiliates from "./pages/admin/Affiliates";
+import AdminConversions from "./pages/admin/Conversions";
+import Payouts from "./pages/admin/Payouts";
 
 // Admin Layout & Pages
 import { AdminLayout } from "./components/layout/AdminLayout";
@@ -49,6 +56,7 @@ import BrokerFeed from "./pages/broker/BrokerFeed";
 // Components
 import { ChatBot } from "./components/ChatBot";
 import { TrackingScriptInjector } from "./components/TrackingScriptInjector";
+import { ReferralCapture } from "./components/ReferralCapture";
 
 const queryClient = new QueryClient();
 
@@ -70,6 +78,8 @@ const App = () => (
             <Route path="/development-funding" element={<DevelopmentFunding />} />
             <Route path="/bridging-finance" element={<BridgingFinance />} />
             
+            <Route path="/affiliate" element={<AffiliateSignup />} />
+            
             {/* Admin Routes */}
             <Route path="/admin" element={<AdminLayout />}>
               <Route index element={<Dashboard />} />
@@ -80,6 +90,9 @@ const App = () => (
               <Route path="audit-logs" element={<AuditLogs />} />
               <Route path="settings" element={<Settings />} />
               <Route path="tracking" element={<TrackingCodes />} />
+              <Route path="affiliates" element={<Affiliates />} />
+              <Route path="conversions" element={<AdminConversions />} />
+              <Route path="payouts" element={<Payouts />} />
             </Route>
 
             {/* Developer Routes */}
@@ -91,6 +104,11 @@ const App = () => (
               <Route path="applications/:id" element={<ApplicationForm />} />
               <Route path="messages" element={<DevMessages />} />
               <Route path="feed" element={<SocialFeed />} />
+            </Route>
+
+            {/* Affiliate Routes */}
+            <Route path="/affiliate/dashboard" element={<AdminLayout />}>
+              <Route index element={<AffiliateDashboard />} />
             </Route>
 
             {/* Broker Routes */}
@@ -107,6 +125,7 @@ const App = () => (
             <Route path="*" element={<NotFound />} />
           </Routes>
           <TrackingScriptInjector />
+          <ReferralCapture />
           <ChatBot />
         </BrowserRouter>
       </TooltipProvider>

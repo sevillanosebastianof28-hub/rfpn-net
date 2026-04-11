@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { getReferralCode, clearReferral } from '@/lib/referral';
 import type { Database } from '@/integrations/supabase/types';
 
 type AppRole = Database['public']['Enums']['app_role'];
@@ -101,7 +102,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const register = useCallback(async (
     email: string, password: string, firstName: string, lastName: string, role: AppRole = 'developer'
   ) => {
-    const { error } = await supabase.auth.signUp({
+    const refCode = getReferralCode();
+    const { error, data } = await supabase.auth.signUp({
       email,
       password,
       options: {
@@ -109,6 +111,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       },
     });
     if (error) return { success: false, error: error.message };
+
+    // Attribute referral if exists
+    if (refCode && data.user) {
+      const { data: affiliate } = await supabase
+        .from('affiliates')
+        .select('id')
+        .eq('affiliate_code', refCode)
+        .eq('status', 'active')
+        .maybeSingle();
+
+      if (affiliate) {
+        // Check self-referral
+        if (affiliate.id !== data.user.id) {
+          await supabase.from('profiles')
+            .update({ referred_by_affiliate_id: affiliate.id })
+            .eq('user_id', data.user.id);
+        }
+        clearReferral();
+      }
+    }
+
     return { success: true };
   }, []);
 
