@@ -1,3 +1,4 @@
+/* Auth context – provides role-based auth state */
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { getReferralCode, clearReferral } from '@/lib/referral';
