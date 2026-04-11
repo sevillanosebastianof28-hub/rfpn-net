@@ -18,6 +18,7 @@ import DevelopmentFunding from "./pages/DevelopmentFunding";
 import BridgingFinance from "./pages/BridgingFinance";
 import AffiliateSignup from "./pages/affiliate/AffiliateSignup";
 import AffiliateDashboard from "./pages/affiliate/AffiliateDashboard";
+import AffiliateLayout from "./pages/affiliate/AffiliateLayout";
 
 // Admin Affiliate Pages
 import Affiliates from "./pages/admin/Affiliates";
@@ -107,7 +108,7 @@ const App = () => (
             </Route>
 
             {/* Affiliate Routes */}
-            <Route path="/affiliate/dashboard" element={<AdminLayout />}>
+            <Route path="/affiliate/dashboard" element={<AffiliateLayout />}>
               <Route index element={<AffiliateDashboard />} />
             </Route>
 

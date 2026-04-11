@@ -34,18 +34,28 @@ export default function AffiliateSignup() {
     if (!agreed) { setError('You must agree to the affiliate terms'); return; }
 
     setLoading(true);
-    const result = await register(form.email, form.password, form.firstName, form.lastName, 'affiliate');
-    if (!result.success) { setError(result.error || 'Registration failed'); setLoading(false); return; }
 
-    // Get the new user session
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session?.user) {
+    // Sign up directly with Supabase to get the user immediately
+    const { error, data } = await supabase.auth.signUp({
+      email: form.email,
+      password: form.password,
+      options: {
+        data: { first_name: form.firstName, last_name: form.lastName, role: 'affiliate' },
+      },
+    });
+
+    if (error) { setError(error.message); setLoading(false); return; }
+
+    // Wait briefly for profile trigger to complete, then create affiliate record
+    if (data.user) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
       const code = `${form.firstName.toLowerCase().replace(/\W/g, '')}${Math.random().toString(36).slice(2, 8)}`;
-      await supabase.from('affiliates').insert({
-        user_id: session.user.id,
+      const { error: affError } = await supabase.from('affiliates').insert({
+        user_id: data.user.id,
         affiliate_code: code,
         payout_details: { method: form.payoutMethod, details: form.payoutDetails },
       });
+      if (affError) console.error('Affiliate record error:', affError);
     }
 
     toast.success('Affiliate account created! Welcome aboard.');

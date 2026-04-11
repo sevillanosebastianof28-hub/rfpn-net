@@ -1,13 +1,88 @@
-import { Navigate, Outlet } from 'react-router-dom';
+import { useState } from 'react';
+import { Outlet, Navigate, NavLink, useLocation } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { AdminLayout } from '@/components/layout/AdminLayout';
+import { cn } from '@/lib/utils';
+import { Loader2, LayoutDashboard, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Logo } from '@/components/Logo';
+import { Button } from '@/components/ui/button';
+import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
+
+const navItems = [
+  { icon: LayoutDashboard, label: 'Dashboard', path: '/affiliate/dashboard', end: true },
+];
 
 export default function AffiliateLayout() {
-  const { user, isLoading, isAuthenticated } = useAuth();
+  const [collapsed, setCollapsed] = useState(false);
+  const { user, isLoading, isAuthenticated, logout } = useAuth();
+  const location = useLocation();
 
-  if (isLoading) return <div className="flex items-center justify-center min-h-screen"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>;
+  if (isLoading) return <div className="flex min-h-screen items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div>;
   if (!isAuthenticated) return <Navigate to="/login" replace />;
   if (user?.role !== 'affiliate') return <Navigate to="/" replace />;
 
-  return <AdminLayout />;
+  return (
+    <div className="min-h-screen bg-background">
+      <aside className={cn(
+        'fixed left-0 top-0 z-40 flex h-screen flex-col border-r border-sidebar-border bg-sidebar transition-all duration-300',
+        collapsed ? 'w-[72px]' : 'w-64'
+      )}>
+        <div className={cn('flex h-16 items-center border-b border-sidebar-border px-4', collapsed ? 'justify-center' : 'justify-between')}>
+          <Logo showText={!collapsed} size="sm" variant="sidebar" />
+          {!collapsed && (
+            <Button variant="ghost" size="icon" onClick={() => setCollapsed(true)} className="h-8 w-8 text-sidebar-foreground/60 hover:text-sidebar-foreground">
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+          )}
+        </div>
+
+        <nav className="flex-1 space-y-1 p-3">
+          {!collapsed && <p className="mb-2 px-3 text-xs font-semibold uppercase tracking-wider text-sidebar-foreground/50">Affiliate</p>}
+          {navItems.map(item => {
+            const isActive = item.end ? location.pathname === item.path : location.pathname.startsWith(item.path);
+            const link = (
+              <NavLink key={item.path} to={item.path} end={item.end}>
+                <div className={cn('nav-item', isActive && 'active')}>
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  {!collapsed && <span>{item.label}</span>}
+                </div>
+              </NavLink>
+            );
+            return collapsed ? (
+              <Tooltip key={item.path}><TooltipTrigger asChild>{link}</TooltipTrigger><TooltipContent side="right">{item.label}</TooltipContent></Tooltip>
+            ) : link;
+          })}
+        </nav>
+
+        <div className="border-t border-sidebar-border p-3">
+          <div className={cn('flex items-center gap-3 rounded-lg bg-sidebar-accent p-3', collapsed && 'justify-center p-2')}>
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground">
+              {user?.firstName?.[0]}{user?.lastName?.[0]}
+            </div>
+            {!collapsed && (
+              <div className="flex-1 overflow-hidden">
+                <p className="truncate text-sm font-medium text-sidebar-foreground">{user?.firstName} {user?.lastName}</p>
+                <p className="truncate text-xs text-sidebar-foreground/60">Affiliate</p>
+              </div>
+            )}
+            {!collapsed && (
+              <Button variant="ghost" size="icon" onClick={logout} className="h-8 w-8 shrink-0 text-sidebar-foreground/60 hover:text-sidebar-foreground hover:bg-sidebar-accent">
+                <LogOut className="h-4 w-4" />
+              </Button>
+            )}
+          </div>
+        </div>
+
+        {collapsed && (
+          <Button variant="ghost" size="icon" onClick={() => setCollapsed(false)}
+            className="absolute -right-3 top-20 h-6 w-6 rounded-full border border-sidebar-border bg-sidebar text-sidebar-foreground/60 hover:text-sidebar-foreground">
+            <ChevronRight className="h-3 w-3" />
+          </Button>
+        )}
+      </aside>
+
+      <main className={cn('min-h-screen transition-all duration-300', collapsed ? 'ml-[72px]' : 'ml-64')}>
+        <div className="p-6 lg:p-8"><Outlet /></div>
+      </main>
+    </div>
+  );
 }
