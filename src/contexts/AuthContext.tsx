@@ -51,6 +51,15 @@ async function fetchUserData(userId: string): Promise<AuthUser | null> {
   };
 }
 
+async function fetchUserDataWithRetry(userId: string, attempts = 8, delayMs = 300): Promise<AuthUser | null> {
+  for (let attempt = 0; attempt < attempts; attempt += 1) {
+    const userData = await fetchUserData(userId);
+    if (userData) return userData;
+    await new Promise(resolve => setTimeout(resolve, delayMs));
+  }
+  return null;
+}
+
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [authState, setAuthState] = useState<AuthState>({
     user: null,
@@ -59,12 +68,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   });
 
   useEffect(() => {
-    // Set up auth state listener FIRST
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
-        // Use setTimeout to avoid potential deadlocks with Supabase auth
+        setAuthState(prev => ({ ...prev, isLoading: true }));
         setTimeout(async () => {
-          const userData = await fetchUserData(session.user.id);
+          const userData = await fetchUserDataWithRetry(session.user.id);
           setAuthState({
             user: userData,
             isAuthenticated: !!userData,
@@ -76,10 +84,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       }
     });
 
-    // THEN check existing session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session?.user) {
-        const userData = await fetchUserData(session.user.id);
+        const userData = await fetchUserDataWithRetry(session.user.id);
         setAuthState({
           user: userData,
           isAuthenticated: !!userData,
