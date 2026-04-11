@@ -14,8 +14,178 @@ export type Database = {
   }
   public: {
     Tables: {
+      affiliate_clicks: {
+        Row: {
+          affiliate_id: string
+          created_at: string
+          id: string
+          ip_hash: string | null
+          landing_url: string | null
+          session_id: string | null
+          user_agent: string | null
+        }
+        Insert: {
+          affiliate_id: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          landing_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Update: {
+          affiliate_id?: string
+          created_at?: string
+          id?: string
+          ip_hash?: string | null
+          landing_url?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_clicks_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_conversions: {
+        Row: {
+          affiliate_id: string
+          application_id: string | null
+          approved_at: string | null
+          commission_amount: number
+          created_at: string
+          flag_reason: string | null
+          id: string
+          paid_at: string | null
+          referred_user_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          affiliate_id: string
+          application_id?: string | null
+          approved_at?: string | null
+          commission_amount?: number
+          created_at?: string
+          flag_reason?: string | null
+          id?: string
+          paid_at?: string | null
+          referred_user_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          affiliate_id?: string
+          application_id?: string | null
+          approved_at?: string | null
+          commission_amount?: number
+          created_at?: string
+          flag_reason?: string | null
+          id?: string
+          paid_at?: string | null
+          referred_user_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_conversions_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "affiliate_conversions_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: false
+            referencedRelation: "applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_payouts: {
+        Row: {
+          affiliate_id: string
+          amount: number
+          created_at: string
+          id: string
+          method: string | null
+          note: string | null
+          processed_by_admin_id: string | null
+          transaction_reference: string | null
+        }
+        Insert: {
+          affiliate_id: string
+          amount: number
+          created_at?: string
+          id?: string
+          method?: string | null
+          note?: string | null
+          processed_by_admin_id?: string | null
+          transaction_reference?: string | null
+        }
+        Update: {
+          affiliate_id?: string
+          amount?: number
+          created_at?: string
+          id?: string
+          method?: string | null
+          note?: string | null
+          processed_by_admin_id?: string | null
+          transaction_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_payouts_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliates: {
+        Row: {
+          affiliate_code: string
+          created_at: string
+          custom_slug: string | null
+          id: string
+          payout_details: Json | null
+          status: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          affiliate_code: string
+          created_at?: string
+          custom_slug?: string | null
+          id?: string
+          payout_details?: Json | null
+          status?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          affiliate_code?: string
+          created_at?: string
+          custom_slug?: string | null
+          id?: string
+          payout_details?: Json | null
+          status?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       applications: {
         Row: {
+          affiliate_id: string | null
           allocated_at: string | null
           allocated_by: string | null
           amount: number | null
@@ -41,6 +211,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          affiliate_id?: string | null
           allocated_at?: string | null
           allocated_by?: string | null
           amount?: number | null
@@ -66,6 +237,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          affiliate_id?: string | null
           allocated_at?: string | null
           allocated_by?: string | null
           amount?: number | null
@@ -91,6 +263,13 @@ export type Database = {
           updated_at?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "applications_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "applications_tenant_id_fkey"
             columns: ["tenant_id"]
@@ -627,6 +806,7 @@ export type Database = {
           is_active: boolean
           last_name: string
           phone: string | null
+          referred_by_affiliate_id: string | null
           tenant_id: string | null
           updated_at: string
           user_id: string
@@ -642,6 +822,7 @@ export type Database = {
           is_active?: boolean
           last_name?: string
           phone?: string | null
+          referred_by_affiliate_id?: string | null
           tenant_id?: string | null
           updated_at?: string
           user_id: string
@@ -657,11 +838,19 @@ export type Database = {
           is_active?: boolean
           last_name?: string
           phone?: string | null
+          referred_by_affiliate_id?: string | null
           tenant_id?: string | null
           updated_at?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "profiles_referred_by_affiliate_id_fkey"
+            columns: ["referred_by_affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "profiles_tenant_id_fkey"
             columns: ["tenant_id"]
@@ -888,7 +1077,12 @@ export type Database = {
       }
     }
     Enums: {
-      app_role: "super_admin" | "central_admin" | "developer" | "broker"
+      app_role:
+        | "super_admin"
+        | "central_admin"
+        | "developer"
+        | "broker"
+        | "affiliate"
       application_status:
         | "draft"
         | "submitted"
@@ -1032,7 +1226,13 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      app_role: ["super_admin", "central_admin", "developer", "broker"],
+      app_role: [
+        "super_admin",
+        "central_admin",
+        "developer",
+        "broker",
+        "affiliate",
+      ],
       application_status: [
         "draft",
         "submitted",
