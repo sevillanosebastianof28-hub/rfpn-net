@@ -120,7 +120,7 @@ export default function Conversions() {
           { key: 'application_id', header: 'Application', render: (r: ConversionRow) => r.application_id ? <span className="font-mono text-xs">{r.application_id.slice(0, 8)}...</span> : '—' },
           { key: 'status', header: 'Status', render: (r: ConversionRow) => (
             <div className="flex items-center gap-1">
-              <StatusBadge status={r.status} />
+              <StatusBadge status={r.status as any} />
               {r.flag_reason && <AlertTriangle className="h-3.5 w-3.5 text-amber" />}
             </div>
           )},

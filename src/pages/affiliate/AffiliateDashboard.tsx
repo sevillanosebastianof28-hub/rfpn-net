@@ -103,11 +103,11 @@ export default function AffiliateDashboard() {
 
       {/* Stats Grid */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard title="Total Clicks" value={stats.clicks} icon={<MousePointer className="h-5 w-5" />} />
-        <StatCard title="Signups" value={stats.signups} icon={<Users className="h-5 w-5" />} />
-        <StatCard title="Applications" value={stats.applications} icon={<FileText className="h-5 w-5" />} />
-        <StatCard title="Pending" value={stats.pending} icon={<Clock className="h-5 w-5" />} />
-        <StatCard title="Approved" value={stats.approved} icon={<CheckCircle2 className="h-5 w-5" />} />
+        <StatCard title="Total Clicks" value={stats.clicks} icon={MousePointer} />
+        <StatCard title="Signups" value={stats.signups} icon={Users} />
+        <StatCard title="Applications" value={stats.applications} icon={FileText} />
+        <StatCard title="Pending" value={stats.pending} icon={Clock} />
+        <StatCard title="Approved" value={stats.approved} icon={CheckCircle2} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

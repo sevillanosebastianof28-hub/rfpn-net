@@ -113,10 +113,10 @@ export default function Payouts() {
       <PageHeader title="Payouts" description="Manage affiliate payouts (mock workflow)" />
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard title="Total Unpaid" value={`$${overviewStats.totalUnpaid.toFixed(2)}`} icon={<DollarSign className="h-5 w-5" />} />
-        <StatCard title="Paid This Month" value={`$${overviewStats.paidThisMonth.toFixed(2)}`} icon={<CreditCard className="h-5 w-5" />} />
-        <StatCard title="Total Payouts" value={overviewStats.totalPayouts} icon={<CheckCircle2 className="h-5 w-5" />} />
-        <StatCard title="Pending Conversions" value={overviewStats.pendingConversions} icon={<Clock className="h-5 w-5" />} />
+        <StatCard title="Total Unpaid" value={`$${overviewStats.totalUnpaid.toFixed(2)}`} icon={DollarSign} />
+        <StatCard title="Paid This Month" value={`$${overviewStats.paidThisMonth.toFixed(2)}`} icon={CreditCard} />
+        <StatCard title="Total Payouts" value={overviewStats.totalPayouts} icon={CheckCircle2} />
+        <StatCard title="Pending Conversions" value={overviewStats.pendingConversions} icon={Clock} />
       </div>
 
       {/* Affiliate Balances */}

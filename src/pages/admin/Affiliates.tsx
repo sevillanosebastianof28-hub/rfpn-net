@@ -112,7 +112,7 @@ export default function Affiliates() {
           { key: 'approvedCount', header: 'Approved', render: (r: AffiliateRow) => r.approvedCount },
           { key: 'totalEarned', header: 'Earned', render: (r: AffiliateRow) => `$${r.totalEarned.toFixed(2)}` },
           { key: 'totalPaid', header: 'Paid', render: (r: AffiliateRow) => `$${r.totalPaid.toFixed(2)}` },
-          { key: 'status', header: 'Status', render: (r: AffiliateRow) => <StatusBadge status={r.status} /> },
+          { key: 'status', header: 'Status', render: (r: AffiliateRow) => <StatusBadge status={r.status as any} /> },
           { key: 'actions', header: '', render: (r: AffiliateRow) => (
             <DropdownMenu>
               <DropdownMenuTrigger asChild><Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button></DropdownMenuTrigger>
