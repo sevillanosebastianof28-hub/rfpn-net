@@ -134,6 +134,9 @@ export default function Landing() {
               <a href="#contact" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
                 Contact
               </a>
+              <Link to="/affiliate" className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors">
+                Become an Affiliate
+              </Link>
             </div>
 
             <div className="hidden sm:flex items-center gap-3">
@@ -166,6 +169,7 @@ export default function Landing() {
               <a href="#how-it-works" className="block py-2 text-foreground">How It Works</a>
               <Link to="/faq" className="block py-2 text-foreground">FAQ</Link>
               <a href="#contact" className="block py-2 text-foreground">Contact</a>
+              <Link to="/affiliate" className="block py-2 text-foreground">Become an Affiliate</Link>
               <div className="pt-4 border-t border-border/50 space-y-3">
                 <Link to="/login" className="block">
                   <Button variant="outline" className="w-full">Sign In</Button>
@@ -573,6 +577,7 @@ export default function Landing() {
                 <li><a href="#how-it-works" className="hover:text-foreground transition-colors">How It Works</a></li>
                 <li><Link to="/faq" className="hover:text-foreground transition-colors">FAQ</Link></li>
                 <li><a href="#contact" className="hover:text-foreground transition-colors">Pricing</a></li>
+                <li><Link to="/affiliate" className="hover:text-foreground transition-colors">Become an Affiliate</Link></li>
               </ul>
             </div>
 
