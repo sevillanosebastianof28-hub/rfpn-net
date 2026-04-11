@@ -21,6 +21,7 @@ export default function Login() {
       if (user.role === 'super_admin' || user.role === 'central_admin') navigate('/admin');
       else if (user.role === 'developer') navigate('/developer');
       else if (user.role === 'broker') navigate('/broker');
+      else if (user.role === 'affiliate') navigate('/affiliate/dashboard');
     }
   }, [isAuthenticated, user, navigate]);
 
