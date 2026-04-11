@@ -23,8 +23,8 @@ interface UserWithRole extends Profile {
   role: AppRole;
 }
 
-const roleLabels: Record<AppRole, string> = { super_admin: 'Super Admin', central_admin: 'Central Admin', developer: 'Developer', broker: 'Broker' };
-const roleColors: Record<AppRole, string> = { super_admin: 'bg-primary/20 text-primary', central_admin: 'bg-success/20 text-success', developer: 'bg-warning/20 text-warning', broker: 'bg-muted text-muted-foreground' };
+const roleLabels: Record<AppRole, string> = { super_admin: 'Super Admin', central_admin: 'Central Admin', developer: 'Developer', broker: 'Broker', affiliate: 'Affiliate' };
+const roleColors: Record<AppRole, string> = { super_admin: 'bg-primary/20 text-primary', central_admin: 'bg-success/20 text-success', developer: 'bg-warning/20 text-warning', broker: 'bg-muted text-muted-foreground', affiliate: 'bg-teal/20 text-teal' };
 
 export default function Users() {
   const [users, setUsers] = useState<UserWithRole[]>([]);
