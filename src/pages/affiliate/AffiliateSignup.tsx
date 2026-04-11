@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Logo } from '@/components/Logo';
 import { Button } from '@/components/ui/button';
@@ -23,8 +23,14 @@ export default function AffiliateSignup() {
   const [agreed, setAgreed] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { register } = useAuth();
+  const { isAuthenticated, user } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (isAuthenticated && user?.role === 'affiliate') {
+      navigate('/affiliate/dashboard', { replace: true });
+    }
+  }, [isAuthenticated, user, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -46,20 +52,24 @@ export default function AffiliateSignup() {
 
     if (error) { setError(error.message); setLoading(false); return; }
 
-    // Wait briefly for profile trigger to complete, then create affiliate record
     if (data.user) {
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise(resolve => setTimeout(resolve, 1200));
       const code = `${form.firstName.toLowerCase().replace(/\W/g, '')}${Math.random().toString(36).slice(2, 8)}`;
-      const { error: affError } = await supabase.from('affiliates').insert({
+      const { error: affError } = await supabase.from('affiliates').upsert({
         user_id: data.user.id,
         affiliate_code: code,
         payout_details: { method: form.payoutMethod, details: form.payoutDetails },
-      });
-      if (affError) console.error('Affiliate record error:', affError);
+        status: 'active',
+      }, { onConflict: 'user_id' });
+
+      if (affError) {
+        setError('Your account was created, but we could not finish setting up the affiliate profile. Please sign in once and try again.');
+        setLoading(false);
+        return;
+      }
     }
 
-    toast.success('Affiliate account created! Welcome aboard.');
-    navigate('/affiliate/dashboard');
+    toast.success('Affiliate account created. Preparing your dashboard...');
     setLoading(false);
   };
 
@@ -157,7 +167,7 @@ export default function AffiliateSignup() {
                 )}
 
                 <Button type="submit" variant="gradient" size="lg" className="w-full" disabled={loading}>
-                  {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Creating account...</> : 'Join Affiliate Program'}
+                  {loading ? <><Loader2 className="h-4 w-4 animate-spin" /> Creating your affiliate workspace...</> : 'Join Affiliate Program'}
                 </Button>
               </form>
 
