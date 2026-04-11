@@ -31,6 +31,9 @@ const mainNavItems = [
   { icon: FileText, label: 'Applications', path: '/admin/applications' },
   { icon: ScrollText, label: 'Audit Logs', path: '/admin/audit-logs' },
   { icon: Code2, label: 'Tracking Codes', path: '/admin/tracking' },
+  { icon: Users, label: 'Affiliates', path: '/admin/affiliates' },
+  { icon: FileText, label: 'Conversions', path: '/admin/conversions' },
+  { icon: Briefcase, label: 'Payouts', path: '/admin/payouts' },
 ];
 
 const portalNavItems = [
