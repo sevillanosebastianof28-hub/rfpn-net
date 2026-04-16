@@ -13,8 +13,8 @@ import { StatusBadge } from '@/components/StatusBadge';
 import { StatCard } from '@/components/StatCard';
 import { toast } from 'sonner';
 import {
-  Copy, MousePointer, Users, FileText, DollarSign, Clock,
-  CheckCircle2, Wallet, ArrowDownToLine, PoundSterling, Search
+  Copy, MousePointer, Users, FileText,
+  CheckCircle2, ArrowDownToLine, PoundSterling, Search
 } from 'lucide-react';
 
 interface AffiliateData {
