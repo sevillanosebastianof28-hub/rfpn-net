@@ -264,7 +264,7 @@ export default function DeveloperAffiliate() {
         <Card>
           <CardContent className="p-5">
             <p className="text-sm text-muted-foreground">Pending Earnings</p>
-            <p className="text-2xl font-bold text-amber-500">{currencySymbol}{stats.pendingEarnings.toFixed(2)}</p>
+            <p className="text-2xl font-bold text-warning">{currencySymbol}{stats.pendingEarnings.toFixed(2)}</p>
           </CardContent>
         </Card>
         <Card>
