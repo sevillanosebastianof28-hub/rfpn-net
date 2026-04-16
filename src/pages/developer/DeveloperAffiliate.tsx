@@ -170,6 +170,29 @@ export default function DeveloperAffiliate() {
 
   if (loading) return <div className="flex items-center justify-center py-16"><div className="h-8 w-8 animate-spin rounded-full border-4 border-primary border-t-transparent" /></div>;
 
+  const createAffiliateAccount = async () => {
+    if (!user) return;
+    setSubmitting(true);
+    const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+    const { error } = await supabase.from('affiliates').insert({
+      user_id: user.id,
+      affiliate_code: code,
+      status: 'active',
+    });
+    setSubmitting(false);
+    if (error) {
+      if (error.code === '23505') {
+        toast.error('You already have an affiliate account. Refreshing...');
+      } else {
+        toast.error('Failed to create affiliate account');
+        return;
+      }
+    } else {
+      toast.success('Affiliate account created!');
+    }
+    fetchData();
+  };
+
   if (!affiliate) {
     return (
       <div className="space-y-6">
@@ -177,9 +200,9 @@ export default function DeveloperAffiliate() {
           <CardContent className="p-8 text-center">
             <Users className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
             <h3 className="text-lg font-semibold mb-2">No Affiliate Account</h3>
-            <p className="text-muted-foreground mb-4">You don't have an affiliate account yet. Sign up to start earning referral commissions.</p>
-            <Button variant="gradient" onClick={() => window.open('/affiliate', '_blank')}>
-              Become an Affiliate
+            <p className="text-muted-foreground mb-4">You don't have an affiliate account yet. Activate one now to start earning referral commissions.</p>
+            <Button variant="gradient" onClick={createAffiliateAccount} disabled={submitting}>
+              {submitting ? 'Creating...' : 'Become an Affiliate'}
             </Button>
           </CardContent>
         </Card>
