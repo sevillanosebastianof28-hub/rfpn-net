@@ -61,8 +61,11 @@ export type Database = {
           created_at: string
           flag_reason: string | null
           id: string
+          lead_payout_value: number | null
           paid_at: string | null
+          qualified_at: string | null
           referred_user_id: string
+          rejected_reason: string | null
           status: string
           updated_at: string
         }
@@ -74,8 +77,11 @@ export type Database = {
           created_at?: string
           flag_reason?: string | null
           id?: string
+          lead_payout_value?: number | null
           paid_at?: string | null
+          qualified_at?: string | null
           referred_user_id: string
+          rejected_reason?: string | null
           status?: string
           updated_at?: string
         }
@@ -87,8 +93,11 @@ export type Database = {
           created_at?: string
           flag_reason?: string | null
           id?: string
+          lead_payout_value?: number | null
           paid_at?: string | null
+          qualified_at?: string | null
           referred_user_id?: string
+          rejected_reason?: string | null
           status?: string
           updated_at?: string
         }
@@ -143,6 +152,83 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "affiliate_payouts_affiliate_id_fkey"
+            columns: ["affiliate_id"]
+            isOneToOne: false
+            referencedRelation: "affiliates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      affiliate_settings: {
+        Row: {
+          currency: string
+          id: string
+          payout_per_lead: number
+          updated_at: string
+          updated_by: string | null
+        }
+        Insert: {
+          currency?: string
+          id?: string
+          payout_per_lead?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Update: {
+          currency?: string
+          id?: string
+          payout_per_lead?: number
+          updated_at?: string
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
+      affiliate_withdrawal_requests: {
+        Row: {
+          admin_note: string | null
+          affiliate_id: string
+          amount: number
+          approved_at: string | null
+          created_at: string
+          id: string
+          paid_at: string | null
+          payment_details: Json | null
+          payment_method: string | null
+          processed_by_admin_id: string | null
+          status: string
+          transaction_reference: string | null
+        }
+        Insert: {
+          admin_note?: string | null
+          affiliate_id: string
+          amount: number
+          approved_at?: string | null
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          payment_details?: Json | null
+          payment_method?: string | null
+          processed_by_admin_id?: string | null
+          status?: string
+          transaction_reference?: string | null
+        }
+        Update: {
+          admin_note?: string | null
+          affiliate_id?: string
+          amount?: number
+          approved_at?: string | null
+          created_at?: string
+          id?: string
+          paid_at?: string | null
+          payment_details?: Json | null
+          payment_method?: string | null
+          processed_by_admin_id?: string | null
+          status?: string
+          transaction_reference?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "affiliate_withdrawal_requests_affiliate_id_fkey"
             columns: ["affiliate_id"]
             isOneToOne: false
             referencedRelation: "affiliates"

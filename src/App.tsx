@@ -34,6 +34,7 @@ import Applications from "./pages/admin/Applications";
 import AdminApplicationDetail from "./pages/admin/ApplicationDetail";
 import AuditLogs from "./pages/admin/AuditLogs";
 import Settings from "./pages/admin/Settings";
+import AffiliateSettings from "./pages/admin/AffiliateSettings";
 import TrackingCodes from "./pages/admin/TrackingCodes";
 
 // Developer Portal
@@ -44,6 +45,7 @@ import DeveloperApplications from "./pages/developer/DeveloperApplications";
 import ApplicationForm from "./pages/developer/ApplicationForm";
 import DevMessages from "./pages/developer/Messages";
 import SocialFeed from "./pages/developer/SocialFeed";
+import DeveloperAffiliate from "./pages/developer/DeveloperAffiliate";
 
 // Broker Portal
 import BrokerLayout from "./pages/broker/BrokerLayout";
@@ -94,6 +96,7 @@ const App = () => (
               <Route path="affiliates" element={<Affiliates />} />
               <Route path="conversions" element={<AdminConversions />} />
               <Route path="payouts" element={<Payouts />} />
+              <Route path="affiliate-settings" element={<AffiliateSettings />} />
             </Route>
 
             {/* Developer Routes */}
@@ -105,6 +108,7 @@ const App = () => (
               <Route path="applications/:id" element={<ApplicationForm />} />
               <Route path="messages" element={<DevMessages />} />
               <Route path="feed" element={<SocialFeed />} />
+              <Route path="affiliate" element={<DeveloperAffiliate />} />
             </Route>
 
             {/* Affiliate Routes */}

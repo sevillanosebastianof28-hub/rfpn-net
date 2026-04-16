@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip';
 import {
   LayoutDashboard, User, FileText, MessageSquare, Rss, LogOut,
-  ChevronLeft, ChevronRight, Loader2, ShieldAlert
+  ChevronLeft, ChevronRight, Loader2, ShieldAlert, Users
 } from 'lucide-react';
 import { NotificationBell } from '@/components/NotificationBell';
 
@@ -17,6 +17,7 @@ const navItems = [
   { icon: FileText, label: 'Applications', path: '/developer/applications' },
   { icon: MessageSquare, label: 'Messages', path: '/developer/messages' },
   { icon: Rss, label: 'Social Feed', path: '/developer/feed' },
+  { icon: Users, label: 'Affiliate', path: '/developer/affiliate' },
 ];
 
 export default function DeveloperLayout() {

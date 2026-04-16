@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 
-type TableName = 'affiliates' | 'affiliate_clicks' | 'affiliate_conversions' | 'affiliate_payouts';
+type TableName = 'affiliates' | 'affiliate_clicks' | 'affiliate_conversions' | 'affiliate_payouts' | 'affiliate_settings' | 'affiliate_withdrawal_requests';
 
 export function useRealtimeTable(table: TableName, onUpdate: () => void) {
   useEffect(() => {
