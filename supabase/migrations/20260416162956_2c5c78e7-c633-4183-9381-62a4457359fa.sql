@@ -1,0 +1,1 @@
+ALTER TABLE public.affiliate_conversions ALTER COLUMN commission_amount SET DEFAULT 100;
