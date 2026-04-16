@@ -34,6 +34,7 @@ const mainNavItems = [
   { icon: Users, label: 'Affiliates', path: '/admin/affiliates' },
   { icon: FileText, label: 'Conversions', path: '/admin/conversions' },
   { icon: Briefcase, label: 'Payouts', path: '/admin/payouts' },
+  { icon: Settings, label: 'Affiliate Settings', path: '/admin/affiliate-settings' },
 ];
 
 const portalNavItems = [
